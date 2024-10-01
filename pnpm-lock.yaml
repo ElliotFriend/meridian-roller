@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@stellar/stellar-sdk': file:../ext/@stellar/stellar-sdk
+  '@stellar/stellar-sdk': file:../passkey-kit/ext/@stellar/stellar-sdk
 
 importers:
 
@@ -18,8 +18,8 @@ importers:
         specifier: 0.4.0
         version: 0.4.0(tailwindcss@3.4.13)
       '@stellar/stellar-sdk':
-        specifier: file:../ext/@stellar/stellar-sdk
-        version: file:../ext/@stellar/stellar-sdk
+        specifier: file:../passkey-kit/ext/@stellar/stellar-sdk
+        version: file:../passkey-kit/ext/@stellar/stellar-sdk
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
         version: 3.2.5(@sveltejs/kit@2.6.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.8(@types/node@22.7.4)))(svelte@4.2.19)(vite@5.4.8(@types/node@22.7.4)))
@@ -47,9 +47,9 @@ importers:
       base64url:
         specifier: ^3.0.1
         version: 3.0.1
-      dice-game-sdk:
-        specifier: file:../packages/dice-game-sdk
-        version: file:../packages/dice-game-sdk
+      dice-game:
+        specifier: workspace:*
+        version: link:packages/dice-game
       eslint:
         specifier: ^9.0.0
         version: 9.11.1(jiti@1.21.6)
@@ -66,8 +66,8 @@ importers:
         specifier: ^0.446.0
         version: 0.446.0(svelte@4.2.19)
       passkey-kit:
-        specifier: link:../
-        version: link:..
+        specifier: link:../passkey-kit
+        version: link:../passkey-kit
       postcss:
         specifier: 8.4.47
         version: 8.4.47
@@ -101,6 +101,19 @@ importers:
       vite-plugin-tailwind-purgecss:
         specifier: 0.3.3
         version: 0.3.3(tailwindcss@3.4.13)(vite@5.4.8(@types/node@22.7.4))
+
+  packages/dice-game:
+    dependencies:
+      '@stellar/stellar-sdk':
+        specifier: file:../../../passkey-kit/ext/@stellar/stellar-sdk
+        version: file:../passkey-kit/ext/@stellar/stellar-sdk
+      buffer:
+        specifier: 6.0.3
+        version: 6.0.3
+    devDependencies:
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3
 
 packages:
 
@@ -429,8 +442,8 @@ packages:
   '@stellar/stellar-base@12.1.1':
     resolution: {integrity: sha512-gOBSOFDepihslcInlqnxKZdIW9dMUO1tpOm3AtJR33K2OvpXG6SaVHCzAmCFArcCqI9zXTEiSoh70T48TmiHJA==}
 
-  '@stellar/stellar-sdk@file:../ext/@stellar/stellar-sdk':
-    resolution: {directory: ../ext/@stellar/stellar-sdk, type: directory}
+  '@stellar/stellar-sdk@file:../passkey-kit/ext/@stellar/stellar-sdk':
+    resolution: {directory: ../passkey-kit/ext/@stellar/stellar-sdk, type: directory}
 
   '@sveltejs/adapter-auto@3.2.5':
     resolution: {integrity: sha512-27LR+uKccZ62lgq4N/hvyU2G+hTP9fxWEAfnZcl70HnyfAjMSsGk1z/SjAPXNCD1mVJIE7IFu3TQ8cQ/UH3c0A==}
@@ -736,9 +749,6 @@ packages:
 
   devalue@5.1.1:
     resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
-
-  dice-game-sdk@file:../packages/dice-game-sdk:
-    resolution: {directory: ../packages/dice-game-sdk, type: directory}
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
@@ -1540,6 +1550,11 @@ packages:
       typescript:
         optional: true
 
+  typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@5.6.2:
     resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
     engines: {node: '>=14.17'}
@@ -1872,7 +1887,7 @@ snapshots:
     optionalDependencies:
       sodium-native: 4.2.0
 
-  '@stellar/stellar-sdk@file:../ext/@stellar/stellar-sdk':
+  '@stellar/stellar-sdk@file:../passkey-kit/ext/@stellar/stellar-sdk':
     dependencies:
       '@stellar/stellar-base': 12.1.1
       axios: 1.7.7
@@ -2214,13 +2229,6 @@ snapshots:
   delayed-stream@1.0.0: {}
 
   devalue@5.1.1: {}
-
-  dice-game-sdk@file:../packages/dice-game-sdk:
-    dependencies:
-      '@stellar/stellar-sdk': file:../ext/@stellar/stellar-sdk
-      buffer: 6.0.3
-    transitivePeerDependencies:
-      - debug
 
   didyoumean@1.2.2: {}
 
@@ -3029,6 +3037,8 @@ snapshots:
     transitivePeerDependencies:
       - eslint
       - supports-color
+
+  typescript@5.3.3: {}
 
   typescript@5.6.2: {}
 

@@ -1,4 +1,4 @@
-import * as diceGameSdk from 'dice-game-sdk';
+import * as diceGameSdk from 'dice-game';
 import {
     PUBLIC_STELLAR_RPC_URL,
     PUBLIC_GAME_CONTRACT_ADDRESS,

@@ -87,8 +87,12 @@
                 roller: $contractId
             });
 
+            // let tx = new TransactionBuilder
+
+            console.log('at', at)
+            console.log('unsigned at', at.built!.toXDR());
             await account.sign(at, { keyId: $keyId });
-            console.log('at', at.built!.toXDR());
+            console.log('signed at', at.built!.toXDR());
             const res = await send(at.built!);
             console.log('res', res);
 
