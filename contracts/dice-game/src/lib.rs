@@ -1,8 +1,8 @@
 #![no_std]
 
 use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, panic_with_error, token, vec, Address,
-    Env, Vec,
+    contract, contracterror, contractimpl, contracttype, panic_with_error, token, vec, xdr::ToXdr,
+    Address, Bytes, Env, Vec,
 };
 
 #[contracttype]
@@ -73,6 +73,16 @@ impl HelloContract {
 
         let mut rolls = Vec::new(&env);
         let mut total = 0u32;
+
+        let address_bytes = roller.clone().to_xdr(&env);
+        let address_bytes = address_bytes.slice(address_bytes.len() - 32..);
+
+        let mut slice = [0u8; 32];
+        address_bytes.copy_into_slice(&mut slice);
+
+        let seed = Bytes::from_array(&env, &slice);
+
+        env.prng().seed(seed);
 
         // Iterate through the number of dice, generating a random number within
         // the specified range
