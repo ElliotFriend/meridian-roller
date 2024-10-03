@@ -5,10 +5,13 @@
     import type { PageData } from './$types';
     import { contractId } from '$lib/stores/contractId';
     import { keyId } from '$lib/stores/keyId';
-    import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH, PUBLIC_DEPLOYER_CONTRACT_ADDRESS } from '$env/static/public';
-    import { account, send, getSalt } from '$lib/passkeyClient';
+    import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH, PUBLIC_DEPLOYER_CONTRACT_ADDRESS, PUBLIC_STELLAR_NETWORK_PASSPHRASE } from '$env/static/public';
+    import { account, send, getSalt, mockSource, native, rpc } from '$lib/passkeyClient';
+    import { assembleTransaction } from '@stellar/stellar-sdk/rpc';
     import deployerSdk from '$lib/contracts/deployerContract'
-    import { nativeToScVal } from '@stellar/stellar-sdk';
+    import { nativeToScVal, Operation, Contract, xdr, Address, TransactionBuilder, BASE_FEE, Transaction } from '@stellar/stellar-sdk';
+    import { Spec } from '@stellar/stellar-sdk/contract';
+    import { spec } from '$lib/contracts/diceGameContract'
     // import { randomBytes } from 'crypto';
 
     export let data: PageData;
@@ -21,29 +24,87 @@
 
     $: rollButtonDisabled = isWaiting || !$contractId;
 
+    // let getClassOf = Function.prototype.call.bind(Object.prototype.toString());
+
     async function deployGame() {
         console.log('deploying game')
         try {
             isWaiting = true;
             // let salt = await getSalt();
+
+            // const args = spec.funcArgsToScVals('init', {
+            //     admin: $contractId,
+            //     token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
+            //     num_faces: 6,
+            // })
+            // console.log('args', args[1].toXDR('base64'))
+
             const at = await deployerSdk.deploy({
                 deployer: $contractId,
                 wasm_hash: Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'),
-                init_fn: 'init',
                 salt: Buffer.from(await getSalt(), 'hex'),
+                init_fn: 'init',
                 init_args: [
-                    nativeToScVal([
-                        $contractId,
-                        nativeToScVal(PUBLIC_NATIVE_CONTRACT_ADDRESS, { type: 'address' }),
-                        numFaces,
-                    ], { type: 'vector' }),
-                ]
+                    // ...deployerSdk.spec.funcArgsToScVals('init', {
+                    //     admin: $contractId,
+                    //     token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
+                    //     num_faces: 6,
+                    // }),
+                    // {address: $contractId},
+                    // {$contractId: xdr.ScSpecType.scSpecTypeAddress()},
+                    // { address: PUBLIC_NATIVE_CONTRACT_ADDRESS },
+                    // { u32: numFaces },
+                ],
             })
+            // const at = xdr.ScSpecType.scSpecTypeU32().value
+            // console.log('spec', spec.getFunc('init'))
+            // console.log('yas', spec.funcArgsToScVals('init', {
+            //     admin: $contractId,
+            //     token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
+            //     num_faces: 6,
+            // }))
 
-            console.log('at', at)
+            // const deployerContract = new Contract(PUBLIC_DEPLOYER_CONTRACT_ADDRESS);
+            // const swAddress = new Address($contractId);
+            // const tx = new TransactionBuilder(
+            //     mockSource, {
+            //         fee: BASE_FEE,
+            //         networkPassphrase: PUBLIC_STELLAR_NETWORK_PASSPHRASE,
+            //     })
+            //     .addOperation(Operation.invokeContractFunction({
+            //         contract: PUBLIC_DEPLOYER_CONTRACT_ADDRESS,
+            //         function: 'deploy',
+            //         args: [
+            //             swAddress.toScVal(),
+            //             nativeToScVal(Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'), { type: 'bytes'}),
+            //             nativeToScVal(Buffer.from(await getSalt(), 'hex'), { type: 'bytes' }),
+            //             nativeToScVal('init', { type: 'symbol' }),
+            //             nativeToScVal([
+            //                 swAddress.toScVal(),
+            //                 new Address(PUBLIC_NATIVE_CONTRACT_ADDRESS).toScVal(),
+            //                 nativeToScVal(numFaces, { type: 'u32'})
+            //             ], { type: 'vector' })
+            //         ]
+            //     }))
+            //     .setTimeout(300)
+            //     .build()
+
+            // console.log('tx', tx)
+            // console.log('tx instanceof Transaction', tx instanceof Transaction)
+            // const sim = await rpc.simulateTransaction(tx) // this works
+            // console.log('tx instanceof Transaction', tx instanceof Transaction)
+            // const at = assembleTransaction(tx, sim)
+
+            // const pt = await rpc.prepareTransaction(tx) // this doesn't?
+            // const tb = TransactionBuilder.cloneFrom(tx);
+            // console.log('tb', tb)
+            // console.log('at', at)
+
+            // console.log('at', at)
             await account.sign(at, { keyId: $keyId });
-            const res = await send(at.built!);
+            console.log('xdr', at.built?.toXDR())
 
+            const res = await send(at.built!);
             console.log('res', res);
 
         } catch (err) {

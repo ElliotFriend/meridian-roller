@@ -1,3 +1,4 @@
+import { Account, BASE_FEE, StrKey, TransactionBuilder } from '@stellar/stellar-sdk'
 import { Server } from '@stellar/stellar-sdk/rpc';
 import { PasskeyKit, SACClient } from 'passkey-kit';
 
@@ -8,6 +9,9 @@ import {
     PUBLIC_NATIVE_CONTRACT_ADDRESS
 } from '$env/static/public';
 import type { Tx } from '@stellar/stellar-sdk/contract';
+
+export const mockPubkey = StrKey.encodeEd25519PublicKey(Buffer.alloc(32));
+export const mockSource = new Account(mockPubkey, '0');
 
 export const rpc = new Server(PUBLIC_STELLAR_RPC_URL);
 

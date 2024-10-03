@@ -43,8 +43,6 @@ fn check_initialized(env: &Env) -> bool {
     env.storage().instance().has(&DataKey::Admin)
 }
 
-<<<<<<< Updated upstream
-=======
 fn roll_dice(env: &Env, num_faces: &u32) -> Vec<u32> {
     let mut rolls = Vec::new(&env);
 
@@ -58,7 +56,6 @@ fn roll_dice(env: &Env, num_faces: &u32) -> Vec<u32> {
     return rolls;
 }
 
->>>>>>> Stashed changes
 #[contract]
 pub struct HelloContract;
 
@@ -68,6 +65,8 @@ impl HelloContract {
         if check_initialized(&env) {
             panic_with_error!(env, Error::AlreadyInitialized);
         }
+
+        admin.require_auth();
 
         env.storage().instance().set(&DataKey::Admin, &admin);
         env.storage()
@@ -119,9 +118,6 @@ impl HelloContract {
             .persistent()
             .has(&DataKey::Roller(roller.clone()))
         {
-<<<<<<< Updated upstream
-            token::Client::new(
-=======
             let address_bytes = roller.clone().to_xdr(&env);
             let address_bytes = address_bytes.slice(address_bytes.len() - 32..);
 
@@ -135,7 +131,6 @@ impl HelloContract {
             total = rolls.iter().sum();
 
             token::TokenClient::new(
->>>>>>> Stashed changes
                 &env,
                 &env.storage()
                     .instance()
@@ -147,12 +142,9 @@ impl HelloContract {
                 &env.current_contract_address(),
                 &((total * 10_000_000) as i128),
             );
-<<<<<<< Updated upstream
-=======
         } else {
             rolls = roll_dice(&env, &num_faces);
             total = rolls.iter().sum();
->>>>>>> Stashed changes
         }
 
         let mut roller_store: Roller = env
@@ -172,12 +164,6 @@ impl HelloContract {
             .persistent()
             .set(&DataKey::Roller(roller.clone()), &roller_store);
 
-<<<<<<< Updated upstream
-        // if not the first roll, just return the number
-        // if they're the winner:
-        // - send ALL the lumens to them
-        // - brick the contract
-=======
         if total == jackpot {
             env.storage().instance().set(&DataKey::Winner, &roller);
 
@@ -195,7 +181,6 @@ impl HelloContract {
             token_client.transfer(&contract_address, &roller, &contract_balance);
         }
 
->>>>>>> Stashed changes
         Ok(rolls)
     }
 
