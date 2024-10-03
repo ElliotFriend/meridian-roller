@@ -8,7 +8,8 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --check . && eslint .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "setup": "node initialize.js"
     },
     "devDependencies": {
         "@skeletonlabs/skeleton": "2.10.2",
@@ -23,12 +24,16 @@
         "@types/node": "22.7.4",
         "autoprefixer": "10.4.20",
         "base64url": "^3.0.1",
-        "dice-game": "file:./packages/dice-game",
+        "deployer-sdk": "file:./packages/deployer",
+        "dice-game": "file:./packages/dice_game",
+        "dotenv": "^16.4.5",
         "eslint": "^9.0.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.36.0",
+        "glob": "^11.0.0",
         "globals": "^15.0.0",
         "lucide-svelte": "^0.446.0",
+        "passkey-kit": "^0.7.16",
         "postcss": "8.4.47",
         "prettier": "^3.1.1",
         "prettier-plugin-svelte": "^3.1.2",
@@ -39,8 +44,7 @@
         "typescript": "^5.0.0",
         "typescript-eslint": "^8.0.0",
         "vite": "^5.0.3",
-        "vite-plugin-tailwind-purgecss": "0.3.3",
-        "passkey-kit": "^0.7.16"
+        "vite-plugin-tailwind-purgecss": "0.3.3"
     },
     "pnpm": {
         "overrides": {

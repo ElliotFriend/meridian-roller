@@ -49,3 +49,10 @@ export async function fundContract(address: string) {
         else throw await res.text();
     });
 }
+
+export async function getSalt() {
+    return fetch('/api/salt').then(async (res) => {
+        if (res.ok) return res.text();
+        else throw await res.text();
+    })
+}
