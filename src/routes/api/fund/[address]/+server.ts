@@ -18,9 +18,9 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
         });
 
         await transfer.signAuthEntries({
-            address: fundKeypair.publicKey(),
-            signAuthEntry: (auth) => fundSigner.signAuthEntry(auth)
-        });
+			publicKey: fundKeypair.publicKey(),
+			signAuthEntry: fundSigner.signAuthEntry,
+		});
 
         await fetch('/api/send', {
             method: 'POST',
