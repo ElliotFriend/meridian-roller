@@ -61,7 +61,12 @@ pub struct HelloContract;
 
 #[contractimpl]
 impl HelloContract {
-    pub fn init(env: Env, admin: Address, token_address: Address, num_faces: u32) -> Result<(), Error> {
+    pub fn init(
+        env: Env,
+        admin: Address,
+        token_address: Address,
+        num_faces: u32,
+    ) -> Result<(), Error> {
         if check_initialized(&env) {
             panic_with_error!(env, Error::AlreadyInitialized);
         }

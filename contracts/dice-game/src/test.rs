@@ -51,10 +51,7 @@ fn test_including_winner() {
 
         // make sure the new balance is exactly `total` less than the minted
         // amount
-        assert_eq!(
-            balance + (total * 10_000_000) as i128,
-            100 * 10_000_000
-        );
+        assert_eq!(balance + (total * 10_000_000) as i128, 100 * 10_000_000);
 
         // make sure the storage entry looks as expected
         assert_eq!(roller_storage.times_rolled, 1);
@@ -72,7 +69,10 @@ fn test_including_winner() {
     let winner_balance = token_client.balance(&winner);
 
     assert_eq!(total, 18);
-    assert_eq!(winner_balance, (100 * 10_000_000) as i128 + contract_balance);
+    assert_eq!(
+        winner_balance,
+        (100 * 10_000_000) as i128 + contract_balance
+    );
 
     contract_balance = token_client.balance(&contract_address);
     assert_eq!(contract_balance, 0);

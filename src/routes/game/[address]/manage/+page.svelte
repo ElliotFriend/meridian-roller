@@ -4,21 +4,23 @@
     import qrCode from 'qrcode';
     import { contractId } from '$lib/stores/contractId';
     import { keyId } from '$lib/stores/keyId';
+    import { account, send } from '$lib/passkeyClient';
     import diceGameSdk from '$lib/contracts/diceGameContract';
 
     import type { PageData } from './$types';
-    import { account, send } from '$lib/passkeyClient';
     export let data: PageData;
+
+    diceGameSdk.options.contractId = data.gameAddress;
+
+    let isWaiting: boolean = false;
+
+    $: isButtonDisabled = !$contractId || isWaiting;
 
     const toastStore = getToastStore();
 
     let qrDataUrl = qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
         errorCorrectionLevel: 'high'
     });
-
-    let isWaiting: boolean = false;
-
-    $: isButtonDisabled = !$contractId || isWaiting;
 
     async function callIt() {
         console.log('calling it a day');
