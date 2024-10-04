@@ -17,7 +17,7 @@
     const toastStore = getToastStore();
 
     let numDice: number = 3;
-    let numFaces: 4 | 6 | 8 | 10 | 12 | 20 = 6;
+    let numFaces: 4 | 6 | 8 | 10 | 12 | 20;
     let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS
     let isWaiting: boolean = false;
 
@@ -82,7 +82,7 @@
         <span>Select the number of faces on those dice</span>
         <select class="select" bind:value={numFaces}>
             <option>4</option>
-            <option>6</option>
+            <option selected>6</option>
             <option>8</option>
             <option>10</option>
             <option>12</option>

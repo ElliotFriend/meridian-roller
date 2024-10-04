@@ -1,6 +1,5 @@
 <script lang="ts">
     import { page } from '$app/stores';
-
     $: pathname = $page.url.pathname.split('/').filter(p => p)
 </script>
 
