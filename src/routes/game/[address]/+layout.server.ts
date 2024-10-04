@@ -1,5 +1,5 @@
-import { error, redirect } from '@sveltejs/kit';
-import { Contract, nativeToScVal, scValToNative, StrKey, xdr } from '@stellar/stellar-sdk';
+import { error } from '@sveltejs/kit';
+import { Contract, scValToNative, StrKey } from '@stellar/stellar-sdk';
 import { server } from '$lib/server/passkeyServer';
 import type { LayoutServerLoad } from './$types';
 import { PUBLIC_GAME_WASM_HASH } from '$env/static/public';
@@ -18,9 +18,9 @@ export const load = (async ({ params }) => {
     }
 
     const contract = new Contract(contractAddress);
-    let instance = await server.rpc?.getLedgerEntries(contract.getFootprint());
+    const instance = await server.rpc?.getLedgerEntries(contract.getFootprint());
 
-    let wasmHash = instance?.entries[0].val
+    const wasmHash = instance?.entries[0].val
         .contractData()
         .val()
         .instance()
@@ -33,7 +33,7 @@ export const load = (async ({ params }) => {
         });
     }
 
-    let instanceStorage: Record<string, any> = {};
+    const instanceStorage: Record<string, any> = {};
     instance?.entries[0].val
         .contractData()
         .val()

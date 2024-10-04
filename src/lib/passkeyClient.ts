@@ -1,4 +1,4 @@
-import { Account, BASE_FEE, StrKey, TransactionBuilder } from '@stellar/stellar-sdk';
+import { Account, StrKey } from '@stellar/stellar-sdk';
 import { Server } from '@stellar/stellar-sdk/rpc';
 import { PasskeyKit, SACClient } from 'passkey-kit';
 

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { contractId } from '$lib/stores/contractId';
 </script>
 
 <h1 class="h1">Error: {$page.status}</h1>

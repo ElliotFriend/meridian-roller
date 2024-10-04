@@ -16,7 +16,12 @@
 
 <div class="flex-none w-24">
     <div class="card p-4 flex flex-col justify-center items-center">
-        <span><svelte:component this={diceIcons[rolledNumber]} size={72} /></span>
+        <span
+            ><svelte:component
+                this={rolledNumber <= 6 ? diceIcons[rolledNumber] : Dices}
+                size={72}
+            /></span
+        >
         <span class="text-3xl">{rolledNumber}</span>
     </div>
 </div>
