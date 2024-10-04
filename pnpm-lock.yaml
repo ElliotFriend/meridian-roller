@@ -7,6 +7,25 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@stellar/stellar-sdk':
+        specifier: 13.0.0-beta.1
+        version: 13.0.0-beta.1
+      base64url:
+        specifier: ^3.0.1
+        version: 3.0.1
+      deployer-sdk:
+        specifier: file:./packages/deployer
+        version: deployer@file:packages/deployer
+      dice-game:
+        specifier: file:./packages/dice_game
+        version: dice_game@file:packages/dice_game
+      passkey-kit:
+        specifier: ^0.9.0
+        version: 0.9.0
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
     devDependencies:
       '@skeletonlabs/skeleton':
         specifier: 2.10.2
@@ -14,9 +33,6 @@ importers:
       '@skeletonlabs/tw-plugin':
         specifier: 0.4.0
         version: 0.4.0(tailwindcss@3.4.13)
-      '@stellar/stellar-sdk':
-        specifier: 13.0.0-beta.1
-        version: 13.0.0-beta.1
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
         version: 3.2.5(@sveltejs/kit@2.6.1(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.8(@types/node@22.7.4)))(svelte@4.2.19)(vite@5.4.8(@types/node@22.7.4)))
@@ -44,15 +60,6 @@ importers:
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.47)
-      base64url:
-        specifier: ^3.0.1
-        version: 3.0.1
-      deployer-sdk:
-        specifier: file:./packages/deployer
-        version: deployer@file:packages/deployer
-      dice-game:
-        specifier: file:./packages/dice_game
-        version: dice_game@file:packages/dice_game
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -74,9 +81,6 @@ importers:
       lucide-svelte:
         specifier: ^0.446.0
         version: 0.446.0(svelte@4.2.19)
-      passkey-kit:
-        specifier: ^0.9.0
-        version: 0.9.0
       postcss:
         specifier: 8.4.47
         version: 8.4.47
@@ -86,9 +90,6 @@ importers:
       prettier-plugin-svelte:
         specifier: ^3.1.2
         version: 3.2.7(prettier@3.3.3)(svelte@4.2.19)
-      qrcode:
-        specifier: ^1.5.4
-        version: 1.5.4
       svelte:
         specifier: ^4.2.7
         version: 4.2.19
