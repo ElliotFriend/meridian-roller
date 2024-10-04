@@ -27,9 +27,7 @@
                 roller: $contractId
             });
 
-
             await account.sign(at, { keyId: $keyId });
-            console.log('at', at)
             const res = await send(at.built!);
 
             let result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');

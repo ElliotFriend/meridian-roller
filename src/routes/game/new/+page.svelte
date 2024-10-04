@@ -3,7 +3,6 @@
 
     import { goto } from '$app/navigation';
     import { getToastStore } from '@skeletonlabs/skeleton';
-    import type { PageData } from './$types';
     import { contractId } from '$lib/stores/contractId';
     import { keyId } from '$lib/stores/keyId';
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
@@ -11,8 +10,6 @@
     import { scValToNative, xdr } from '@stellar/stellar-sdk'
     import deployerSdk from '$lib/contracts/deployerContract'
     import diceGameSdk from '$lib/contracts/diceGameContract'
-
-    export let data: PageData;
 
     const toastStore = getToastStore();
 
@@ -42,15 +39,11 @@
             })
 
             await account.sign(at, { keyId: $keyId });
-            console.log('xdr', at.built?.toXDR())
-
             const res = await send(at.built!);
-            console.log('res', res);
 
             const txMeta = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64')
             // @ts-ignore
             const deployedGame = scValToNative(txMeta.value().sorobanMeta().returnValue())[0]
-            console.log('deployedGame', deployedGame);
 
             toastStore.trigger({
                 message: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
