@@ -1,14 +1,18 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
-import { Buffer } from "buffer";
-import { AssembledTransaction, Client as ContractClient, ClientOptions as ContractClientOptions } from '@stellar/stellar-sdk/contract';
+import { Buffer } from 'buffer';
+import {
+    AssembledTransaction,
+    Client as ContractClient,
+    ClientOptions as ContractClientOptions
+} from '@stellar/stellar-sdk/contract';
 export * from '@stellar/stellar-sdk';
 export * as contract from '@stellar/stellar-sdk/contract';
 export * as rpc from '@stellar/stellar-sdk/rpc';
 export declare const networks: {
     readonly testnet: {
-        readonly networkPassphrase: "Test SDF Network ; September 2015";
-        readonly contractId: "CAPAFWGKU4OX66NT53DTT5NOH6NPES5ZKBNPUVINUH6P562NAQ2MNPOD";
+        readonly networkPassphrase: 'Test SDF Network ; September 2015';
+        readonly contractId: 'CAPAFWGKU4OX66NT53DTT5NOH6NPES5ZKBNPUVINUH6P562NAQ2MNPOD';
     };
 };
 export declare const Errors: {};
@@ -24,26 +28,35 @@ export interface Client {
      *
      * Returns the contract ID and result of the init function.
      */
-    deploy: ({ deployer, wasm_hash, salt, init_fn, init_args }: {
-        deployer: string;
-        wasm_hash: Buffer;
-        salt: Buffer;
-        init_fn: string;
-        init_args: Array<any>;
-    }, options?: {
-        /**
-         * The fee to pay for the transaction. Default: BASE_FEE
-         */
-        fee?: number;
-        /**
-         * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
-         */
-        timeoutInSeconds?: number;
-        /**
-         * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
-         */
-        simulate?: boolean;
-    }) => Promise<AssembledTransaction<readonly [string, any]>>;
+    deploy: (
+        {
+            deployer,
+            wasm_hash,
+            salt,
+            init_fn,
+            init_args
+        }: {
+            deployer: string;
+            wasm_hash: Buffer;
+            salt: Buffer;
+            init_fn: string;
+            init_args: Array<any>;
+        },
+        options?: {
+            /**
+             * The fee to pay for the transaction. Default: BASE_FEE
+             */
+            fee?: number;
+            /**
+             * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
+             */
+            timeoutInSeconds?: number;
+            /**
+             * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
+             */
+            simulate?: boolean;
+        }
+    ) => Promise<AssembledTransaction<readonly [string, any]>>;
 }
 export declare class Client extends ContractClient {
     readonly options: ContractClientOptions;

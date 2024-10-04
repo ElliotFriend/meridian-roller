@@ -49,7 +49,7 @@ function filenameNoExtension(filename) {
 
 function deploy(wasm) {
     exe(
-        `${cli} contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)}`,
+        `${cli} contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)}`
     );
 }
 
@@ -68,18 +68,18 @@ function contracts() {
     return contractFiles
         .map((path) => ({
             alias: filenameNoExtension(path),
-            ...JSON.parse(readFileSync(path)),
+            ...JSON.parse(readFileSync(path))
         }))
         .filter((data) => data.ids[process.env.STELLAR_NETWORK_PASSPHRASE])
         .map((data) => ({
             alias: data.alias,
-            id: data.ids[process.env.STELLAR_NETWORK_PASSPHRASE],
+            id: data.ids[process.env.STELLAR_NETWORK_PASSPHRASE]
         }));
 }
 
 function bind({ alias, id }) {
     exe(
-        `${cli} contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`,
+        `${cli} contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`
     );
 }
 
@@ -113,8 +113,8 @@ function importAll() {
 
 function init({ id }) {
     exe(
-        `${cli} contract invoke --id ${id} -- init --admin ${process.env.STELLAR_ACCOUNT} --token_address CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC --num_faces 6`,
-    )
+        `${cli} contract invoke --id ${id} -- init --admin ${process.env.STELLAR_ACCOUNT} --token_address CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC --num_faces 6`
+    );
 }
 
 function initAll() {

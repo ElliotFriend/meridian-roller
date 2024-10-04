@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { getToastStore } from '@skeletonlabs/skeleton';
-    import qrCode from 'qrcode'
+    import qrCode from 'qrcode';
     import { contractId } from '$lib/stores/contractId';
     import { keyId } from '$lib/stores/keyId';
     import diceGameSdk from '$lib/contracts/diceGameContract';
@@ -14,27 +14,28 @@
 
     let qrDataUrl = qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
         errorCorrectionLevel: 'high'
-    })
+    });
 
-    let isWaiting: boolean = false
+    let isWaiting: boolean = false;
 
-    $: isButtonDisabled = !$contractId || isWaiting
+    $: isButtonDisabled = !$contractId || isWaiting;
 
     async function callIt() {
-        console.log('calling it a day')
+        console.log('calling it a day');
         try {
-            isWaiting = true
+            isWaiting = true;
             const at = await diceGameSdk.call_it();
 
-            await account.sign(at, { keyId: $keyId })
+            await account.sign(at, { keyId: $keyId });
             await send(at.built!);
 
             toastStore.trigger({
-                message: 'Hooray! Everyone is a winner, now! I\'ll start handing out the participation trophies.',
+                message:
+                    "Hooray! Everyone is a winner, now! I'll start handing out the participation trophies.",
                 background: 'variant-filled-primary'
-            })
+            });
         } catch (err) {
-            console.log('err', err)
+            console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong ending the game. Please try again later.',
                 background: 'variant-filled-error'
@@ -54,4 +55,6 @@
 {/await}
 
 <p>Is this taking too long? Click the button below, and then everybody is a winner!</p>
-<button class="btn variant-filled-primary" disabled={isButtonDisabled} on:click={callIt}>Call it!</button>
+<button class="btn variant-filled-primary" disabled={isButtonDisabled} on:click={callIt}
+    >Call it!</button
+>

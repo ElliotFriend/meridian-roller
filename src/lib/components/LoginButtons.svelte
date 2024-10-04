@@ -31,7 +31,7 @@
                 background: 'variant-filled-error'
             });
         }
-    };
+    }
 
     async function login(storedKey?: string) {
         console.log('logging in');
@@ -53,7 +53,7 @@
                 background: 'variant-filled-error'
             });
         }
-    };
+    }
 
     function logout() {
         console.log('logging out');
@@ -69,16 +69,14 @@
                 background: 'variant-filled-error'
             });
         }
-    };
+    }
 </script>
 
 {#if $contractId}
-    <button type="button" class="btn variant-filled-secondary" on:click={logout}
-        >Logout</button
-    >
+    <button type="button" class="btn variant-filled-secondary" on:click={logout}>Logout</button>
 {:else}
-    <button type="button" class="btn variant-filled-primary" on:click={signup}
-        >Signup</button
+    <button type="button" class="btn variant-filled-primary" on:click={signup}>Signup</button>
+    <button type="button" class="btn variant-filled-secondary" on:click={() => login()}
+        >Login</button
     >
-    <button type="button" class="btn variant-filled-secondary" on:click={() => login()}>Login</button>
 {/if}

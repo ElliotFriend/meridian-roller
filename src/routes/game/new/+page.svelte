@@ -7,21 +7,21 @@
     import { keyId } from '$lib/stores/keyId';
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
     import { account, send, getSalt } from '$lib/passkeyClient';
-    import { scValToNative, xdr } from '@stellar/stellar-sdk'
-    import deployerSdk from '$lib/contracts/deployerContract'
-    import diceGameSdk from '$lib/contracts/diceGameContract'
+    import { scValToNative, xdr } from '@stellar/stellar-sdk';
+    import deployerSdk from '$lib/contracts/deployerContract';
+    import diceGameSdk from '$lib/contracts/diceGameContract';
 
     const toastStore = getToastStore();
 
     let numDice: number = 3;
     let numFaces: 4 | 6 | 8 | 10 | 12 | 20;
-    let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS
+    let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS;
     let isWaiting: boolean = false;
 
     $: rollButtonDisabled = isWaiting || !$contractId;
 
     async function deployGame() {
-        console.log('deploying game')
+        console.log('deploying game');
         try {
             isWaiting = true;
             const at = await deployerSdk.deploy({
@@ -33,26 +33,26 @@
                     ...diceGameSdk.spec.funcArgsToScVals('init', {
                         admin: $contractId,
                         token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
-                        num_faces: parseInt(numFaces.toString()),
-                    }),
-                ],
-            })
+                        num_faces: parseInt(numFaces.toString())
+                    })
+                ]
+            });
 
             await account.sign(at, { keyId: $keyId });
             const res = await send(at.built!);
 
-            const txMeta = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64')
+            const txMeta = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
             // @ts-ignore
-            const deployedGame = scValToNative(txMeta.value().sorobanMeta().returnValue())[0]
+            const deployedGame = scValToNative(txMeta.value().sorobanMeta().returnValue())[0];
 
             toastStore.trigger({
                 message: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
-                background: 'variant-filled-success',
-            })
+                background: 'variant-filled-success'
+            });
 
             goto(`./${deployedGame}/manage`);
         } catch (err) {
-            console.error('err', err)
+            console.error('err', err);
             toastStore.trigger({
                 message: 'Something went wrong rolling dice. Please try again later.',
                 background: 'variant-filled-error'
@@ -64,11 +64,16 @@
 </script>
 
 <h1 class="h1">Start a new game</h1>
-<p>Choose which token you'd like to use, and configure the dice you'd like to be rolled in your game below.</p>
+<p>
+    Choose which token you'd like to use, and configure the dice you'd like to be rolled in your
+    game below.
+</p>
 
 <form on:submit|preventDefault class="space-y-4">
     <label class="label">
-        <span>Specify how many dice should be rolled (currently, it can only be 3. sorry 'bout that)</span>
+        <span
+            >Specify how many dice should be rolled (currently, it can only be 3. sorry 'bout that)</span
+        >
         <input class="input" type="number" bind:value={numDice} placeholder="3" readonly />
     </label>
     <label class="label">
@@ -89,8 +94,12 @@
         <span>Select the payment token</span>
         <select class="select" bind:value={tokenAddress}>
             <option value={PUBLIC_NATIVE_CONTRACT_ADDRESS}>XLM</option>
-            <option value="CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA" disabled>USDC</option>
+            <option value="CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA" disabled
+                >USDC</option
+            >
         </select>
     </label>
-    <button class="btn variant-filled-primary" disabled={rollButtonDisabled} on:click={deployGame}>Create Game</button>
+    <button class="btn variant-filled-primary" disabled={rollButtonDisabled} on:click={deployGame}
+        >Create Game</button
+    >
 </form>

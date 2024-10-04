@@ -1,4 +1,4 @@
-import { Account, BASE_FEE, StrKey, TransactionBuilder } from '@stellar/stellar-sdk'
+import { Account, BASE_FEE, StrKey, TransactionBuilder } from '@stellar/stellar-sdk';
 import { Server } from '@stellar/stellar-sdk/rpc';
 import { PasskeyKit, SACClient } from 'passkey-kit';
 
@@ -58,5 +58,5 @@ export async function getSalt() {
     return fetch('/api/salt').then(async (res) => {
         if (res.ok) return res.text();
         else throw await res.text();
-    })
+    });
 }
