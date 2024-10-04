@@ -91,26 +91,8 @@ impl HelloContract {
         check_if_winner(&env);
         roller.require_auth();
 
-        let mut rolls = Vec::new(&env);
-        let mut total = 0u32;
-
-        let address_bytes = roller.clone().to_xdr(&env);
-        let address_bytes = address_bytes.slice(address_bytes.len() - 32..);
-
-        let mut slice = [0u8; 32];
-        address_bytes.copy_into_slice(&mut slice);
-
-        let seed = Bytes::from_array(&env, &slice);
-
-        env.prng().seed(seed);
-
-        // Iterate through the number of dice, generating a random number within
-        // the specified range
-        for _i in 1..=3 {
-            let rolled_value: u64 = env.prng().gen_range(1..=6);
-            rolls.push_back(rolled_value as u32);
-            total += rolled_value as u32;
-        }
+        let rolls: Vec<u32>;
+        let total: u32;
 
         // check if user's first roll, if so, deposit from native SAC into the contract
         if !env
@@ -185,10 +167,10 @@ impl HelloContract {
     }
 
     pub fn call_it(env: Env) -> Result<(), Error> {
-        check_if_winner(&env);
         if !check_initialized(&env) {
             panic_with_error!(env, Error::NotInitialized);
         }
+        check_if_winner(&env);
 
         env.storage()
             .instance()
