@@ -3,7 +3,7 @@
 
     import { goto } from '$app/navigation';
     import { getToastStore } from '@skeletonlabs/skeleton';
-    import { contractId } from '$lib/stores/contractId';
+    import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
     import { account, send, getSalt } from '$lib/passkeyClient';
@@ -18,20 +18,20 @@
     let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS;
     let isWaiting: boolean = false;
 
-    $: rollButtonDisabled = isWaiting || !$contractId;
+    $: rollButtonDisabled = isWaiting || !$contractAddress;
 
     async function deployGame() {
         console.log('deploying game');
         try {
             isWaiting = true;
             const at = await deployerSdk.deploy({
-                deployer: $contractId,
+                deployer: $contractAddress,
                 wasm_hash: Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'),
                 salt: Buffer.from(await getSalt(), 'hex'),
                 init_fn: 'init',
                 init_args: [
                     ...diceGameSdk.spec.funcArgsToScVals('init', {
-                        admin: $contractId,
+                        admin: $contractAddress,
                         token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
                         num_faces: parseInt(numFaces.toString())
                     })

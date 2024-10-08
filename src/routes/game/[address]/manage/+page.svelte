@@ -1,20 +1,32 @@
 <script lang="ts">
+    import { type Readable } from 'svelte/store';
+    import { source } from 'sveltekit-sse'
     import { page } from '$app/stores';
     import { getToastStore } from '@skeletonlabs/skeleton';
     import qrCode from 'qrcode';
-    import { contractId } from '$lib/stores/contractId';
+    import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send } from '$lib/passkeyClient';
     import diceGameSdk from '$lib/contracts/diceGameContract';
+    import Leaderboard from '$lib/components/Leaderboard.svelte';
 
     import type { PageData } from './$types';
     export let data: PageData;
+
+    // const connection = source('./manage')
+    // $: value = connection.select('leaderboard').json(
+    //     function or({error, raw, previous}){
+    //         console.error(`Could not parse "${raw}" as json.`, error)
+    //         return previous  // This will be the new value of the store
+    // })
+    // $: leaderboardData = value
+    // $: console.log($value)
 
     diceGameSdk.options.contractId = data.gameAddress;
 
     let isWaiting: boolean = false;
 
-    $: isButtonDisabled = !$contractId || isWaiting;
+    $: isButtonDisabled = !$contractAddress || isWaiting;
 
     const toastStore = getToastStore();
 
@@ -60,3 +72,5 @@
 <button class="btn variant-filled-primary" disabled={isButtonDisabled} on:click={callIt}
     >Call it!</button
 >
+
+<Leaderboard />

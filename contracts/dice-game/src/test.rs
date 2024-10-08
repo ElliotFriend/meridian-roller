@@ -9,8 +9,8 @@ use soroban_sdk::{testutils::Address as _, Env};
 #[test]
 fn test_including_winner() {
     let env = Env::default();
-    let contract_address = env.register_contract(None, HelloContract);
-    let client = HelloContractClient::new(&env, &contract_address);
+    let contract_address = env.register_contract(None, RollerContract);
+    let client = RollerContractClient::new(&env, &contract_address);
 
     // env.budget().reset_unlimited();
     env.mock_all_auths();
@@ -82,8 +82,8 @@ fn test_including_winner() {
 #[should_panic(expected = "HostError: Error(Contract, #1)")]
 fn test_past_winner() {
     let env = Env::default();
-    let contract_address = env.register_contract(None, HelloContract);
-    let client = HelloContractClient::new(&env, &contract_address);
+    let contract_address = env.register_contract(None, RollerContract);
+    let client = RollerContractClient::new(&env, &contract_address);
 
     // env.budget().reset_unlimited();
     env.mock_all_auths();
@@ -108,8 +108,8 @@ fn test_past_winner() {
 #[test]
 fn test_everyone_wins() {
     let env = Env::default();
-    let contract_address = env.register_contract(None, HelloContract);
-    let client = HelloContractClient::new(&env, &contract_address);
+    let contract_address = env.register_contract(None, RollerContract);
+    let client = RollerContractClient::new(&env, &contract_address);
 
     // env.budget().reset_unlimited();
     env.mock_all_auths();

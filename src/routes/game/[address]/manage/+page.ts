@@ -1,12 +1,12 @@
 import type { PageLoad } from './$types';
-import { contractId } from '$lib/stores/contractId';
+import { contractAddress } from '$lib/stores/contractAddress';
 import { get } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 
 export const load = (async ({ parent }) => {
     const { gameAdmin } = await parent();
-    if (get(contractId) !== gameAdmin) {
-        error(403, { message: 'unauthorized admin' });
-    }
+    // if (get(contractAddress) !== gameAdmin) {
+    //     error(403, { message: 'unauthorized admin' });
+    // }
     return {};
 }) satisfies PageLoad;

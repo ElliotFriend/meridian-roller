@@ -3,7 +3,7 @@
     export let data: PageData;
 
     import { getToastStore } from '@skeletonlabs/skeleton';
-    import { contractId } from '$lib/stores/contractId';
+    import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send } from '$lib/passkeyClient';
     import diceGame from '$lib/contracts/diceGameContract';
@@ -15,7 +15,7 @@
     let rollResult: number[];
     let isWaiting: boolean = false;
 
-    $: rollButtonDisabled = isWaiting || !$contractId;
+    $: rollButtonDisabled = isWaiting || !$contractAddress;
 
     const toastStore = getToastStore();
 
@@ -24,7 +24,7 @@
         try {
             isWaiting = true;
             const at = await diceGame.roll({
-                roller: $contractId
+                roller: $contractAddress
             });
 
             await account.sign(at, { keyId: $keyId });

@@ -111,10 +111,12 @@ function importAll() {
     contracts().forEach(importContract);
 }
 
-function init({ id }) {
-    exe(
-        `${cli} contract invoke --id ${id} -- init --admin ${process.env.STELLAR_ACCOUNT} --token_address CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC --num_faces 6`
-    );
+function init({ id, alias }) {
+    if (alias === 'dice_game') {
+        exe(
+            `${cli} contract invoke --id ${id} -- init --admin ${process.env.STELLAR_ACCOUNT} --token_address CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC --num_faces 6`
+        );
+    }
 }
 
 function initAll() {

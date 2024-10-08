@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { contractId } from '$lib/stores/contractId';
+    import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, fundContract, getContractId } from '$lib/passkeyClient';
     import { PUBLIC_SITE_NAME } from '$env/static/public';
-    import base64url from 'base64url';
     import { getToastStore } from '@skeletonlabs/skeleton';
     let toastStore = getToastStore();
 
@@ -11,19 +10,18 @@
         console.log('signing up');
         try {
             const {
-                keyId: kid,
+                keyId_base64: kid,
                 contractId: cid,
                 built
             } = await account.createWallet(PUBLIC_SITE_NAME, 'High Stakes Roller');
 
-            const keyId_b64 = base64url(kid);
-            keyId.set(keyId_b64);
-            console.log('key id', keyId_b64);
-            contractId.set(cid);
-            console.log('contract id', cid);
+            keyId.set(kid);
+            console.log('key id', $keyId);
+            contractAddress.set(cid);
+            console.log('contract address', $contractAddress);
 
             await send(built);
-            await fundContract($contractId);
+            await fundContract($contractAddress);
         } catch (err) {
             console.log('err', err);
             toastStore.trigger({
@@ -33,19 +31,17 @@
         }
     }
 
-    async function login(storedKey?: string) {
+    async function login() {
         console.log('logging in');
         try {
-            const { keyId: kid, contractId: cid } = await account.connectWallet({
-                keyId: storedKey,
+            const { keyId_base64: kid, contractId: cid } = await account.connectWallet({
                 getContractId
             });
 
-            const keyId_base64 = base64url(kid);
-            keyId.set(keyId_base64);
+            keyId.set(kid);
             console.log('key id', $keyId);
-            contractId.set(cid);
-            console.log('contract id', $contractId);
+            contractAddress.set(cid);
+            console.log('contract address', $contractAddress);
         } catch (err) {
             console.log('err', err);
             toastStore.trigger({
@@ -59,7 +55,7 @@
         console.log('logging out');
         try {
             keyId.reset();
-            contractId.set('');
+            contractAddress.set('');
             localStorage.removeItem('dg:keyId');
             window.location.reload();
         } catch (err) {
@@ -72,7 +68,7 @@
     }
 </script>
 
-{#if $contractId}
+{#if $contractAddress}
     <button type="button" class="btn variant-filled-secondary" on:click={logout}>Logout</button>
 {:else}
     <button type="button" class="btn variant-filled-primary" on:click={signup}>Signup</button>

@@ -1,8 +1,7 @@
 #![no_std]
 
 use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, panic_with_error, token, vec, xdr::ToXdr,
-    Address, Bytes, Env, Vec,
+    contract, contracterror, contractimpl, contracttype, panic_with_error, symbol_short, token, vec, xdr::ToXdr, Address, Bytes, Env, Vec
 };
 
 #[contracttype]
@@ -57,10 +56,10 @@ fn roll_dice(env: &Env, num_faces: &u32) -> Vec<u32> {
 }
 
 #[contract]
-pub struct HelloContract;
+pub struct RollerContract;
 
 #[contractimpl]
-impl HelloContract {
+impl RollerContract {
     pub fn init(
         env: Env,
         admin: Address,
@@ -78,6 +77,19 @@ impl HelloContract {
             .instance()
             .set(&DataKey::TokenAddress, &token_address);
         env.storage().instance().set(&DataKey::NumFaces, &num_faces);
+
+        // Publish an event about the game being ready
+        // The event has two topics:
+        //   - The "MROLLER" symbol
+        //   - The "ready" symbol
+        //   - The admin address
+        // The event data is the number of faces on each die.
+        env.events().publish((
+            symbol_short!("MROLLER"),
+            symbol_short!("ready"),
+            admin,
+        ), num_faces);
+
         Ok(())
     }
 
@@ -166,6 +178,24 @@ impl HelloContract {
             let contract_balance = token_client.balance(&contract_address);
 
             token_client.transfer(&contract_address, &roller, &contract_balance);
+
+            // Publish an event about the game being won
+            // The event has two topics:
+            //   - The "MROLLER" symbol
+            //   - The "winner" symbol
+            //   - The winner's' address
+            // The event data is the prize pot that has been won.
+            env.events().publish((
+                symbol_short!("MROLLER"),
+                symbol_short!("winner"),
+                roller,
+            ), contract_balance);
+        } else {
+            env.events().publish((
+                symbol_short!("MROLLER"),
+                symbol_short!("roller"),
+                roller,
+            ), total);
         }
 
         Ok(rolls)
@@ -177,12 +207,33 @@ impl HelloContract {
         }
         check_if_winner(&env);
 
-        env.storage()
+        let admin = env.storage()
             .instance()
             .get::<DataKey, Address>(&DataKey::Admin)
-            .unwrap()
-            .require_auth();
+            .unwrap();
+
+        admin.require_auth();
         env.storage().instance().set(&DataKey::EveryoneWins, &true);
+
+        let contract_balance = token::TokenClient::new(
+            &env,
+            &env.storage()
+                .instance()
+                .get(&DataKey::TokenAddress)
+                .unwrap(),
+        ).balance(&env.current_contract_address());
+
+        // Publish an event about the game being called
+        // The event has two topics:
+        //   - The "MROLLER" symbol
+        //   - The "called" symbol
+        //   - The admin address
+        // The event data is the contract balance (the bricked prize pot).
+        env.events().publish((
+            symbol_short!("MROLLER"),
+            symbol_short!("called"),
+            admin,
+        ), contract_balance);
 
         Ok(())
     }
