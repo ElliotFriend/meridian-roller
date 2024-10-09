@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "api/game/[address]/events/+server.ts": {
+            "maxDuration": 60
+        }
+    }
+}
