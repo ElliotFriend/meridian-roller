@@ -5,11 +5,25 @@
 <footer class="flex-none bg-surface-100-800-token shadow-xl p-4">
     <div class="flex flex-col md:flex-row justify-around align-center mx-auto">
         <div class="space-y-1">
-            <h6 class="h6">View Contract</h6>
+            <h6 class="h6">This Project</h6>
             <ul class="flex">
-                <li class="flex-initial">
-                    <!-- <StellarExpertLink target={networks.testnet.contractId} /> -->
-                    (link to a contract)
+                <li>
+                    <a
+                        class="anchor"
+                        target="_blank"
+                        href="https://github.com/elliotfriend/meridian-roller"
+                    >
+                        View Source Code
+                    </a>
+                </li>
+                <li>
+                    <a
+                        class="anchor"
+                        target="_blank"
+                        href="https://github.com/elliotfriend/soroban-template-sveltekit-passkeys"
+                    >
+                        Frontend Template
+                    </a>
                 </li>
             </ul>
         </div>
@@ -24,15 +38,6 @@
                             href="https://developers.stellar.org/docs/build/apps/smart-wallets"
                         >
                             Developer Documentation
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            class="anchor"
-                            target="_blank"
-                            href="https://github.com/elliotfriend/meridian-roller"
-                        >
-                            View Source Code
                         </a>
                     </li>
                 </ul>
