@@ -164,6 +164,10 @@ impl RollerContract {
             .set(&DataKey::Roller(roller.clone()), &roller_store);
 
         if total == jackpot {
+            // TODO: lots of this stuff fails when someone wins because the
+            // proper footprint for all this stuff (token contract instance,
+            // winner datakey, etc.) isn't attached to the transaction, because
+            // i don't know how to do that (yet).
             env.storage().instance().set(&DataKey::Winner, &roller);
 
             let token_client = token::TokenClient::new(
