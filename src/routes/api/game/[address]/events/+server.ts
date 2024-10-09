@@ -15,10 +15,10 @@ export const POST: RequestHandler = async ({ params }) => {
         async function start({ emit, lock }) {
             console.log('connection open')
             const contractAddress = params.address
-            let startLedger = (await rpc.getLatestLedger()).sequence - 10000
+            let startLedger = (await rpc.getLatestLedger()).sequence - 1000
+
             let foundWinner: boolean = false
             let gameCalled: boolean = false
-
             let retObj: Record<string, any> = {};
 
             while (!(foundWinner || gameCalled)) {

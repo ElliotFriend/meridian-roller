@@ -61,7 +61,7 @@
 </script>
 
 <h1 class="h1">Manage Game</h1>
-<p>Managing game <code>{data.gameAddress}</code></p>
+<p>Managing game: <code class="code">{data.gameAddress.slice(0, 6)}...</code></p>
 <div id="container"></div>
 
 {#await qrDataUrl then url}

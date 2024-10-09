@@ -51,7 +51,7 @@
 </script>
 
 <h1 class="h1">Play Game</h1>
-<p>Playing game <code>{data.gameAddress}</code></p>
+<p>Playing game: <code class="code">{data.gameAddress.slice(0, 6)}...</code></p>
 
 <button
     type="button"

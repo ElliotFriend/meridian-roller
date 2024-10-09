@@ -2,7 +2,6 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, fundContract, getContractId } from '$lib/passkeyClient';
-    import { PUBLIC_SITE_NAME } from '$env/static/public';
     import { getToastStore } from '@skeletonlabs/skeleton';
     let toastStore = getToastStore();
 
@@ -13,7 +12,7 @@
                 keyId_base64: kid,
                 contractId: cid,
                 built
-            } = await account.createWallet(PUBLIC_SITE_NAME, 'High Stakes Roller');
+            } = await account.createWallet("Meridian Roller", 'High Stakes Roller');
 
             keyId.set(kid);
             console.log('key id', $keyId);
