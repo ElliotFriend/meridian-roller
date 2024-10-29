@@ -2974,6 +2974,25 @@
     ],
     [
       [
+        "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ",
+        {
+          "function": {
+            "contract_fn": {
+              "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+              "function_name": "claim_prize",
+              "args": [
+                {
+                  "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ"
+                }
+              ]
+            }
+          },
+          "sub_invocations": []
+        }
+      ]
+    ],
+    [
+      [
         "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
         {
           "function": {
@@ -3109,6 +3128,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 16
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3177,6 +3204,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 13
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3249,6 +3284,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 15
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3317,6 +3360,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 8
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3389,6 +3440,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3457,6 +3516,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 6
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3529,6 +3596,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3597,6 +3672,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3669,6 +3752,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 11
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3737,6 +3828,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3809,6 +3908,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -3877,6 +3984,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 12
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -3949,6 +4064,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 12
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4017,6 +4140,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 8
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4089,6 +4220,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 11
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4157,6 +4296,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 10
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4229,6 +4376,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4297,6 +4452,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4369,6 +4532,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 12
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4437,6 +4608,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4509,6 +4688,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 15
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4577,6 +4764,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 6
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4649,6 +4844,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4717,6 +4920,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4789,6 +5000,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 13
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4857,6 +5076,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 16
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -4929,6 +5156,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 6
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -4997,6 +5232,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 11
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5069,6 +5312,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5137,6 +5388,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 12
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5209,6 +5468,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 14
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5277,6 +5544,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 13
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5349,6 +5624,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5417,6 +5700,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5489,6 +5780,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 16
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5557,6 +5856,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 14
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5629,6 +5936,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 6
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5697,6 +6012,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 7
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5769,6 +6092,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 10
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5837,6 +6168,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 13
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -5909,6 +6248,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -5977,6 +6324,14 @@
                 "durability": "persistent",
                 "val": {
                   "map": [
+                    {
+                      "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 9
+                      }
+                    },
                     {
                       "key": {
                         "symbol": "high_roll"
@@ -6049,6 +6404,14 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "first_roll"
+                      },
+                      "val": {
+                        "u32": 18
+                      }
+                    },
+                    {
+                      "key": {
                         "symbol": "high_roll"
                       },
                       "val": {
@@ -6070,6 +6433,175 @@
                       "val": {
                         "u32": 1
                       }
+                    }
+                  ]
+                }
+              }
+            },
+            "ext": "v0"
+          },
+          4095
+        ]
+      ],
+      [
+        {
+          "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+            "key": {
+              "vec": [
+                {
+                  "symbol": "Rollers"
+                }
+              ]
+            },
+            "durability": "persistent"
+          }
+        },
+        [
+          {
+            "last_modified_ledger_seq": 0,
+            "data": {
+              "contract_data": {
+                "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
+                "key": {
+                  "vec": [
+                    {
+                      "symbol": "Rollers"
+                    }
+                  ]
+                },
+                "durability": "persistent",
+                "val": {
+                  "vec": [
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLZM"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARQG5"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATYON"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAX5"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXI7N"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYRE5"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2ZMN"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4BV5"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6J5N"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABB6KO"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDWC6"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABFO3O"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHGT6"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABI7IO"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABKXA6"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABMPZO"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABOHR6"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABR4OP"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABTUG7"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVM7P"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXEX7"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABY5MP"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB2VE7"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4N5P"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB6FV7"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBKTY"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDC3I"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACF2CY"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACHSKI"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACILRY"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACKDZI"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACM3AY"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACOTII"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACRIXZ"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACTA7J"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACVYGZ"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACXQOJ"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACYJVZ"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC2B5J"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC4ZEZ"
+                    },
+                    {
+                      "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ"
                     }
                   ]
                 }
@@ -6119,7 +6651,19 @@
                         "key": {
                           "vec": [
                             {
-                              "symbol": "Balance"
+                              "symbol": "NumFaces"
+                            }
+                          ]
+                        },
+                        "val": {
+                          "u32": 6
+                        }
+                      },
+                      {
+                        "key": {
+                          "vec": [
+                            {
+                              "symbol": "PrizePot"
                             }
                           ]
                         },
@@ -6128,18 +6672,6 @@
                             "hi": 0,
                             "lo": 4490000000
                           }
-                        }
-                      },
-                      {
-                        "key": {
-                          "vec": [
-                            {
-                              "symbol": "NumFaces"
-                            }
-                          ]
-                        },
-                        "val": {
-                          "u32": 6
                         }
                       },
                       {
@@ -6776,39 +7308,6 @@
             "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
             "key": {
               "ledger_key_nonce": {
-                "nonce": 2841415490237507697
-              }
-            },
-            "durability": "temporary"
-          }
-        },
-        [
-          {
-            "last_modified_ledger_seq": 0,
-            "data": {
-              "contract_data": {
-                "ext": "v0",
-                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
-                "key": {
-                  "ledger_key_nonce": {
-                    "nonce": 2841415490237507697
-                  }
-                },
-                "durability": "temporary",
-                "val": "void"
-              }
-            },
-            "ext": "v0"
-          },
-          6311999
-        ]
-      ],
-      [
-        {
-          "contract_data": {
-            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
-            "key": {
-              "ledger_key_nonce": {
                 "nonce": 2891388370666955040
               }
             },
@@ -7155,6 +7654,39 @@
                 "key": {
                   "ledger_key_nonce": {
                     "nonce": 5012940724606903311
+                  }
+                },
+                "durability": "temporary",
+                "val": "void"
+              }
+            },
+            "ext": "v0"
+          },
+          6311999
+        ]
+      ],
+      [
+        {
+          "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
+            "key": {
+              "ledger_key_nonce": {
+                "nonce": 5148037999226383026
+              }
+            },
+            "durability": "temporary"
+          }
+        },
+        [
+          {
+            "last_modified_ledger_seq": 0,
+            "data": {
+              "contract_data": {
+                "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
+                "key": {
+                  "ledger_key_nonce": {
+                    "nonce": 5148037999226383026
                   }
                 },
                 "durability": "temporary",
@@ -9069,6 +9601,39 @@
                 "key": {
                   "ledger_key_nonce": {
                     "nonce": 2526474023416127439
+                  }
+                },
+                "durability": "temporary",
+                "val": "void"
+              }
+            },
+            "ext": "v0"
+          },
+          6311999
+        ]
+      ],
+      [
+        {
+          "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ",
+            "key": {
+              "ledger_key_nonce": {
+                "nonce": 2841415490237507697
+              }
+            },
+            "durability": "temporary"
+          }
+        },
+        [
+          {
+            "last_modified_ledger_seq": 0,
+            "data": {
+              "contract_data": {
+                "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ",
+                "key": {
+                  "ledger_key_nonce": {
+                    "nonce": 2841415490237507697
                   }
                 },
                 "durability": "temporary",
@@ -12666,7 +13231,7 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
                 "symbol": "ready"
@@ -12920,10 +13485,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM"
@@ -13186,10 +13751,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4"
@@ -13452,10 +14017,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOLZM"
@@ -13718,10 +14283,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARQG5"
@@ -13984,10 +14549,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATYON"
@@ -14250,10 +14815,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAX5"
@@ -14516,10 +15081,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXI7N"
@@ -14782,10 +15347,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYRE5"
@@ -15048,10 +15613,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2ZMN"
@@ -15314,10 +15879,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4BV5"
@@ -15580,10 +16145,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6J5N"
@@ -15846,10 +16411,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABB6KO"
@@ -16112,10 +16677,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDWC6"
@@ -16378,10 +16943,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABFO3O"
@@ -16644,10 +17209,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHGT6"
@@ -16910,10 +17475,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABI7IO"
@@ -17176,10 +17741,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABKXA6"
@@ -17442,10 +18007,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABMPZO"
@@ -17708,10 +18273,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABOHR6"
@@ -17974,10 +18539,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABR4OP"
@@ -18240,10 +18805,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABTUG7"
@@ -18506,10 +19071,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVM7P"
@@ -18772,10 +19337,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXEX7"
@@ -19038,10 +19603,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABY5MP"
@@ -19304,10 +19869,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB2VE7"
@@ -19570,10 +20135,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4N5P"
@@ -19836,10 +20401,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB6FV7"
@@ -20102,10 +20667,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBKTY"
@@ -20368,10 +20933,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDC3I"
@@ -20634,10 +21199,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACF2CY"
@@ -20900,10 +21465,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACHSKI"
@@ -21166,10 +21731,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACILRY"
@@ -21432,10 +21997,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACKDZI"
@@ -21698,10 +22263,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACM3AY"
@@ -21964,10 +22529,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACOTII"
@@ -22230,10 +22795,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACRIXZ"
@@ -22496,10 +23061,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACTA7J"
@@ -22762,10 +23327,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACVYGZ"
@@ -23028,10 +23593,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACXQOJ"
@@ -23294,10 +23859,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACYJVZ"
@@ -23560,10 +24125,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC2B5J"
@@ -23826,10 +24391,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "roller"
+                "symbol": "rolled"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC4ZEZ"
@@ -24087,6 +24652,94 @@
       "event": {
         "ext": "v0",
         "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "ROLLER"
+              },
+              {
+                "symbol": "winner"
+              },
+              {
+                "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ"
+              }
+            ],
+            "data": {
+              "i128": {
+                "hi": 0,
+                "lo": 4490000000
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_return"
+              },
+              {
+                "symbol": "roll"
+              }
+            ],
+            "data": {
+              "vec": [
+                {
+                  "u32": 6
+                },
+                {
+                  "u32": 6
+                },
+                {
+                  "u32": 6
+                }
+              ]
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": null,
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_call"
+              },
+              {
+                "bytes": "0000000000000000000000000000000000000000000000000000000000000001"
+              },
+              {
+                "symbol": "claim_prize"
+              }
+            ],
+            "data": {
+              "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ"
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
         "type_": "diagnostic",
         "body": {
           "v0": {
@@ -24184,10 +24837,10 @@
           "v0": {
             "topics": [
               {
-                "symbol": "MROLLER"
+                "symbol": "ROLLER"
               },
               {
-                "symbol": "winner"
+                "symbol": "claimed"
               },
               {
                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC6RMJ"
@@ -24216,21 +24869,14 @@
                 "symbol": "fn_return"
               },
               {
-                "symbol": "roll"
+                "symbol": "claim_prize"
               }
             ],
             "data": {
-              "vec": [
-                {
-                  "u32": 6
-                },
-                {
-                  "u32": 6
-                },
-                {
-                  "u32": 6
-                }
-              ]
+              "i128": {
+                "hi": 0,
+                "lo": 4490000000
+              }
             }
           }
         }

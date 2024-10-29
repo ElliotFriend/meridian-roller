@@ -1,3 +1,17 @@
+//! # Dice Roller Game
+//!
+//! A Soroban smart contract that simulates a dice-rolling game, where each player is attempting to
+//! roll a "jackpot": all three dice at the highest value.
+//!
+//! On the first roll, a user will pay into the "prize pot" an amount of tokens
+//! equal to their roll. On subsequent rolls no payment is made.
+//!
+//! If a user does roll a "jackpot," they are henceforth eligible to claim the
+//! total sum of tokens in the "prize pot," by invoking the `claim_prize`
+//! function of the contract.
+//!
+//! Admin logic exists to allow the user to "call" the game off, and
+
 #![no_std]
 
 use soroban_sdk::{
@@ -10,9 +24,11 @@ pub enum DataKey {
     Admin,
     TokenAddress,
     Winner,
+    Rollers,
     Roller(Address),
     EveryoneWins,
     NumFaces,
+    PrizePot,
 }
 
 #[contracttype]
@@ -21,6 +37,7 @@ pub struct Roller {
     pub times_rolled: u32,
     pub high_roll: u32,
     pub ledger_number: u32,
+    pub first_roll: u32,
 }
 
 #[contracterror]
@@ -29,19 +46,77 @@ pub struct Roller {
 pub enum Error {
     WinnerFound = 1,        // A winner has already been found.
     NotInitialized = 2,     // Contract has not been initialized yet.
-    AlreadyInitialized = 3, // Contract has already been initialized yet.
+    AlreadyInitialized = 3, // Contract has already been initialized.
+    InvalidWinner = 4,      // You haven't rolled had a jackpot.
+    NotCalled = 5,          // You can't be evil. The game has not been called.
+    AlreadyCalled = 6,      // The game has already been called.
 }
 
-fn check_if_winner(env: &Env) {
-    if env.storage().instance().has(&DataKey::Winner) {
+/// Panic if a winning roll has already occurred.
+fn check_no_winner(env: &Env) {
+    if is_winner(env) {
         panic_with_error!(env, Error::WinnerFound);
     }
 }
 
-fn check_initialized(env: &Env) -> bool {
+/// Return whether or not the instance storage contains a winner's address.
+fn is_winner(env: &Env) -> bool {
+    env.storage().instance().has(&DataKey::Winner)
+}
+
+/// Panic if the game has not been initialized.
+fn check_is_initialized(env: &Env) {
+    if !is_initialized(env) {
+        panic_with_error!(env, Error::NotInitialized);
+    }
+}
+
+/// Panic if the game has not been initialized.
+fn check_not_initialized(env: &Env) {
+    if is_initialized(env) {
+        panic_with_error!(env, Error::AlreadyInitialized);
+    }
+}
+
+/// Return whether or not the instance storage contains an admin's address.
+fn is_initialized(env: &Env) -> bool {
     env.storage().instance().has(&DataKey::Admin)
 }
 
+/// Panic if the game has not been "called" by the admin.
+fn check_everyone_does_win(env: &Env) {
+    if !does_everyone_win(env) {
+        panic_with_error!(env, Error::NotCalled);
+    }
+}
+
+/// Panic if the game has been "called" by the admin.
+fn check_everyone_does_not_win(env: &Env) {
+    if does_everyone_win(env) {
+        panic_with_error!(env, Error::AlreadyCalled);
+    }
+}
+
+/// Returns whether or not the instance storage contains the everyone wins key.
+fn does_everyone_win(env: &Env) -> bool {
+    env.storage().instance().has(&DataKey::EveryoneWins)
+}
+
+/// Panics if the address attempting to claim the prize hasn't rolled a jackpot.
+fn check_valid_winner(env: &Env, roller: &Address) {
+    if !has_rolled_jackpot(env, roller) {
+        panic_with_error!(env, Error::InvalidWinner)
+    }
+}
+
+/// Returns whether or not the roller has previously rolled a jackpot.
+fn has_rolled_jackpot(env: &Env, roller: &Address) -> bool {
+    let num_faces: u32 = env.storage().instance().get(&DataKey::NumFaces).unwrap();
+    let Roller { high_roll, ..} = env.storage().persistent().get(&DataKey::Roller(roller.clone())).unwrap_or_default();
+    high_roll == num_faces * 3
+}
+
+/// Returns a dice roll simulation
 fn roll_dice(env: &Env, num_faces: &u32) -> Vec<u32> {
     let mut rolls = Vec::new(&env);
 
@@ -60,32 +135,53 @@ pub struct RollerContract;
 
 #[contractimpl]
 impl RollerContract {
+    /// Initialize a new game contract.
+    ///
+    /// # Arguments
+    ///
+    /// * `admin` - address corresponding to the deployer of this game.
+    /// * `token_address` - address for the asset contract that will be used for
+    ///   payments to and from the prize pot.
+    /// * `num_faces` - number of faces on each die that will be rolled during
+    ///   the course of the game.
+    ///
+    /// # Panics
+    ///
+    /// * If the contract is already initialized
+    ///
+    /// # Events
+    ///
+    /// Emits an event with the topics `["ROLLER", "ready", admin: Address],
+    /// data = num_faces: u32`
     pub fn init(
         env: Env,
         admin: Address,
         token_address: Address,
         num_faces: u32,
     ) -> Result<(), Error> {
-        if check_initialized(&env) {
-            panic_with_error!(env, Error::AlreadyInitialized);
-        }
+        // Check for various contract states, where we don't want to proceed:
+        check_not_initialized(&env); // already initialized game,
 
         admin.require_auth();
 
         env.storage().instance().set(&DataKey::Admin, &admin);
+        env.storage().instance().set(&DataKey::NumFaces, &num_faces);
         env.storage()
             .instance()
             .set(&DataKey::TokenAddress, &token_address);
-        env.storage().instance().set(&DataKey::NumFaces, &num_faces);
+        env.storage().instance().set(&DataKey::PrizePot, &0i128);
+
+        let roller_vec: Vec<Address> = vec![&env];
+        env.storage().persistent().set(&DataKey::Rollers, &roller_vec);
 
         // Publish an event about the game being ready
-        // The event has two topics:
-        //   - The "MROLLER" symbol
+        // The event has three topics:
+        //   - The "ROLLER" symbol
         //   - The "ready" symbol
         //   - The admin address
         // The event data is the number of faces on each die.
         env.events().publish((
-            symbol_short!("MROLLER"),
+            symbol_short!("ROLLER"),
             symbol_short!("ready"),
             admin,
         ), num_faces);
@@ -93,36 +189,67 @@ impl RollerContract {
         Ok(())
     }
 
+    /// Roll the dice
+    ///
+    /// # Arguments
+    ///
+    /// * `roller` - address rolling the dice during this turn.
+    ///
+    /// # Panics
+    ///
+    /// * If the contract has not yet been initialized
+    /// * If a winner has already been found, and they've claimed the prize pot
+    ///
+    /// # Events
+    ///
+    /// Emits one of two events, depending on the rolled value:
+    ///
+    /// * For a non-winning roll, emits an event with topics `["ROLLER",
+    ///   "rolled", roller: Address], data = total: u32`
+    /// * For a winning roll, emits an event with topics `["ROLLER", "winner",
+    ///   roller: Address], data = prize_pot: u32`
+    ///
+    /// If the game has already been "called" by the admin, and therefore
+    /// everyone is henceforth a winner, no event is emitted and a "jackpot"
+    /// roll is simply returned to the user.
     pub fn roll(env: Env, roller: Address) -> Result<Vec<u32>, Error> {
-        if !check_initialized(&env) {
-            panic_with_error!(env, Error::NotInitialized);
-        }
+        // Check for various contract states, where we don't want to proceed:
+        check_is_initialized(&env); // uninitialized game,
+        check_no_winner(&env);      // a game that has been won,
 
         let num_faces: u32 = env.storage().instance().get(&DataKey::NumFaces).unwrap();
-        let jackpot = num_faces * 3;
 
-        if env.storage().instance().has(&DataKey::EveryoneWins) {
+        // If the game has already been called by the admin, return a jackpot
+        // vec to the roller
+        if does_everyone_win(&env) {
             return Ok(vec![&env, num_faces, num_faces, num_faces]);
         }
 
-        check_if_winner(&env);
+        // Require auth from the roller address
         roller.require_auth();
 
+        let jackpot = num_faces * 3;
         let rolls: Vec<u32>;
         let total: u32;
 
-        // check if user's first roll, if so, deposit from native SAC into the contract
+        // Check if roller's first roll. If so, deposit from native SAC into the
+        // game contract, according to their roll.
         if !env
             .storage()
             .persistent()
             .has(&DataKey::Roller(roller.clone()))
         {
+            // Reseed the env's PRNG, so as to avoid a non-determinative
+            // invocation and deposit. Essentially, we're singing a transaction
+            // that will deposit tokens from the roller's balance, and the
+            // amount is dependant on their roll. If the simulation returns one
+            // result, and the _actual_ invocation another, then the signed auth
+            // will be invalid, since the resulting PRNG roll will (likely) be
+            // different.
             let address_bytes = roller.clone().to_xdr(&env);
             let address_bytes = address_bytes.slice(address_bytes.len() - 32..);
-
             let mut slice = [0u8; 32];
             address_bytes.copy_into_slice(&mut slice);
-
             let seed = Bytes::from_array(&env, &slice);
             env.prng().seed(seed);
 
@@ -141,11 +268,20 @@ impl RollerContract {
                 &env.current_contract_address(),
                 &((total * 10_000_000) as i128),
             );
+
+            let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
+            env.storage().instance().set(&DataKey::PrizePot, &(prize_pot + ((total * 10_000_000) as i128)));
+
+            let mut rollers_vec: Vec<Address> = env.storage().persistent().get(&DataKey::Rollers).unwrap();
+            rollers_vec.push_back(roller.clone());
+            env.storage().persistent().set(&DataKey::Rollers, &rollers_vec);
         } else {
+            // It's not the first roll. Just roll the dice.
             rolls = roll_dice(&env, &num_faces);
             total = rolls.iter().sum();
         }
 
+        // Retrieve and update the roller's data in persistent storage.
         let mut roller_store: Roller = env
             .storage()
             .persistent()
@@ -158,88 +294,226 @@ impl RollerContract {
         } else {
             roller_store.high_roll
         };
+        roller_store.first_roll = if roller_store.first_roll == 0 {
+            total
+        } else {
+            roller_store.first_roll
+        };
 
+        // Store the updated roller data in persistent storage.
         env.storage()
             .persistent()
             .set(&DataKey::Roller(roller.clone()), &roller_store);
 
+        // Emit a "winner" or "rolled" event, depending on the rolled value.
         if total == jackpot {
-            // TODO: lots of this stuff fails when someone wins because the
-            // proper footprint for all this stuff (token contract instance,
-            // winner datakey, etc.) isn't attached to the transaction, because
-            // i don't know how to do that (yet).
-            env.storage().instance().set(&DataKey::Winner, &roller);
-
-            let token_client = token::TokenClient::new(
-                &env,
-                &env.storage()
-                    .instance()
-                    .get(&DataKey::TokenAddress)
-                    .unwrap(),
-            );
-
-            let contract_address = env.current_contract_address();
-            let contract_balance = token_client.balance(&contract_address);
-
-            token_client.transfer(&contract_address, &roller, &contract_balance);
-
+            let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
             // Publish an event about the game being won
-            // The event has two topics:
-            //   - The "MROLLER" symbol
+            // The event has three topics:
+            //   - The "ROLLER" symbol
             //   - The "winner" symbol
-            //   - The winner's' address
-            // The event data is the prize pot that has been won.
+            //   - The winner's address
+            // The event data is the prize pot that has been won
             env.events().publish((
-                symbol_short!("MROLLER"),
+                symbol_short!("ROLLER"),
                 symbol_short!("winner"),
                 roller,
-            ), contract_balance);
+            ), prize_pot);
         } else {
+            // Publish an event about the game being won
+            // The event has three topics:
+            //   - The "ROLLER" symbol
+            //   - The "rolled" symbol
+            //   - The roller's address
+            // The event data is the total rolled value
             env.events().publish((
-                symbol_short!("MROLLER"),
-                symbol_short!("roller"),
+                symbol_short!("ROLLER"),
+                symbol_short!("rolled"),
                 roller,
             ), total);
         }
 
+        // Return the vector of rolled values
         Ok(rolls)
     }
 
-    pub fn call_it(env: Env) -> Result<(), Error> {
-        if !check_initialized(&env) {
-            panic_with_error!(env, Error::NotInitialized);
-        }
-        check_if_winner(&env);
+    /// Claim the prize pot tokens
+    ///
+    /// # Arguments
+    ///
+    /// * `roller` - address attempting to claim the prize pot.
+    ///
+    /// # Panics
+    ///
+    /// * If the contract has not yet been initialized
+    /// * If the roller attempting to claim the prize has not rolled a "jackpot"
+    ///
+    /// # Events
+    ///
+    /// Emits an event with topics `["ROLLER", "claimed", roller: Address], data
+    /// = prize_pot: i128`
+    pub fn claim_prize(env: Env, roller: Address) -> Result<i128, Error> {
+        // Check for various contract states, where we don't want to proceed:
+        check_is_initialized(&env);        // uninitialized game,
+        check_valid_winner(&env, &roller); // an invalid winner attempting to claim
 
-        let admin = env.storage()
-            .instance()
-            .get::<DataKey, Address>(&DataKey::Admin)
-            .unwrap();
+        // Set the instance storage, so the contract knows there _is_ a winner
+        env.storage().instance().set(&DataKey::Winner, &roller);
+        // Next, make sure the winner has authorized the transaction
+        roller.require_auth();
 
-        admin.require_auth();
-        env.storage().instance().set(&DataKey::EveryoneWins, &true);
-
-        let contract_balance = token::TokenClient::new(
+        // Make a transfer
+        let token_client = token::TokenClient::new(
             &env,
             &env.storage()
                 .instance()
                 .get(&DataKey::TokenAddress)
                 .unwrap(),
-        ).balance(&env.current_contract_address());
+        );
+
+        let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
+        token_client.transfer(&env.current_contract_address(), &roller, &prize_pot);
+
+        // Publish an event about the prize being claimed
+        // The event has three topics:
+        //   - The "ROLLER" symbol
+        //   - The "claimed" symbol
+        //   - The winner's' address
+        // The event data is the prize pot that has been claimed.
+        env.events().publish((
+            symbol_short!("ROLLER"),
+            symbol_short!("claimed"),
+            roller,
+        ), prize_pot);
+
+        // Return the prize pot amount
+        Ok(prize_pot)
+    }
+
+    /// Call the game off
+    ///
+    /// # Panics
+    ///
+    /// * If the contract has not yet been initialized
+    /// * If a winner has already been found, and they've claimed the prize pot
+    /// * If the game has already been "called" by the admin
+    ///
+    /// # Events
+    ///
+    /// Emits an event with topics `["ROLLER", "called", admin: Address], data
+    /// = prize_pot: i128`
+    pub fn call_it(env: Env) -> Result<(), Error> {
+        // Check for various contract states, where we don't want to proceed:
+        check_is_initialized(&env); // uninitialized game,
+        check_no_winner(&env); // a game that has been won,
+        check_everyone_does_not_win(&env); // a game that has already been called,
+
+        let admin: Address = env.storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .unwrap();
+
+        admin.require_auth();
+        env.storage().instance().set(&DataKey::EveryoneWins, &true);
+
+        let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
 
         // Publish an event about the game being called
-        // The event has two topics:
-        //   - The "MROLLER" symbol
+        // The event has three topics:
+        //   - The "ROLLER" symbol
         //   - The "called" symbol
         //   - The admin address
-        // The event data is the contract balance (the bricked prize pot).
+        // The event data is the prize pot at the time the game ended.
         env.events().publish((
-            symbol_short!("MROLLER"),
+            symbol_short!("ROLLER"),
             symbol_short!("called"),
             admin,
-        ), contract_balance);
+        ), prize_pot);
 
         Ok(())
+    }
+
+    /// Be altruistic and kind, pay everybody back.
+    ///
+    /// # Panics
+    ///
+    /// * If the contract has not yet been initialized
+    /// * If the game has not been previously "called" by the admin
+    ///
+    /// # Events
+    ///
+    /// Emits an event with topics `["ROLLER", "kindadmin", admin: Address], data
+    /// = prize_pot: i128`
+    pub fn be_kind(env: Env) -> Result<i128, Error> {
+        // Check for various contract states, where we don't want to proceed:
+        check_is_initialized(&env); // uninitialized game,
+        check_everyone_does_win(&env); // a game that has not yet been called,
+
+        let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        admin.require_auth();
+
+        let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
+        let rollers_vec: Vec<Address> = env.storage().persistent().get(&DataKey::Rollers).unwrap();
+        let token_client = token::TokenClient::new(
+            &env,
+            &env.storage()
+                .instance()
+                .get(&DataKey::TokenAddress)
+                .unwrap(),
+        );
+
+        for roller in rollers_vec.iter() {
+            let Roller { first_roll, .. } = env.storage().persistent().get(&DataKey::Roller(roller.clone())).unwrap();
+            token_client.transfer(&env.current_contract_address(), &roller, &((first_roll * 10_000_000) as i128));
+        }
+
+        // Publish an event about the admin being kind
+        // The event has three topics:
+        //   - The "ROLLER" symbol
+        //   - The "kindadmin" symbol
+        //   - The admin address
+        // The event data is the prize pot the admin has distributed
+        env.events().publish((
+            symbol_short!("ROLLER"),
+            symbol_short!("kindadmin"),
+            admin,
+        ), prize_pot);
+
+        Ok(prize_pot)
+    }
+
+    /// Sssshhh... Nothing to see here.
+    pub fn be_evil(env: Env) -> Result<i128, Error> {
+        // Check for various contract states, where we don't want to proceed:
+        check_is_initialized(&env); // uninitialized game,
+        check_everyone_does_win(&env); // a game that has not yet been called,
+
+        let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        admin.require_auth();
+
+        let token_client = token::TokenClient::new(
+            &env,
+            &env.storage()
+                .instance()
+                .get(&DataKey::TokenAddress)
+                .unwrap(),
+        );
+        let prize_pot: i128 = env.storage().instance().get(&DataKey::PrizePot).unwrap();
+        token_client.transfer(&env.current_contract_address(), &admin, &prize_pot);
+
+        // Publish an event about the admin being evil
+        // The event has three topics:
+        //   - The "ROLLER" symbol
+        //   - The "eviladmin" symbol
+        //   - The admin address
+        // The event data is the prize pot the admin has stolen
+        env.events().publish((
+            symbol_short!("ROLLER"),
+            symbol_short!("eviladmin"),
+            admin,
+        ), prize_pot);
+
+        Ok(prize_pot)
     }
 }
 
