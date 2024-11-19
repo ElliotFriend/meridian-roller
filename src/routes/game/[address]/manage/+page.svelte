@@ -40,8 +40,8 @@
             isWaiting = true;
             const at = await diceGameSdk.call_it();
 
-            await account.sign(at, { keyId: $keyId });
-            await send(at.built!);
+            const tx = await account.sign(at.built!, { keyId: $keyId });
+            await send(tx.built!);
 
             toastStore.trigger({
                 message:

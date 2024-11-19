@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
 import { Contract, scValToNative, StrKey } from '@stellar/stellar-sdk';
 import { server } from '$lib/server/passkeyServer';
+import { sac } from '$lib/passkeyClient';
 import type { LayoutServerLoad } from './$types';
 import { PUBLIC_GAME_WASM_HASH } from '$env/static/public';
 
-export const load = (async ({ params }) => {
+export const load: LayoutServerLoad = async ({ params, depends }) => {
     const contractAddress = params.address;
     if (!contractAddress) {
         error(404, {
@@ -29,7 +30,7 @@ export const load = (async ({ params }) => {
         .toString('hex');
     if (wasmHash !== PUBLIC_GAME_WASM_HASH) {
         error(400, {
-            message: 'requested contract is not a game'
+            message: 'requested contract is not a valid game'
         });
     }
 
@@ -49,10 +50,18 @@ export const load = (async ({ params }) => {
         });
     }
 
+    const tokenSymbol = (await sac.getSACClient(instanceStorage.TokenAddress).symbol()).result
+    const prizePot = (await sac.getSACClient(instanceStorage.TokenAddress).balance({
+        id: contractAddress,
+    })).result;
+
+    depends('instance:storage');
     return {
         gameAddress: contractAddress,
         tokenAddress: instanceStorage.TokenAddress,
+        tokenSymbol: tokenSymbol,
         gameAdmin: instanceStorage.Admin,
-        numFaces: instanceStorage.NumFaces
+        numFaces: instanceStorage.NumFaces,
+        prizePot,
     };
-}) satisfies LayoutServerLoad;
+};

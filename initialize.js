@@ -29,7 +29,7 @@ function exe(command) {
 }
 
 function fundAll() {
-    exe(`${cli} keys generate ${process.env.STELLAR_ACCOUNT}`);
+    exe(`${cli} keys generate --overwrite ${process.env.STELLAR_ACCOUNT}`);
 }
 
 function removeFiles(pattern) {
@@ -41,6 +41,13 @@ function buildAll() {
     removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
     removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.d`);
     exe(`${cli} contract build`);
+}
+
+function optimize(wasm) {
+    exe(
+        `${cli} contract optimize --wasm `
+    )
+
 }
 
 function filenameNoExtension(filename) {
@@ -57,7 +64,7 @@ function deployAll() {
     const contractsDir = `${dirname}/.soroban/contract-ids`;
     mkdirSync(contractsDir, { recursive: true });
 
-    const wasmFiles = glob(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
+    const wasmFiles = glob(`${dirname}/target/wasm32-unknown-unknown/release/*optimized.wasm`);
 
     wasmFiles.forEach(deploy);
 }

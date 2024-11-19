@@ -1,7 +1,7 @@
 import { rpc } from '$lib/passkeyClient';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { scValToNative } from '@stellar/stellar-sdk';
+import { scValToNative, nativeToScVal } from '@stellar/stellar-sdk';
 import { produce } from 'sveltekit-sse';
 
 function delay(milliseconds: number) {
@@ -20,6 +20,7 @@ export const POST: RequestHandler = async ({ params }) => {
             let foundWinner: boolean = false
             let gameCalled: boolean = false
             let retObj: Record<string, any> = {};
+            // console.log('xdr', nativeToScVal("ROLLER", { type: "symbol"}).toXDR('base64'))
 
             while (!(foundWinner || gameCalled)) {
                 let { events } = await rpc.getEvents({
@@ -29,7 +30,7 @@ export const POST: RequestHandler = async ({ params }) => {
                             type: 'contract',
                             contractIds: [ contractAddress ],
                             topics: [
-                                ['AAAADwAAAAdNUk9MTEVSAA==', '*', '*'],
+                                [nativeToScVal("ROLLER", { type: "symbol"}).toXDR('base64'), '*', '*'],
                             ]
                         }
                     ],
@@ -48,7 +49,7 @@ export const POST: RequestHandler = async ({ params }) => {
                         const topics = event.topic.map(scValToNative)
                         const data = scValToNative(event.value)
                         switch(topics[1]) {
-                            case 'roller':
+                            case 'rolled':
                                 if (!(topics[2] in retObj) || (retObj[topics[2]].rolled < data)) {
                                     retObj[topics[2]] = {
                                         rolled: data,
@@ -57,16 +58,17 @@ export const POST: RequestHandler = async ({ params }) => {
                                 }
                                 break;
                             case 'winner':
+                                // console.log('prize', typeof data)
                                 retObj['winner'] = {
                                     address: topics[2],
-                                    prize: data,
+                                    prize: data.toString(),
                                     ledger: event.ledger
                                 }
                                 foundWinner = true
                                 break;
                             case 'called':
                                 retObj['called'] = {
-                                    prize: data,
+                                    prize: data.toString(),
                                     ledger: event.ledger
                                 }
                                 gameCalled = true

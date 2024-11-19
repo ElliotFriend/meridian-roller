@@ -21,7 +21,7 @@ export const account = new PasskeyKit({
     factoryContractId: PUBLIC_FACTORY_CONTRACT_ADDRESS
 });
 
-const sac = new SACClient({
+export const sac = new SACClient({
     networkPassphrase: PUBLIC_STELLAR_NETWORK_PASSPHRASE,
     rpcUrl: PUBLIC_STELLAR_RPC_URL
 });
@@ -41,7 +41,7 @@ export async function send(tx: Tx) {
 }
 
 export async function getContractId(signer: string) {
-    return fetch(`/api/contract-id/${signer}`).then(async (res) => {
+    return fetch(`/api/contract/${signer}`).then(async (res) => {
         if (res.ok) return res.text();
         else throw await res.text();
     });

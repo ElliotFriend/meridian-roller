@@ -14,11 +14,13 @@
     const toastStore = getToastStore();
 
     let numDice: number = 3;
-    let numFaces: 4 | 6 | 8 | 10 | 12 | 20;
+    let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
     let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS;
     let isWaiting: boolean = false;
+    let gameAddress: string;
 
     $: rollButtonDisabled = isWaiting || !$contractAddress;
+
 
     async function deployGame() {
         console.log('deploying game');
@@ -33,17 +35,20 @@
                     ...diceGameSdk.spec.funcArgsToScVals('init', {
                         admin: $contractAddress,
                         token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
-                        num_faces: parseInt(numFaces.toString())
-                    })
-                ]
+                        num_faces: parseInt(numFaces.toString()),
+                    }),
+                ],
             });
 
-            await account.sign(at, { keyId: $keyId });
-            const res = await send(at.built!);
+            const tx = await account.sign(at.built!, { keyId: $keyId });
+            const res = await send(tx.built!);
 
-            const txMeta = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
-            // @ts-ignore
-            const deployedGame = scValToNative(txMeta.value().sorobanMeta().returnValue())[0];
+            const result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
+            const sMeta = result.v3().sorobanMeta();
+            let deployedGame
+            if (sMeta) {
+                deployedGame = scValToNative(sMeta.returnValue())[0];
+            }
 
             toastStore.trigger({
                 message: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
@@ -79,6 +84,8 @@
     <label class="label">
         <span>Select the number of faces on those dice</span>
         <select class="select" bind:value={numFaces}>
+            <option>2</option>
+            <option>3</option>
             <option>4</option>
             <option selected>6</option>
             <option>8</option>

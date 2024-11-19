@@ -3,7 +3,7 @@
     import Info from 'lucide-svelte/icons/info';
 
     export let numDice: number;
-    export let numFaces: 4 | 6 | 8 | 10 | 12 | 20;
+    export let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
 </script>
 
 {#if numDice && numFaces}

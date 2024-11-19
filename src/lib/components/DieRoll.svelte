@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from 'lucide-svelte';
+    import { Dices, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, CircleHelp } from 'lucide-svelte';
     import type { Icon } from 'lucide-svelte';
     import type { ComponentType } from 'svelte';
     export let rolledNumber: number;
 
     const diceIcons: Record<number, ComponentType<Icon>> = {
+        0: CircleHelp,
         1: Dice1,
         2: Dice2,
         3: Dice3,
