@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { page } from "$app/stores";
-    import TruncatedAddress from "./TruncatedAddress.svelte";
+    import { page } from '$app/stores';
+    import TruncatedAddress from './TruncatedAddress.svelte';
 </script>
 
 <div class="card">
@@ -34,7 +34,10 @@
             <div>
                 <span class="flex-auto">
                     <dt class="font-bold">Current Prize Pot</dt>
-                    <dd class="text-sm opacity-50">{parseInt($page.data.prizePot) / 10_000_000} {$page.data.tokenSymbol === 'native' ? 'XLM' : $page.data.tokenSymbol}</dd>
+                    <dd class="text-sm opacity-50">
+                        {parseInt($page.data.prizePot) / 10_000_000}
+                        {$page.data.tokenSymbol === 'native' ? 'XLM' : $page.data.tokenSymbol}
+                    </dd>
                 </span>
             </div>
         </dl>

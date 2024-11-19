@@ -1,6 +1,6 @@
 <script lang="ts">
     import { type Readable } from 'svelte/store';
-    import { source } from 'sveltekit-sse'
+    import { source } from 'sveltekit-sse';
     import { page } from '$app/stores';
     import { getToastStore } from '@skeletonlabs/skeleton';
     import qrCode from 'qrcode';

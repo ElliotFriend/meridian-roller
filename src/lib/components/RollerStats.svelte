@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { Roller } from "dice-game";
+    import type { Roller } from 'dice-game';
 
     export let tokenSymbol: string;
     export let tokenBalance: string;
     export let roller: Roller;
 
-    let tSymbol = tokenSymbol === 'native' ? "XLM" : tokenSymbol
+    let tSymbol = tokenSymbol === 'native' ? 'XLM' : tokenSymbol;
 </script>
 
 <div class="card">

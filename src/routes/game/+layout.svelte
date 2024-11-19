@@ -4,7 +4,7 @@
     $: pathname = $page.url.pathname.split('/').filter((p) => p);
 
     function capitalized(word: string): string {
-        return word.charAt(0).toUpperCase() + word.slice(1)
+        return word.charAt(0).toUpperCase() + word.slice(1);
     }
 </script>
 
@@ -21,7 +21,7 @@
                     {#if segment.startsWith('C')}
                         <div class="overflow-hidden">
                             <div class="overflow-hidden">
-                            <TruncatedAddress address={segment} />
+                                <TruncatedAddress address={segment} />
                             </div>
                         </div>
                     {:else}

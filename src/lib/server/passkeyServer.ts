@@ -13,5 +13,5 @@ export const server = new PasskeyServer({
     launchtubeJwt: PRIVATE_LAUNCHTUBE_JWT,
     mercuryUrl: PUBLIC_MERCURY_URL,
     mercuryKey: PRIVATE_MERCURY_KEY,
-    mercuryProjectName: 'smart-wallets-next-dima',
+    mercuryProjectName: 'smart-wallets-next-dima'
 });

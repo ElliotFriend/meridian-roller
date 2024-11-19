@@ -12,7 +12,7 @@
                 keyId_base64: kid,
                 contractId: cid,
                 built
-            } = await account.createWallet("Meridian Roller", 'High Stakes Roller');
+            } = await account.createWallet('Meridian Roller', 'High Stakes Roller');
 
             keyId.set(kid);
             console.log('key id', $keyId);

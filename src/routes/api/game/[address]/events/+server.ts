@@ -7,18 +7,18 @@ import { produce } from 'sveltekit-sse';
 function delay(milliseconds: number) {
     return new Promise(function run(resolve) {
         setTimeout(resolve, milliseconds);
-    })
+    });
 }
 
 export const POST: RequestHandler = async ({ params }) => {
     return produce(
         async function start({ emit, lock }) {
-            console.log('connection open')
-            const contractAddress = params.address
-            let startLedger = (await rpc.getLatestLedger()).sequence - 1000
+            console.log('connection open');
+            const contractAddress = params.address;
+            let startLedger = (await rpc.getLatestLedger()).sequence - 1000;
 
-            let foundWinner: boolean = false
-            let gameCalled: boolean = false
+            let foundWinner: boolean = false;
+            let gameCalled: boolean = false;
             let retObj: Record<string, any> = {};
             // console.log('xdr', nativeToScVal("ROLLER", { type: "symbol"}).toXDR('base64'))
 
@@ -28,33 +28,37 @@ export const POST: RequestHandler = async ({ params }) => {
                     filters: [
                         {
                             type: 'contract',
-                            contractIds: [ contractAddress ],
+                            contractIds: [contractAddress],
                             topics: [
-                                [nativeToScVal("ROLLER", { type: "symbol"}).toXDR('base64'), '*', '*'],
+                                [
+                                    nativeToScVal('ROLLER', { type: 'symbol' }).toXDR('base64'),
+                                    '*',
+                                    '*'
+                                ]
                             ]
                         }
                     ],
-                    limit: 10000,
-                })
+                    limit: 10000
+                });
 
                 events
-                    .filter(event => event.inSuccessfulContractCall)
+                    .filter((event) => event.inSuccessfulContractCall)
                     .sort((a, b) => {
                         if (a.ledger === b.ledger) {
-                            return parseInt(b.id.split('-')[0]) - parseInt(a.id.split('-')[0])
+                            return parseInt(b.id.split('-')[0]) - parseInt(a.id.split('-')[0]);
                         }
-                        return b.ledger - a.ledger
+                        return b.ledger - a.ledger;
                     })
                     .forEach((event) => {
-                        const topics = event.topic.map(scValToNative)
-                        const data = scValToNative(event.value)
-                        switch(topics[1]) {
+                        const topics = event.topic.map(scValToNative);
+                        const data = scValToNative(event.value);
+                        switch (topics[1]) {
                             case 'rolled':
-                                if (!(topics[2] in retObj) || (retObj[topics[2]].rolled < data)) {
+                                if (!(topics[2] in retObj) || retObj[topics[2]].rolled < data) {
                                     retObj[topics[2]] = {
                                         rolled: data,
                                         ledger: event.ledger
-                                    }
+                                    };
                                 }
                                 break;
                             case 'winner':
@@ -63,36 +67,35 @@ export const POST: RequestHandler = async ({ params }) => {
                                     address: topics[2],
                                     prize: data.toString(),
                                     ledger: event.ledger
-                                }
-                                foundWinner = true
+                                };
+                                foundWinner = true;
                                 break;
                             case 'called':
                                 retObj['called'] = {
                                     prize: data.toString(),
                                     ledger: event.ledger
-                                }
-                                gameCalled = true
+                                };
+                                gameCalled = true;
                                 break;
                             default:
                                 break;
                         }
-                    }
-                )
+                    });
 
                 // console.log('JSON', retObj)
-                const { error } = emit('leaderboard', JSON.stringify(retObj))
-                if (error ) {
-                    return
+                const { error } = emit('leaderboard', JSON.stringify(retObj));
+                if (error) {
+                    return;
                 }
-                await delay(3000)
+                await delay(3000);
             }
-            lock.set(false)
+            lock.set(false);
             // return json(retObj);
         },
         {
             stop() {
-                console.log('connection stopped')
+                console.log('connection stopped');
             }
         }
-    )
+    );
 };

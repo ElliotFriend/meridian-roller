@@ -50,10 +50,12 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         });
     }
 
-    const tokenSymbol = (await sac.getSACClient(instanceStorage.TokenAddress).symbol()).result
-    const prizePot = (await sac.getSACClient(instanceStorage.TokenAddress).balance({
-        id: contractAddress,
-    })).result;
+    const tokenSymbol = (await sac.getSACClient(instanceStorage.TokenAddress).symbol()).result;
+    const prizePot = (
+        await sac.getSACClient(instanceStorage.TokenAddress).balance({
+            id: contractAddress
+        })
+    ).result;
 
     depends('instance:storage');
     return {
@@ -62,6 +64,6 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         tokenSymbol: tokenSymbol,
         gameAdmin: instanceStorage.Admin,
         numFaces: instanceStorage.NumFaces,
-        prizePot,
+        prizePot
     };
 };

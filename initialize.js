@@ -44,10 +44,7 @@ function buildAll() {
 }
 
 function optimize(wasm) {
-    exe(
-        `${cli} contract optimize --wasm `
-    )
-
+    exe(`${cli} contract optimize --wasm `);
 }
 
 function filenameNoExtension(filename) {

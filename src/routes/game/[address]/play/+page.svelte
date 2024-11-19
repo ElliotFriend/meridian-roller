@@ -10,7 +10,7 @@
     import diceGame from '$lib/contracts/diceGameContract';
     import { xdr, scValToNative, nativeToScVal, Address } from '@stellar/stellar-sdk';
     import DieRoll from '$lib/components/DieRoll.svelte';
-    import type { Roller } from 'dice-game'
+    import type { Roller } from 'dice-game';
     import GameStats from '$lib/components/GameStats.svelte';
     import RollerStats from '$lib/components/RollerStats.svelte';
     import { onMount } from 'svelte';
@@ -28,23 +28,24 @@
     $: rollButtonDisabled = isWaiting || !$contractAddress;
 
     const fetchRoller = async () => {
-        console.log('fetching roller')
+        console.log('fetching roller');
         if ($contractAddress) {
             const ledgerKey = xdr.LedgerKey.contractData(
                 new xdr.LedgerKeyContractData({
                     contract: new Address(data.gameAddress).toScAddress(),
-                    key: nativeToScVal([
-                        nativeToScVal('Roller', { type: 'symbol' }),
-                        nativeToScVal($contractAddress, { type: 'address' }),
-                    ], { type: 'vec' }),
-                    durability: xdr.ContractDataDurability.persistent(),
+                    key: nativeToScVal(
+                        [
+                            nativeToScVal('Roller', { type: 'symbol' }),
+                            nativeToScVal($contractAddress, { type: 'address' })
+                        ],
+                        { type: 'vec' }
+                    ),
+                    durability: xdr.ContractDataDurability.persistent()
                 })
-            )
-            const ledgerEntry = await rpc.getLedgerEntries(
-                ledgerKey,
-            )
+            );
+            const ledgerEntry = await rpc.getLedgerEntries(ledgerKey);
             if (ledgerEntry.entries.length) {
-                rollerStruct = scValToNative(ledgerEntry.entries[0].val.contractData().val())
+                rollerStruct = scValToNative(ledgerEntry.entries[0].val.contractData().val());
             }
 
             if (rollerStruct.high_roll === data.numFaces * 3) {
@@ -53,15 +54,15 @@
 
             let { result } = await native.balance({
                 id: $contractAddress
-            })
+            });
             rollerBalance = result.toString();
         }
-    }
+    };
 
     const fetchInstance = async () => {
-        console.log('fetching instance')
-        await invalidate('instance:storage')
-    }
+        console.log('fetching instance');
+        await invalidate('instance:storage');
+    };
 
     const rollDice = async () => {
         console.log('rolling dice');
@@ -99,17 +100,21 @@
 
     onMount(async () => {
         await fetchRoller();
-    })
+    });
 </script>
 
 <h1 class="h1">Play Game</h1>
-<p>Here, you can play the game that has been deployed as contract <code class="code">{data.gameAddress}</code>. Important game details are listed on the right.</p>
+<p>
+    Here, you can play the game that has been deployed as contract <code class="code"
+        >{data.gameAddress}</code
+    >. Important game details are listed on the right.
+</p>
 
 <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6">
     <div class="md:col-span-8 space-y-6">
         <section class="py-8 space-y-6">
             <h2 class="h2 text-center" data-ignore-toc>
-                Total: {rollResult.reduce((acc, i) => acc + i) || "?"}
+                Total: {rollResult.reduce((acc, i) => acc + i) || '?'}
             </h2>
             <div class="w-full flex flex-wrap gap-1 justify-center">
                 {#each rollResult as dieResult}
@@ -126,12 +131,13 @@
             </div>
         </section>
 
-
         <Leaderboard />
     </div>
     <div class="grid grid-cols-1 md:col-span-4 gap-4">
         <GameStats />
-        <button type="button" class="btn variant-filled-secondary" on:click={fetchInstance}>Re-fetch</button>
+        <button type="button" class="btn variant-filled-secondary" on:click={fetchInstance}
+            >Re-fetch</button
+        >
 
         <RollerStats
             tokenSymbol={data.tokenSymbol}

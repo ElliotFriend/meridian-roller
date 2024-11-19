@@ -1,4 +1,3 @@
-
 export default [
     { id: 1, first_name: 'Tobie', last_name: 'Vint', email: 'tvint0@fotki.com' },
     { id: 2, first_name: 'Zacharias', last_name: 'Cerman', email: 'zcerman1@sciencedirect.com' },

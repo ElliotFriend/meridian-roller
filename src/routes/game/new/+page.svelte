@@ -21,7 +21,6 @@
 
     $: rollButtonDisabled = isWaiting || !$contractAddress;
 
-
     async function deployGame() {
         console.log('deploying game');
         try {
@@ -35,9 +34,9 @@
                     ...diceGameSdk.spec.funcArgsToScVals('init', {
                         admin: $contractAddress,
                         token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
-                        num_faces: parseInt(numFaces.toString()),
-                    }),
-                ],
+                        num_faces: parseInt(numFaces.toString())
+                    })
+                ]
             });
 
             const tx = await account.sign(at.built!, { keyId: $keyId });
@@ -45,7 +44,7 @@
 
             const result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
             const sMeta = result.v3().sorobanMeta();
-            let deployedGame
+            let deployedGame;
             if (sMeta) {
                 deployedGame = scValToNative(sMeta.returnValue())[0];
             }

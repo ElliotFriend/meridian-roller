@@ -1,36 +1,48 @@
-import { AssembledTransaction, Client as ContractClient, ClientOptions as ContractClientOptions, Result } from '@stellar/stellar-sdk/contract';
+import {
+    AssembledTransaction,
+    Client as ContractClient,
+    ClientOptions as ContractClientOptions,
+    Result
+} from '@stellar/stellar-sdk/contract';
 import type { u32, i128 } from '@stellar/stellar-sdk/contract';
 export * from '@stellar/stellar-sdk';
 export * as contract from '@stellar/stellar-sdk/contract';
 export * as rpc from '@stellar/stellar-sdk/rpc';
 export declare const networks: {
     readonly testnet: {
-        readonly networkPassphrase: "Test SDF Network ; September 2015";
-        readonly contractId: "CDQN3O4EQUAUMN5ETTQI4OXKIX2EV7AGUFMIFQFFGB5OFZX6AYIWGP7U";
+        readonly networkPassphrase: 'Test SDF Network ; September 2015';
+        readonly contractId: 'CDQN3O4EQUAUMN5ETTQI4OXKIX2EV7AGUFMIFQFFGB5OFZX6AYIWGP7U';
     };
 };
-export type DataKey = {
-    tag: "Admin";
-    values: void;
-} | {
-    tag: "TokenAddress";
-    values: void;
-} | {
-    tag: "Winner";
-    values: void;
-} | {
-    tag: "Roller";
-    values: readonly [string];
-} | {
-    tag: "EveryoneWins";
-    values: void;
-} | {
-    tag: "NumFaces";
-    values: void;
-} | {
-    tag: "PrizePot";
-    values: void;
-};
+export type DataKey =
+    | {
+          tag: 'Admin';
+          values: void;
+      }
+    | {
+          tag: 'TokenAddress';
+          values: void;
+      }
+    | {
+          tag: 'Winner';
+          values: void;
+      }
+    | {
+          tag: 'Roller';
+          values: readonly [string];
+      }
+    | {
+          tag: 'EveryoneWins';
+          values: void;
+      }
+    | {
+          tag: 'NumFaces';
+          values: void;
+      }
+    | {
+          tag: 'PrizePot';
+          values: void;
+      };
 export interface Roller {
     first_roll: u32;
     high_roll: u32;
@@ -76,24 +88,31 @@ export interface Client {
      * Emits an event with the topics `["ROLLER", "ready", admin: Address],
      * data = num_faces: u32`
      */
-    init: ({ admin, token_address, num_faces }: {
-        admin: string;
-        token_address: string;
-        num_faces: u32;
-    }, options?: {
-        /**
-         * The fee to pay for the transaction. Default: BASE_FEE
-         */
-        fee?: number;
-        /**
-         * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
-         */
-        timeoutInSeconds?: number;
-        /**
-         * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
-         */
-        simulate?: boolean;
-    }) => Promise<AssembledTransaction<Result<void>>>;
+    init: (
+        {
+            admin,
+            token_address,
+            num_faces
+        }: {
+            admin: string;
+            token_address: string;
+            num_faces: u32;
+        },
+        options?: {
+            /**
+             * The fee to pay for the transaction. Default: BASE_FEE
+             */
+            fee?: number;
+            /**
+             * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
+             */
+            timeoutInSeconds?: number;
+            /**
+             * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
+             */
+            simulate?: boolean;
+        }
+    ) => Promise<AssembledTransaction<Result<void>>>;
     /**
      * Construct and simulate a roll transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
      * Roll the dice
@@ -120,22 +139,27 @@ export interface Client {
      * everyone is henceforth a winner, no event is emitted and a "jackpot"
      * roll is simply returned to the user.
      */
-    roll: ({ roller }: {
-        roller: string;
-    }, options?: {
-        /**
-         * The fee to pay for the transaction. Default: BASE_FEE
-         */
-        fee?: number;
-        /**
-         * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
-         */
-        timeoutInSeconds?: number;
-        /**
-         * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
-         */
-        simulate?: boolean;
-    }) => Promise<AssembledTransaction<Result<Array<u32>>>>;
+    roll: (
+        {
+            roller
+        }: {
+            roller: string;
+        },
+        options?: {
+            /**
+             * The fee to pay for the transaction. Default: BASE_FEE
+             */
+            fee?: number;
+            /**
+             * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
+             */
+            timeoutInSeconds?: number;
+            /**
+             * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
+             */
+            simulate?: boolean;
+        }
+    ) => Promise<AssembledTransaction<Result<Array<u32>>>>;
     /**
      * Construct and simulate a call_it transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
      * Call the game off
@@ -188,9 +212,25 @@ export declare class Client extends ContractClient {
     readonly options: ContractClientOptions;
     constructor(options: ContractClientOptions);
     readonly fromJSON: {
-        init: (json: string) => AssembledTransaction<Result<void, import("@stellar/stellar-sdk/contract").ErrorMessage>>;
-        roll: (json: string) => AssembledTransaction<Result<number[], import("@stellar/stellar-sdk/contract").ErrorMessage>>;
-        call_it: (json: string) => AssembledTransaction<Result<void, import("@stellar/stellar-sdk/contract").ErrorMessage>>;
-        be_evil: (json: string) => AssembledTransaction<Result<bigint, import("@stellar/stellar-sdk/contract").ErrorMessage>>;
+        init: (
+            json: string
+        ) => AssembledTransaction<
+            Result<void, import('@stellar/stellar-sdk/contract').ErrorMessage>
+        >;
+        roll: (
+            json: string
+        ) => AssembledTransaction<
+            Result<number[], import('@stellar/stellar-sdk/contract').ErrorMessage>
+        >;
+        call_it: (
+            json: string
+        ) => AssembledTransaction<
+            Result<void, import('@stellar/stellar-sdk/contract').ErrorMessage>
+        >;
+        be_evil: (
+            json: string
+        ) => AssembledTransaction<
+            Result<bigint, import('@stellar/stellar-sdk/contract').ErrorMessage>
+        >;
     };
 }
