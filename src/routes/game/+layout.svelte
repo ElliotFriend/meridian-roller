@@ -10,7 +10,7 @@
 
 <ol class="breadcrumb-nonresponsive flex">
     <li class="crumb"><a class="anchor" href="/">Home</a></li>
-    <li class="crumb-separator" aria-hidden>&rsaquo;</li>
+    <li class="crumb-separator" aria-hidden="true">&rsaquo;</li>
     {#each pathname as segment, i}
         {@const pathToHere = pathname.slice(0, i + 1).join('/')}
         {#if i == pathname.length - 1}
@@ -29,7 +29,7 @@
                     {/if}
                 </a>
             </li>
-            <li class="crumb-separator" aria-hidden>&rsaquo;</li>
+            <li class="crumb-separator" aria-hidden="true">&rsaquo;</li>
         {/if}
     {/each}
 </ol>

@@ -1,7 +1,3 @@
-<script lang="ts">
-    import { networks } from 'dice-game';
-</script>
-
 <footer class="flex-none bg-surface-100-800-token shadow-xl p-4">
     <div class="flex flex-col md:flex-row justify-around align-center mx-auto">
         <div class="space-y-1">
@@ -20,7 +16,7 @@
                     <a
                         class="anchor"
                         target="_blank"
-                        href="https://github.com/elliotfriend/hm2024"
+                        href="https://github.com/elliotfriend/soroban-template-sveltekit-passkeys"
                     >
                         Frontend Template
                     </a>
@@ -44,9 +40,9 @@
                         <a
                             class="anchor"
                             target="_blank"
-                            href="https://github.com/kalepail/passkey-kit/tree/next"
+                            href="https://github.com/kalepail/passkey-kit/tree/next-dima"
                         >
-                            Passkey Kit (<code class="code">next</code> branch)
+                            Passkey Kit (<code class="code">next-dima</code> branch)
                         </a>
                     </li>
                 </ul>
