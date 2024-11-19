@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { type Readable } from 'svelte/store';
-    import { source } from 'sveltekit-sse';
     import { page } from '$app/stores';
     import { getToastStore } from '@skeletonlabs/skeleton';
     import qrCode from 'qrcode';
@@ -12,15 +10,6 @@
 
     import type { PageData } from './$types';
     export let data: PageData;
-
-    // const connection = source('./manage')
-    // $: value = connection.select('leaderboard').json(
-    //     function or({error, raw, previous}){
-    //         console.error(`Could not parse "${raw}" as json.`, error)
-    //         return previous  // This will be the new value of the store
-    // })
-    // $: leaderboardData = value
-    // $: console.log($value)
 
     diceGameSdk.options.contractId = data.gameAddress;
 

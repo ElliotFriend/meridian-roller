@@ -1,5 +1,4 @@
 import { rpc } from '$lib/passkeyClient';
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { scValToNative, nativeToScVal } from '@stellar/stellar-sdk';
 import { produce } from 'sveltekit-sse';
@@ -15,15 +14,14 @@ export const POST: RequestHandler = async ({ params }) => {
         async function start({ emit, lock }) {
             console.log('connection open');
             const contractAddress = params.address;
-            let startLedger = (await rpc.getLatestLedger()).sequence - 1000;
+            const startLedger = (await rpc.getLatestLedger()).sequence - 1000;
 
             let foundWinner: boolean = false;
             let gameCalled: boolean = false;
-            let retObj: Record<string, any> = {};
-            // console.log('xdr', nativeToScVal("ROLLER", { type: "symbol"}).toXDR('base64'))
+            const retObj: Record<string, any> = {};
 
             while (!(foundWinner || gameCalled)) {
-                let { events } = await rpc.getEvents({
+                const { events } = await rpc.getEvents({
                     startLedger: startLedger,
                     filters: [
                         {
@@ -62,7 +60,6 @@ export const POST: RequestHandler = async ({ params }) => {
                                 }
                                 break;
                             case 'winner':
-                                // console.log('prize', typeof data)
                                 retObj['winner'] = {
                                     address: topics[2],
                                     prize: data.toString(),
@@ -82,7 +79,6 @@ export const POST: RequestHandler = async ({ params }) => {
                         }
                     });
 
-                // console.log('JSON', retObj)
                 const { error } = emit('leaderboard', JSON.stringify(retObj));
                 if (error) {
                     return;
@@ -90,7 +86,6 @@ export const POST: RequestHandler = async ({ params }) => {
                 await delay(3000);
             }
             lock.set(false);
-            // return json(retObj);
         },
         {
             stop() {

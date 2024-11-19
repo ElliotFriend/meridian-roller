@@ -17,7 +17,6 @@
     let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
     let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS;
     let isWaiting: boolean = false;
-    let gameAddress: string;
 
     $: rollButtonDisabled = isWaiting || !$contractAddress;
 
