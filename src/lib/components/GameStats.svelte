@@ -1,6 +1,11 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import TruncatedAddress from './TruncatedAddress.svelte';
+    import { invalidate } from '$app/navigation';
+
+    const fetchInstance = async () => {
+        await invalidate('instance:storage');
+    };
 </script>
 
 <div class="card">
@@ -35,5 +40,6 @@
                 </div>
             {/if}
         </dl>
+        <button class="btn variant-filled-primary" onclick={fetchInstance}>re-fetch</button>
     </section>
 </div>
