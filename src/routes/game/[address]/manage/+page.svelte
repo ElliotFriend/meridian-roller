@@ -7,6 +7,7 @@
     import { account, send } from '$lib/passkeyClient';
     import diceGameSdk from '$lib/contracts/diceGameContract';
     import Leaderboard from '$lib/components/Leaderboard.svelte';
+    import GameStats from '$lib/components/GameStats.svelte';
 
     import type { PageData } from './$types';
     export let data: PageData;
@@ -84,6 +85,8 @@
             {#await qrDataUrl then url}
                 <img class="mx-auto" src={url} alt="qr code to play this game" />
             {/await}
+
+            <GameStats />
 
             <p>Is this taking too long? Click the button below, and then everybody is a winner!</p>
 
