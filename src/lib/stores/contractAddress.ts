@@ -1,3 +1,3 @@
-import { writable, type Writable } from 'svelte/store';
+import { persisted } from 'svelte-persisted-store';
 
-export const contractAddress: Writable<string> = writable();
+export const contractAddress = persisted<string>('mr:contractAddress', '');

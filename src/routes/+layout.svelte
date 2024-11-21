@@ -13,7 +13,7 @@
     <Header />
 
     <div class="container mx-auto grid grid-cols-1">
-        <main class="p-4 space-y-4 mt-8">
+        <main class="p-4 space-y-4 md:mt-8">
             <slot />
         </main>
     </div>

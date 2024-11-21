@@ -15,9 +15,9 @@
     <section class="p-4">
         <dl class="list-dl">
             <div>
-                <span class="flex-auto">
-                    <dt class="font-bold">Your Buy-In</dt>
-                    <dd class="text-sm opacity-50">
+                <span class="w-full flex flex-row justify-between">
+                    <dt class="font-bold">Buy-In</dt>
+                    <dd class="opacity-50">
                         {#if roller}
                             {roller.first_roll} {tSymbol}
                         {:else}
@@ -27,9 +27,9 @@
                 </span>
             </div>
             <div>
-                <span class="flex-auto">
+                <span class="w-full flex flex-row justify-between">
                     <dt class="font-bold">Highest Roll</dt>
-                    <dd class="text-sm opacity-50">
+                    <dd class="opacity-50">
                         {#if roller}
                             {roller.high_roll}
                         {:else}
@@ -39,9 +39,9 @@
                 </span>
             </div>
             <div>
-                <span class="flex-auto">
+                <span class="w-full flex flex-row justify-between">
                     <dt class="font-bold">Total Rolls</dt>
-                    <dd class="text-sm opacity-50">
+                    <dd class="opacity-50">
                         {#if roller}
                             {roller.times_rolled}
                         {:else}
@@ -51,9 +51,9 @@
                 </span>
             </div>
             <div>
-                <span class="flex-auto">
-                    <dt class="font-bold">Your Token Balance</dt>
-                    <dd class="text-sm opacity-50">
+                <span class="w-full flex flex-row justify-between">
+                    <dt class="font-bold">Balance</dt>
+                    <dd class="opacity-50">
                         {#if tokenBalance}
                             {parseInt(tokenBalance) / 10_000_000} {tSymbol}
                         {:else}

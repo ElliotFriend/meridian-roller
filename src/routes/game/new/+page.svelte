@@ -38,6 +38,8 @@
                 ]
             });
 
+            console.log('at', at.built?.toXDR());
+
             const tx = await account.sign(at.built!, { keyId: $keyId });
             const res = await send(tx.built!);
 

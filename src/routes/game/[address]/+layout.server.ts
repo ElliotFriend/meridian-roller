@@ -64,6 +64,7 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         tokenSymbol: tokenSymbol,
         gameAdmin: instanceStorage.Admin,
         numFaces: instanceStorage.NumFaces,
-        prizePot
+        prizePot,
+        gameWinner: instanceStorage.Winner || undefined
     };
 };

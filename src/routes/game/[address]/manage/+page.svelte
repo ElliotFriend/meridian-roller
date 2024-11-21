@@ -14,8 +14,9 @@
     diceGameSdk.options.contractId = data.gameAddress;
 
     let isWaiting: boolean = false;
+    let calledIt: boolean = false;
 
-    $: isButtonDisabled = !$contractAddress || isWaiting;
+    $: isButtonDisabled = !$contractAddress || isWaiting || data.gameWinner;
 
     const toastStore = getToastStore();
 
@@ -32,6 +33,7 @@
             const tx = await account.sign(at.built!, { keyId: $keyId });
             await send(tx.built!);
 
+            calledIt = true;
             toastStore.trigger({
                 message:
                     "Hooray! Everyone is a winner, now! I'll start handing out the participation trophies.",
@@ -47,19 +49,60 @@
             isWaiting = false;
         }
     }
+
+    async function beEvil() {
+        console.log('evil admin!');
+        try {
+            isWaiting = true;
+
+            const at = await diceGameSdk.be_evil();
+
+            const tx = await account.sign(at.built!, { keyId: $keyId });
+            await send(tx.built!);
+
+            toastStore.trigger({
+                message: 'Welp... You stole from everyone... hooray?',
+                background: 'variant-filled-tertiary'
+            });
+        } catch (err) {
+            console.log('err', err);
+            toastStore.trigger({
+                message: 'Something went wrong being evil. Serves you right!',
+                background: 'variant-filled-error'
+            });
+        } finally {
+            isWaiting = false;
+        }
+    }
 </script>
 
 <h1 class="h1">Manage Game</h1>
-<p>Managing game: <code class="code">{data.gameAddress.slice(0, 6)}...</code></p>
-<div id="container"></div>
 
-{#await qrDataUrl then url}
-    <img src={url} alt="qr code to play this game" />
-{/await}
+<div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6">
+    <div class="md:col-span-4 space-y-4">
+        <section class="space-y-6 text-center">
+            {#await qrDataUrl then url}
+                <img class="mx-auto" src={url} alt="qr code to play this game" />
+            {/await}
 
-<p>Is this taking too long? Click the button below, and then everybody is a winner!</p>
-<button class="btn variant-filled-primary" disabled={isButtonDisabled} on:click={callIt}
-    >Call it!</button
->
+            <p>Is this taking too long? Click the button below, and then everybody is a winner!</p>
 
-<Leaderboard />
+            {#if calledIt}
+                <button
+                    class="btn variant-filled-tertiary"
+                    disabled={isButtonDisabled}
+                    on:click={beEvil}>Be evil!</button
+                >
+            {:else}
+                <button
+                    class="btn variant-filled-primary"
+                    disabled={isButtonDisabled}
+                    on:click={callIt}>Call it!</button
+                >
+            {/if}
+        </section>
+    </div>
+    <div class="md:col-span-8">
+        <Leaderboard />
+    </div>
+</div>

@@ -16,6 +16,7 @@
     import { onMount } from 'svelte';
     import Leaderboard from '$lib/components/Leaderboard.svelte';
     import { invalidate } from '$app/navigation';
+    import TruncatedAddress from '$lib/components/TruncatedAddress.svelte';
 
     const toastStore = getToastStore();
     diceGame.options.contractId = data.gameAddress;
@@ -25,7 +26,8 @@
     let rollerStruct: Roller;
     let rollerBalance: string;
     let youWon: boolean = false;
-    $: rollButtonDisabled = isWaiting || !$contractAddress;
+    let wonAmount: number = 0;
+    $: rollButtonDisabled = isWaiting || !$contractAddress || data.gameWinner;
 
     const fetchRoller = async () => {
         console.log('fetching roller');
@@ -94,6 +96,7 @@
                 background: 'variant-filled-error'
             });
         } finally {
+            fetchInstance();
             isWaiting = false;
         }
     };
@@ -104,18 +107,24 @@
 </script>
 
 <h1 class="h1">Play Game</h1>
-<p>
-    Here, you can play the game that has been deployed as contract <code class="code"
-        >{data.gameAddress}</code
-    >. Important game details are listed on the right.
-</p>
+
+{#if $contractAddress}
+    <p>
+        Your smart wallet address is: <TruncatedAddress address={$contractAddress} />
+    </p>
+{/if}
 
 <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6">
-    <div class="md:col-span-8 space-y-6">
-        <section class="py-8 space-y-6">
-            <h2 class="h2 text-center" data-ignore-toc>
-                Total: {rollResult.reduce((acc, i) => acc + i) || '?'}
-            </h2>
+    <div class="md:col-span-8 space-y-4">
+        <section class="space-y-6">
+            {#if youWon}
+                <h2 class="h2 text-center" data-ignore-toc>You won!! 🎉</h2>
+                <p class="text-center">Congratulations! You've won {wonAmount} XLM. Enjoy!</p>
+            {:else}
+                <h2 class="h2 text-center" data-ignore-toc>
+                    Total: {rollResult.reduce((acc, i) => acc + i) || '?'}
+                </h2>
+            {/if}
             <div class="w-full flex flex-wrap gap-1 justify-center">
                 {#each rollResult as dieResult}
                     <DieRoll rolledNumber={dieResult} />
@@ -130,14 +139,9 @@
                 >
             </div>
         </section>
-
-        <Leaderboard />
     </div>
-    <div class="grid grid-cols-1 md:col-span-4 gap-4">
+    <div class="grid grid-cols-2 md:col-span-4 gap-4">
         <GameStats />
-        <button type="button" class="btn variant-filled-secondary" on:click={fetchInstance}
-            >Re-fetch</button
-        >
 
         <RollerStats
             tokenSymbol={data.tokenSymbol}
