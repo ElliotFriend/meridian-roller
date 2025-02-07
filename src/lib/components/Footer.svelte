@@ -40,9 +40,9 @@
                         <a
                             class="anchor"
                             target="_blank"
-                            href="https://github.com/kalepail/passkey-kit/tree/next-dima"
+                            href="https://github.com/kalepail/passkey-kit/tree/next"
                         >
-                            Passkey Kit (<code class="code">next-dima</code> branch)
+                            Passkey Kit (<code class="code">next</code> branch)
                         </a>
                     </li>
                 </ul>

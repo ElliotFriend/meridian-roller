@@ -9,9 +9,9 @@
         console.log('signing up');
         try {
             const {
-                keyId_base64: kid,
+                keyIdBase64: kid,
                 contractId: cid,
-                built
+                signedTx
             } = await account.createWallet('Meridian Roller', 'High Stakes Roller');
 
             keyId.set(kid);
@@ -19,7 +19,7 @@
             contractAddress.set(cid);
             console.log('contract address', $contractAddress);
 
-            await send(built);
+            await send(signedTx);
             await fundContract($contractAddress);
         } catch (err) {
             console.log('err', err);
@@ -30,25 +30,25 @@
         }
     }
 
-    // async function login() {
-    //     console.log('logging in');
-    //     try {
-    //         const { keyId_base64: kid, contractId: cid } = await account.connectWallet({
-    //             getContractId
-    //         });
+    async function login() {
+        console.log('logging in');
+        try {
+            const { keyIdBase64: kid, contractId: cid } = await account.connectWallet({
+                getContractId
+            });
 
-    //         keyId.set(kid);
-    //         console.log('key id', $keyId);
-    //         contractAddress.set(cid);
-    //         console.log('contract address', $contractAddress);
-    //     } catch (err) {
-    //         console.log('err', err);
-    //         toastStore.trigger({
-    //             message: 'Something went wrong logging in. Please try again later.',
-    //             background: 'variant-filled-error'
-    //         });
-    //     }
-    // }
+            keyId.set(kid);
+            console.log('key id', $keyId);
+            contractAddress.set(cid);
+            console.log('contract address', $contractAddress);
+        } catch (err) {
+            console.log('err', err);
+            toastStore.trigger({
+                message: 'Something went wrong logging in. Please try again later.',
+                background: 'variant-filled-error'
+            });
+        }
+    }
 
     function logout() {
         console.log('logging out');
@@ -69,10 +69,10 @@
 </script>
 
 {#if $contractAddress}
-    <button type="button" class="btn variant-filled-secondary" on:click={logout}>Logout</button>
+    <button type="button" class="btn variant-filled-secondary" onclick={logout}>Logout</button>
 {:else}
-    <button type="button" class="btn variant-filled-primary" on:click={signup}>Signup</button>
-    <!-- <button type="button" class="btn variant-filled-secondary" on:click={() => login()}
+    <button type="button" class="btn variant-filled-primary" onclick={signup}>Signup</button>
+    <button type="button" class="btn variant-filled-secondary" onclick={login}
         >Login</button
-    > -->
+    >
 {/if}
