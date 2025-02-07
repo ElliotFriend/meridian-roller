@@ -11,7 +11,7 @@ fn test_including_winner() {
     let contract_address = env.register(RollerContract, ());
     let client = RollerContractClient::new(&env, &contract_address);
 
-    env.budget().reset_unlimited();
+    env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
@@ -88,7 +88,7 @@ fn test_past_winner() {
     let contract_address = env.register(RollerContract, ());
     let client = RollerContractClient::new(&env, &contract_address);
 
-    env.budget().reset_unlimited();
+    env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
@@ -123,7 +123,7 @@ fn test_everyone_wins() {
     let contract_address = env.register(RollerContract, ());
     let client = RollerContractClient::new(&env, &contract_address);
 
-    // env.budget().reset_unlimited();
+    // env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
