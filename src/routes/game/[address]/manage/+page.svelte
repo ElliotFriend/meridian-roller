@@ -5,7 +5,7 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send } from '$lib/passkeyClient';
-    import diceGameSdk from '$lib/contracts/diceGameContract';
+    import diceGameSdk from '$lib/contracts/dice_game';
     import Leaderboard from '$lib/components/Leaderboard.svelte';
     import GameStats from '$lib/components/GameStats.svelte';
 

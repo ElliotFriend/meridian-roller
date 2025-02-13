@@ -63,25 +63,6 @@ fn is_winner(env: &Env) -> bool {
     env.storage().instance().has(&DataKey::Winner)
 }
 
-/// Panic if the game has not been initialized.
-fn check_is_initialized(env: &Env) {
-    if !is_initialized(env) {
-        panic_with_error!(env, Error::NotInitialized);
-    }
-}
-
-/// Panic if the game has not been initialized.
-fn check_not_initialized(env: &Env) {
-    if is_initialized(env) {
-        panic_with_error!(env, Error::AlreadyInitialized);
-    }
-}
-
-/// Return whether or not the instance storage contains an admin's address.
-fn is_initialized(env: &Env) -> bool {
-    env.storage().instance().has(&DataKey::Admin)
-}
-
 /// Panic if the game has not been "called" by the admin.
 fn check_everyone_does_win(env: &Env) {
     if !does_everyone_win(env) {
@@ -138,15 +119,12 @@ impl RollerContract {
     ///
     /// Emits an event with the topics `["ROLLER", "ready", admin: Address],
     /// data = num_faces: u32`
-    pub fn init(
+    pub fn __constructor(
         env: Env,
         admin: Address,
         token_address: Address,
         num_faces: u32,
     ) -> Result<(), Error> {
-        // Check for various contract states, where we don't want to proceed:
-        check_not_initialized(&env); // already initialized game,
-
         admin.require_auth();
 
         env.storage().instance().set(&DataKey::Admin, &admin);
@@ -195,7 +173,6 @@ impl RollerContract {
     /// roll is simply returned to the user.
     pub fn roll(env: Env, roller: Address) -> Result<Vec<u32>, Error> {
         // Check for various contract states, where we don't want to proceed:
-        check_is_initialized(&env); // uninitialized game,
         check_no_winner(&env); // a game that has been won,
 
         let num_faces: u32 = env.storage().instance().get(&DataKey::NumFaces).unwrap();
@@ -367,7 +344,6 @@ impl RollerContract {
     /// = prize_pot: i128`
     pub fn call_it(env: Env) -> Result<(), Error> {
         // Check for various contract states, where we don't want to proceed:
-        check_is_initialized(&env); // uninitialized game,
         check_no_winner(&env); // a game that has been won,
         check_everyone_does_not_win(&env); // a game that has already been called,
 
@@ -395,7 +371,6 @@ impl RollerContract {
     /// Sssshhh... Nothing to see here.
     pub fn be_evil(env: Env) -> Result<i128, Error> {
         // Check for various contract states, where we don't want to proceed:
-        check_is_initialized(&env); // uninitialized game,
         check_everyone_does_win(&env); // a game that has not yet been called,
 
         let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();

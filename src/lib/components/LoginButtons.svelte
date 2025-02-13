@@ -72,7 +72,5 @@
     <button type="button" class="btn variant-filled-secondary" onclick={logout}>Logout</button>
 {:else}
     <button type="button" class="btn variant-filled-primary" onclick={signup}>Signup</button>
-    <button type="button" class="btn variant-filled-secondary" onclick={login}
-        >Login</button
-    >
+    <button type="button" class="btn variant-filled-secondary" onclick={login}>Login</button>
 {/if}

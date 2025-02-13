@@ -4,6 +4,7 @@ import {
     AssembledTransaction,
     Client as ContractClient,
     ClientOptions as ContractClientOptions,
+    MethodOptions,
     Result,
     Spec as ContractSpec
 } from '@stellar/stellar-sdk/contract';
@@ -32,7 +33,7 @@ if (typeof window !== 'undefined') {
 export const networks = {
     testnet: {
         networkPassphrase: 'Test SDF Network ; September 2015',
-        contractId: 'CAPAFWGKU4OX66NT53DTT5NOH6NPES5ZKBNPUVINUH6P562NAQ2MNPOD'
+        contractId: 'CBS2SN4NO5KVC5WUSDPSRNBMJWOIS3DA457EXDK5S67GYDJGH3JZRBOI'
     }
 } as const;
 
@@ -41,29 +42,17 @@ export const Errors = {};
 export interface Client {
     /**
      * Construct and simulate a deploy transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
-     * Deploy the contract Wasm and after deployment invoke the init function
-     * of the contract with the given arguments.
+     * Deploys the contract on behalf of the `Deployer` contract.
      *
-     * This has to be authorized by `deployer` (unless the `Deployer` instance
-     * itself is used as deployer). This way the whole operation is atomic
-     * and it's not possible to frontrun the contract initialization.
-     *
-     * Returns the contract ID and result of the init function.
+     * This has to be authorized by the `Deployer`s address.
      */
     deploy: (
         {
             deployer,
             wasm_hash,
             salt,
-            init_fn,
-            init_args
-        }: {
-            deployer: string;
-            wasm_hash: Buffer;
-            salt: Buffer;
-            init_fn: string;
-            init_args: Array<any>;
-        },
+            constructor_args
+        }: { deployer: string; wasm_hash: Buffer; salt: Buffer; constructor_args: Array<any> },
         options?: {
             /**
              * The fee to pay for the transaction. Default: BASE_FEE
@@ -80,18 +69,32 @@ export interface Client {
              */
             simulate?: boolean;
         }
-    ) => Promise<AssembledTransaction<readonly [string, any]>>;
+    ) => Promise<AssembledTransaction<string>>;
 }
 export class Client extends ContractClient {
+    static async deploy<T = Client>(
+        /** Options for initalizing a Client as well as for calling a method, with extras specific to deploying. */
+        options: MethodOptions &
+            Omit<ContractClientOptions, 'contractId'> & {
+                /** The hash of the Wasm blob, which must already be installed on-chain. */
+                wasmHash: Buffer | string;
+                /** Salt used to generate the contract's ID. Passed through to {@link Operation.createCustomContract}. Default: random. */
+                salt?: Buffer | Uint8Array;
+                /** The format used to decode `wasmHash`, if it's provided as a string. */
+                format?: 'hex' | 'base64';
+            }
+    ): Promise<AssembledTransaction<T>> {
+        return ContractClient.deploy(null, options);
+    }
     constructor(public readonly options: ContractClientOptions) {
         super(
             new ContractSpec([
-                'AAAAAAAAAXZEZXBsb3kgdGhlIGNvbnRyYWN0IFdhc20gYW5kIGFmdGVyIGRlcGxveW1lbnQgaW52b2tlIHRoZSBpbml0IGZ1bmN0aW9uCm9mIHRoZSBjb250cmFjdCB3aXRoIHRoZSBnaXZlbiBhcmd1bWVudHMuCgpUaGlzIGhhcyB0byBiZSBhdXRob3JpemVkIGJ5IGBkZXBsb3llcmAgKHVubGVzcyB0aGUgYERlcGxveWVyYCBpbnN0YW5jZQppdHNlbGYgaXMgdXNlZCBhcyBkZXBsb3llcikuIFRoaXMgd2F5IHRoZSB3aG9sZSBvcGVyYXRpb24gaXMgYXRvbWljCmFuZCBpdCdzIG5vdCBwb3NzaWJsZSB0byBmcm9udHJ1biB0aGUgY29udHJhY3QgaW5pdGlhbGl6YXRpb24uCgpSZXR1cm5zIHRoZSBjb250cmFjdCBJRCBhbmQgcmVzdWx0IG9mIHRoZSBpbml0IGZ1bmN0aW9uLgAAAAAABmRlcGxveQAAAAAABQAAAAAAAAAIZGVwbG95ZXIAAAATAAAAAAAAAAl3YXNtX2hhc2gAAAAAAAPuAAAAIAAAAAAAAAAEc2FsdAAAA+4AAAAgAAAAAAAAAAdpbml0X2ZuAAAAABEAAAAAAAAACWluaXRfYXJncwAAAAAAA+oAAAAAAAAAAQAAA+0AAAACAAAAEwAAAAA='
+                'AAAAAAAAAHFEZXBsb3lzIHRoZSBjb250cmFjdCBvbiBiZWhhbGYgb2YgdGhlIGBEZXBsb3llcmAgY29udHJhY3QuCgpUaGlzIGhhcyB0byBiZSBhdXRob3JpemVkIGJ5IHRoZSBgRGVwbG95ZXJgcyBhZGRyZXNzLgAAAAAAAAZkZXBsb3kAAAAAAAQAAAAAAAAACGRlcGxveWVyAAAAEwAAAAAAAAAJd2FzbV9oYXNoAAAAAAAD7gAAACAAAAAAAAAABHNhbHQAAAPuAAAAIAAAAAAAAAAQY29uc3RydWN0b3JfYXJncwAAA+oAAAAAAAAAAQAAABM='
             ]),
             options
         );
     }
     public readonly fromJSON = {
-        deploy: this.txFromJSON<readonly [string, any]>
+        deploy: this.txFromJSON<string>
     };
 }

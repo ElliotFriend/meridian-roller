@@ -19,9 +19,6 @@ console.log('###################### Initializing ########################');
 const __filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(__filename);
 
-// variable for later setting pinned version of soroban in "$(dirname/target/bin/soroban)"
-const cli = 'stellar';
-
 // Function to execute and log shell commands
 function exe(command) {
     console.log(command);
@@ -29,7 +26,7 @@ function exe(command) {
 }
 
 function fundAll() {
-    exe(`${cli} keys generate --overwrite ${process.env.STELLAR_ACCOUNT}`);
+    exe(`stellar keys generate --overwrite ${process.env.STELLAR_ACCOUNT}`);
 }
 
 function removeFiles(pattern) {
@@ -40,11 +37,11 @@ function removeFiles(pattern) {
 function buildAll() {
     removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
     removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.d`);
-    exe(`${cli} contract build`);
+    exe(`stellar contract build`);
 }
 
 function optimize(wasm) {
-    exe(`${cli} contract optimize --wasm `);
+    exe(`stellar contract optimize --wasm `);
 }
 
 function filenameNoExtension(filename) {
@@ -52,22 +49,31 @@ function filenameNoExtension(filename) {
 }
 
 function deploy(wasm) {
+    const alias = filenameNoExtension(wasm);
+    let constructor_args = '';
+    switch (alias) {
+        case 'dice_game':
+            constructor_args = `-- --admin ${process.env.STELLAR_ACCOUNT} --token_address ${process.env.NATIVE_CONTRACT_ADDRESS} --num_faces 6`;
+        default:
+            '';
+    }
+
     exe(
-        `${cli} contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)}`
+        `stellar contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)} ${constructor_args}`
     );
 }
 
 function deployAll() {
-    const contractsDir = `${dirname}/.soroban/contract-ids`;
+    const contractsDir = `${dirname}/.stellar/contract-ids`;
     mkdirSync(contractsDir, { recursive: true });
 
-    const wasmFiles = glob(`${dirname}/target/wasm32-unknown-unknown/release/*optimized.wasm`);
+    const wasmFiles = glob(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
 
     wasmFiles.forEach(deploy);
 }
 
 function contracts() {
-    const contractFiles = glob(`${dirname}/.soroban/contract-ids/*.json`);
+    const contractFiles = glob(`${dirname}/.stellar/contract-ids/*.json`);
 
     return contractFiles
         .map((path) => ({
@@ -83,8 +89,10 @@ function contracts() {
 
 function bind({ alias, id }) {
     exe(
-        `${cli} contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`
+        `stellar contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`
     );
+
+    exe(`cd ${dirname}/packages/${alias} && pnpm install && pnpm run build && cd ../..`);
 }
 
 function bindAll() {
@@ -98,10 +106,10 @@ function importContract({ alias }) {
 
     const importContent =
         `import * as Client from '${alias}';\n` +
-        `import { RPC_URL } from './util';\n\n` +
+        `import { PUBLIC_STELLAR_RPC_URL } from '$env/static/public';\n\n` +
         `export default new Client.Client({\n` +
         `    ...Client.networks.${process.env.STELLAR_NETWORK},\n` +
-        `    rpcUrl: RPC_URL,\n` +
+        `    rpcUrl: PUBLIC_STELLAR_RPC_URL,\n` +
         `});\n`;
 
     const outputPath = `${outputDir}/${alias}.ts`;
@@ -115,22 +123,9 @@ function importAll() {
     contracts().forEach(importContract);
 }
 
-function init({ id, alias }) {
-    if (alias === 'dice_game') {
-        exe(
-            `${cli} contract invoke --id ${id} -- init --admin ${process.env.STELLAR_ACCOUNT} --token_address CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC --num_faces 6`
-        );
-    }
-}
-
-function initAll() {
-    contracts().forEach(init);
-}
-
 // Calling the functions (equivalent to the last part of your bash script)
 fundAll();
 buildAll();
 deployAll();
 bindAll();
-// importAll();
-initAll();
+importAll();

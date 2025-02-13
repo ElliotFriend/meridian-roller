@@ -10,16 +10,22 @@ if (typeof window !== 'undefined') {
 export const networks = {
     testnet: {
         networkPassphrase: 'Test SDF Network ; September 2015',
-        contractId: 'CAPAFWGKU4OX66NT53DTT5NOH6NPES5ZKBNPUVINUH6P562NAQ2MNPOD'
+        contractId: 'CBS2SN4NO5KVC5WUSDPSRNBMJWOIS3DA457EXDK5S67GYDJGH3JZRBOI'
     }
 };
 export const Errors = {};
 export class Client extends ContractClient {
     options;
+    static async deploy(
+        /** Options for initalizing a Client as well as for calling a method, with extras specific to deploying. */
+        options
+    ) {
+        return ContractClient.deploy(null, options);
+    }
     constructor(options) {
         super(
             new ContractSpec([
-                'AAAAAAAAAXZEZXBsb3kgdGhlIGNvbnRyYWN0IFdhc20gYW5kIGFmdGVyIGRlcGxveW1lbnQgaW52b2tlIHRoZSBpbml0IGZ1bmN0aW9uCm9mIHRoZSBjb250cmFjdCB3aXRoIHRoZSBnaXZlbiBhcmd1bWVudHMuCgpUaGlzIGhhcyB0byBiZSBhdXRob3JpemVkIGJ5IGBkZXBsb3llcmAgKHVubGVzcyB0aGUgYERlcGxveWVyYCBpbnN0YW5jZQppdHNlbGYgaXMgdXNlZCBhcyBkZXBsb3llcikuIFRoaXMgd2F5IHRoZSB3aG9sZSBvcGVyYXRpb24gaXMgYXRvbWljCmFuZCBpdCdzIG5vdCBwb3NzaWJsZSB0byBmcm9udHJ1biB0aGUgY29udHJhY3QgaW5pdGlhbGl6YXRpb24uCgpSZXR1cm5zIHRoZSBjb250cmFjdCBJRCBhbmQgcmVzdWx0IG9mIHRoZSBpbml0IGZ1bmN0aW9uLgAAAAAABmRlcGxveQAAAAAABQAAAAAAAAAIZGVwbG95ZXIAAAATAAAAAAAAAAl3YXNtX2hhc2gAAAAAAAPuAAAAIAAAAAAAAAAEc2FsdAAAA+4AAAAgAAAAAAAAAAdpbml0X2ZuAAAAABEAAAAAAAAACWluaXRfYXJncwAAAAAAA+oAAAAAAAAAAQAAA+0AAAACAAAAEwAAAAA='
+                'AAAAAAAAAHFEZXBsb3lzIHRoZSBjb250cmFjdCBvbiBiZWhhbGYgb2YgdGhlIGBEZXBsb3llcmAgY29udHJhY3QuCgpUaGlzIGhhcyB0byBiZSBhdXRob3JpemVkIGJ5IHRoZSBgRGVwbG95ZXJgcyBhZGRyZXNzLgAAAAAAAAZkZXBsb3kAAAAAAAQAAAAAAAAACGRlcGxveWVyAAAAEwAAAAAAAAAJd2FzbV9oYXNoAAAAAAAD7gAAACAAAAAAAAAABHNhbHQAAAPuAAAAIAAAAAAAAAAQY29uc3RydWN0b3JfYXJncwAAA+oAAAAAAAAAAQAAABM='
             ]),
             options
         );

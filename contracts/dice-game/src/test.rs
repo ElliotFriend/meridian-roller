@@ -8,11 +8,9 @@ use soroban_sdk::{testutils::Address as _, Env};
 #[test]
 fn test_including_winner() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
-    env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
+    env.cost_estimate().budget().reset_unlimited();
 
     let admin = Address::generate(&env);
     let token_admin = Address::generate(&env);
@@ -21,7 +19,8 @@ fn test_including_winner() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    client.init(&admin, &token_contract.address(), &6);
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
+    let client = RollerContractClient::new(&env, &contract_address);
 
     for i in 0..103 {
         let roller = Address::generate(&env);
@@ -85,11 +84,9 @@ fn test_including_winner() {
 #[should_panic(expected = "HostError: Error(Contract, #1)")]
 fn test_past_winner() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
-    env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
+    env.cost_estimate().budget().reset_unlimited();
 
     let admin = Address::generate(&env);
     let token_admin = Address::generate(&env);
@@ -97,7 +94,8 @@ fn test_past_winner() {
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    client.init(&admin, &token_contract.address(), &6);
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
+    let client = RollerContractClient::new(&env, &contract_address);
 
     // the tests work out so that on iteration 103, we have a winner. everything
     // should work as predicted until then.
@@ -120,10 +118,7 @@ fn test_past_winner() {
 #[test]
 fn test_everyone_wins() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
-    // env.cost_estimate().budget().reset_unlimited();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
@@ -133,7 +128,8 @@ fn test_everyone_wins() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    client.init(&admin, &token_contract.address(), &6);
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
+    let client = RollerContractClient::new(&env, &contract_address);
 
     // the tests work out so that on iteration 42, we have a winner. everything
     // should work as predicted until then.
@@ -165,77 +161,36 @@ fn test_everyone_wins() {
 #[should_panic(expected = "HostError: Error(Contract, #5)")]
 fn test_cannot_call_game_twice() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
     let token_admin = Address::generate(&env);
+
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
 
-    client.init(&admin, &token_contract.address(), &6);
-    client.call_it();
-    client.call_it();
-}
-
-#[test]
-#[should_panic(expected = "HostError: Error(Contract, #2)")]
-fn test_cannot_call_uninitialized_game() {
-    let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
     let client = RollerContractClient::new(&env, &contract_address);
 
-    env.mock_all_auths();
-
     client.call_it();
-}
-
-#[test]
-#[should_panic(expected = "HostError: Error(Contract, #3)")]
-fn test_cannot_initialize_twice() {
-    let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
-
-    env.mock_all_auths();
-
-    let admin = Address::generate(&env);
-    let token_admin = Address::generate(&env);
-    let token_contract = env.register_stellar_asset_contract_v2(token_admin);
-
-    client.init(&admin, &token_contract.address(), &6);
-    client.init(&admin, &token_contract.address(), &6);
-}
-
-#[test]
-#[should_panic(expected = "HostError: Error(Contract, #2)")]
-fn test_cannot_roll_uninitialized_game() {
-    let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
-
-    env.mock_all_auths();
-
-    let roller = Address::generate(&env);
-    client.roll(&roller);
+    client.call_it();
 }
 
 #[test]
 #[should_panic(expected = "HostError: Error(Contract, #4")]
 fn test_cannot_be_evil_with_uncalled_game() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
     let token_admin = Address::generate(&env);
+
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    client.init(&admin, &token_contract.address(), &6);
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
+    let client = RollerContractClient::new(&env, &contract_address);
     for _i in 0..10 {
         let roller = Address::generate(&env);
         sac_client.mint(&roller, &(100 * 10_000_000));
@@ -248,8 +203,6 @@ fn test_cannot_be_evil_with_uncalled_game() {
 #[test]
 fn test_can_be_evil_with_called_game() {
     let env = Env::default();
-    let contract_address = env.register(RollerContract, ());
-    let client = RollerContractClient::new(&env, &contract_address);
 
     env.mock_all_auths();
 
@@ -260,7 +213,8 @@ fn test_can_be_evil_with_called_game() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    client.init(&admin, &token_contract.address(), &6);
+    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &6u32));
+    let client = RollerContractClient::new(&env, &contract_address);
 
     for _i in 0..10 {
         let roller = Address::generate(&env);

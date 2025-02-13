@@ -8,8 +8,8 @@
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
     import { account, send, getSalt } from '$lib/passkeyClient';
     import { scValToNative, xdr } from '@stellar/stellar-sdk';
-    import deployerSdk from '$lib/contracts/deployerContract';
-    import diceGameSdk from '$lib/contracts/diceGameContract';
+    import deployerSdk from '$lib/contracts/deployer';
+    import diceGameSdk from '$lib/contracts/dice_game';
 
     const toastStore = getToastStore();
 
@@ -28,9 +28,8 @@
                 deployer: $contractAddress,
                 wasm_hash: Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'),
                 salt: Buffer.from(await getSalt(), 'hex'),
-                init_fn: 'init',
-                init_args: [
-                    ...diceGameSdk.spec.funcArgsToScVals('init', {
+                constructor_args: [
+                    ...diceGameSdk.spec.funcArgsToScVals('__constructor', {
                         admin: $contractAddress,
                         token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
                         num_faces: parseInt(numFaces.toString())

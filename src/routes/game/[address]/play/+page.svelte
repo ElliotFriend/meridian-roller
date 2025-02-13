@@ -7,10 +7,10 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, rpc, native } from '$lib/passkeyClient';
-    import diceGame from '$lib/contracts/diceGameContract';
+    import diceGame from '$lib/contracts/dice_game';
     import { xdr, scValToNative, nativeToScVal, Address } from '@stellar/stellar-sdk';
     import DieRoll from '$lib/components/DieRoll.svelte';
-    import type { Roller } from 'dice-game';
+    import type { Roller } from 'dice_game';
     import GameStats from '$lib/components/GameStats.svelte';
     import RollerStats from '$lib/components/RollerStats.svelte';
     import { onMount } from 'svelte';
