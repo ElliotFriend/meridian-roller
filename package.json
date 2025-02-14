@@ -16,7 +16,7 @@
         "@stellar/stellar-sdk": "^13.1.0",
         "deployer": "file:packages/deployer",
         "dice_game": "file:packages/dice_game",
-        "passkey-kit": "^0.10.10",
+        "passkey-kit": "^0.10.11",
         "qrcode": "^1.5.4"
     },
     "devDependencies": {

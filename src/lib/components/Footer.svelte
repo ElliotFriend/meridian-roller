@@ -33,7 +33,7 @@
                             target="_blank"
                             href="https://developers.stellar.org/docs/build/apps/smart-wallets"
                         >
-                            Developer Documentation
+                            Developer Docs
                         </a>
                     </li>
                     <li>
@@ -42,7 +42,7 @@
                             target="_blank"
                             href="https://github.com/kalepail/passkey-kit/tree/next"
                         >
-                            Passkey Kit (<code class="code">next</code> branch)
+                            Passkey Kit
                         </a>
                     </li>
                 </ul>

@@ -3,7 +3,18 @@
     import { keyId } from '$lib/stores/keyId';
     import { account, send, fundContract, getContractId } from '$lib/passkeyClient';
     import { getToastStore } from '@skeletonlabs/skeleton';
+    import { onMount } from 'svelte';
     let toastStore = getToastStore();
+
+    onMount(async () => {
+        if ($keyId) {
+            const { contractId } = await account.connectWallet({
+                keyId: $keyId
+            });
+
+            contractAddress.set(contractId);
+        }
+    });
 
     async function signup() {
         console.log('signing up');

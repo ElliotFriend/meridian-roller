@@ -11,19 +11,23 @@
     import deployerSdk from '$lib/contracts/deployer';
     import diceGameSdk from '$lib/contracts/dice_game';
 
+    import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+    import Dices from 'lucide-svelte/icons/dices';
+
     const toastStore = getToastStore();
 
     let numDice: number = 3;
     let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
     let tokenAddress: string = PUBLIC_NATIVE_CONTRACT_ADDRESS;
-    let isWaiting: boolean = false;
+    let isDeploying: boolean = false;
 
-    $: rollButtonDisabled = isWaiting || !$contractAddress;
+    $: rollButtonDisabled = isDeploying || !$contractAddress;
 
     async function deployGame() {
         console.log('deploying game');
         try {
-            isWaiting = true;
+            isDeploying = true;
+
             const at = await deployerSdk.deploy({
                 deployer: $contractAddress,
                 wasm_hash: Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'),
@@ -36,17 +40,14 @@
                     })
                 ]
             });
-
-            console.log('at', at.built?.toXDR());
-
             const tx = await account.sign(at.built!, { keyId: $keyId });
-            const res = await send(tx.built!);
 
-            const result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
+            const { resultMetaXdr } = await send(tx.built!);
+            const result = xdr.TransactionMeta.fromXDR(resultMetaXdr, 'base64');
             const sMeta = result.v3().sorobanMeta();
             let deployedGame;
             if (sMeta) {
-                deployedGame = scValToNative(sMeta.returnValue())[0];
+                deployedGame = scValToNative(sMeta.returnValue());
             }
 
             toastStore.trigger({
@@ -62,7 +63,7 @@
                 background: 'variant-filled-error'
             });
         } finally {
-            isWaiting = false;
+            isDeploying = false;
         }
     }
 </script>
@@ -105,7 +106,8 @@
             >
         </select>
     </label>
-    <button class="btn variant-filled-primary" disabled={rollButtonDisabled} on:click={deployGame}
-        >Create Game</button
-    >
+    <button class="btn variant-filled-primary" disabled={rollButtonDisabled} on:click={deployGame}>
+        <span><Dices class={isDeploying ? 'animate-spin' : ''} /></span>
+        <span>Create Game</span>
+    </button>
 </form>
