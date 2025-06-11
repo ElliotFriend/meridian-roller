@@ -7,7 +7,7 @@
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
     import { account, send, getSalt } from '$lib/passkeyClient';
     import { scValToNative, xdr } from '@stellar/stellar-sdk';
-    import deployerSdk from '$lib/contracts/deployer';
+    // import deployerSdk from '$lib/contracts/deployer';
     import diceGameSdk from '$lib/contracts/dice_game';
     import { toaster } from '$lib/toaster';
 
