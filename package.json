@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "@stellar/stellar-sdk": "^13.3.0",
+        "@tailwindcss/vite": "^4.1.9",
         "deployer": "file:packages/deployer",
         "dice_game": "file:packages/dice_game",
         "passkey-kit": "^0.10.24",
@@ -26,7 +27,6 @@
         "@sveltejs/kit": "^2.17.1",
         "@sveltejs/vite-plugin-svelte": "^5.0.3",
         "@tailwindcss/forms": "^0.5.10",
-        "@tailwindcss/postcss": "^4.1.9",
         "@tailwindcss/typography": "^0.5.16",
         "@types/eslint": "^9.6.1",
         "@types/node": "^24.0.0",
@@ -39,7 +39,6 @@
         "glob": "^11.0.1",
         "globals": "^15.14.0",
         "lucide-svelte": "^0.514.0",
-        "postcss": "^8.5.1",
         "prettier": "^3.4.2",
         "prettier-plugin-svelte": "^3.3.3",
         "svelte": "^5.19.9",
