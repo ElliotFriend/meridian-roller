@@ -26,7 +26,8 @@ function exe(command) {
 }
 
 function fundAll() {
-    exe(`stellar keys generate --overwrite ${process.env.STELLAR_ACCOUNT}`);
+    exe(`stellar keys generate ${process.env.STELLAR_ACCOUNT} | true`);
+    exe(`stellar keys fund ${process.env.STELLAR_ACCOUNT} --network ${process.env.STELLAR_NETWORK} | true`)
 }
 
 function removeFiles(pattern) {
@@ -35,13 +36,9 @@ function removeFiles(pattern) {
 }
 
 function buildAll() {
-    removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
-    removeFiles(`${dirname}/target/wasm32-unknown-unknown/release/*.d`);
+    removeFiles(`${dirname}/target/wasm32v1-none/release/*.wasm`);
+    removeFiles(`${dirname}/target/wasm32v1-none/release/*.d`);
     exe(`stellar contract build`);
-}
-
-function optimize(wasm) {
-    exe(`stellar contract optimize --wasm `);
 }
 
 function filenameNoExtension(filename) {
@@ -67,7 +64,7 @@ function deployAll() {
     const contractsDir = `${dirname}/.stellar/contract-ids`;
     mkdirSync(contractsDir, { recursive: true });
 
-    const wasmFiles = glob(`${dirname}/target/wasm32-unknown-unknown/release/*.wasm`);
+    const wasmFiles = glob(`${dirname}/target/wasm32v1-none/release/*.wasm`);
 
     wasmFiles.forEach(deploy);
 }
