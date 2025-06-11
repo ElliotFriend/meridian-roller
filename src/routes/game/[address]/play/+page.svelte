@@ -15,8 +15,8 @@
     import Leaderboard from '$lib/components/Leaderboard.svelte';
     import { invalidate } from '$app/navigation';
     import TruncatedAddress from '$lib/components/TruncatedAddress.svelte';
+    import { toaster } from '$lib/toaster';
 
-    const toastStore = getToastStore();
     diceGame.options.contractId = data.gameAddress;
 
     let rollResult: number[] = [0, 0, 0];
@@ -82,16 +82,14 @@
             }
             console.log('rolled result', rollResult);
 
-            toastStore.trigger({
-                message: 'Successfully rolled the dice! Congrats',
-                background: 'preset-filled-success-500'
+            toaster.success({
+                description: 'Successfully rolled the dice! Congrats',
             });
             fetchRoller();
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong rolling dice. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong rolling dice. Please try again later.',
             });
         } finally {
             fetchInstance();

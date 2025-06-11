@@ -9,11 +9,10 @@
     import { scValToNative, xdr } from '@stellar/stellar-sdk';
     import deployerSdk from '$lib/contracts/deployer';
     import diceGameSdk from '$lib/contracts/dice_game';
+    import { toaster } from '$lib/toaster';
 
     import LoaderCircle from 'lucide-svelte/icons/loader-circle';
     import Dices from 'lucide-svelte/icons/dices';
-
-    const toastStore = getToastStore();
 
     let numDice: number = 3;
     let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
@@ -49,17 +48,15 @@
                 deployedGame = scValToNative(sMeta.returnValue());
             }
 
-            toastStore.trigger({
-                message: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
-                background: 'preset-filled-success-500'
+            toaster.success({
+                description: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
             });
 
             goto(`./${deployedGame}/manage`);
         } catch (err) {
             console.error('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong rolling dice. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong rolling dice. Please try again later.',
             });
         } finally {
             isDeploying = false;

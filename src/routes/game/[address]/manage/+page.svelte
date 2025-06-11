@@ -7,6 +7,7 @@
     import diceGameSdk from '$lib/contracts/dice_game';
     import Leaderboard from '$lib/components/Leaderboard.svelte';
     import GameStats from '$lib/components/GameStats.svelte';
+    import { toaster } from '$lib/toaster';
 
     import type { PageData } from './$types';
     export let data: PageData;
@@ -18,7 +19,7 @@
 
     $: isButtonDisabled = !$contractAddress || isWaiting || data.gameWinner;
 
-    const toastStore = getToastStore();
+
 
     let qrDataUrl = qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
         errorCorrectionLevel: 'high'
@@ -34,16 +35,14 @@
             await send(tx.built!);
 
             calledIt = true;
-            toastStore.trigger({
-                message:
+            toaster.success({
+                description:
                     "Hooray! Everyone is a winner, now! I'll start handing out the participation trophies.",
-                background: 'preset-filled-primary-500'
             });
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong ending the game. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong ending the game. Please try again later.',
             });
         } finally {
             isWaiting = false;
@@ -60,15 +59,13 @@
             const tx = await account.sign(at.built!, { keyId: $keyId });
             await send(tx.built!);
 
-            toastStore.trigger({
-                message: 'Welp... You stole from everyone... hooray?',
-                background: 'preset-filled-tertiary-500'
+            toaster.success({
+                description: 'Welp... You stole from everyone... hooray?',
             });
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong being evil. Serves you right!',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong being evil. Serves you right!',
             });
         } finally {
             isWaiting = false;

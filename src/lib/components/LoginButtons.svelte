@@ -3,7 +3,8 @@
     import { keyId } from '$lib/stores/keyId';
     import { account, send, fundContract, getContractId } from '$lib/passkeyClient';
     import { onMount } from 'svelte';
-    let toastStore = getToastStore();
+
+    import { toaster } from '$lib/toaster';
 
     onMount(async () => {
         if ($keyId) {
@@ -33,9 +34,8 @@
             await fundContract($contractAddress);
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong signing up. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong signing up. Please try again later.',
             });
         }
     }
@@ -53,9 +53,8 @@
             console.log('contract address', $contractAddress);
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong logging in. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong logging in. Please try again later.',
             });
         }
     }
@@ -70,9 +69,8 @@
             window.location.reload();
         } catch (err) {
             console.log('err', err);
-            toastStore.trigger({
-                message: 'Something went wrong logging out. Please try again later.',
-                background: 'preset-filled-error-500'
+            toaster.error({
+                description: 'Something went wrong logging out. Please try again later.',
             });
         }
     }
