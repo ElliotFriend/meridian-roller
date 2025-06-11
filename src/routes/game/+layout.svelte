@@ -1,7 +1,9 @@
 <script lang="ts">
     import TruncatedAddress from '$lib/components/TruncatedAddress.svelte';
-    import { page } from '$app/stores';
-    $: pathname = $page.url.pathname.split('/').filter((p) => p);
+    import { page } from '$app/state';
+    import type { LayoutProps } from './$types';
+    let pathname = $derived(page.url.pathname.split('/').filter((p) => p));
+    let { children }: LayoutProps = $props()
 
     function capitalized(word: string): string {
         return word.charAt(0).toUpperCase() + word.slice(1);
@@ -34,4 +36,4 @@
     {/each}
 </ol>
 
-<slot />
+{@render children()}
