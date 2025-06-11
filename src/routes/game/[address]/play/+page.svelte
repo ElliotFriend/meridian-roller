@@ -2,8 +2,6 @@
     import type { PageData } from './$types';
     export let data: PageData;
     console.log('src/routes/game/[address]/play/+page.svelte PageData', data);
-
-    import { getToastStore } from '@skeletonlabs/skeleton';
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, rpc, native } from '$lib/passkeyClient';
@@ -86,14 +84,14 @@
 
             toastStore.trigger({
                 message: 'Successfully rolled the dice! Congrats',
-                background: 'variant-filled-success'
+                background: 'preset-filled-success-500'
             });
             fetchRoller();
         } catch (err) {
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong rolling dice. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         } finally {
             fetchInstance();
@@ -133,7 +131,7 @@
             <div class="text-center">
                 <button
                     type="button"
-                    class="btn variant-filled-primary"
+                    class="btn preset-filled-primary-500"
                     on:click={rollDice}
                     disabled={rollButtonDisabled || youWon}>Roll!</button
                 >

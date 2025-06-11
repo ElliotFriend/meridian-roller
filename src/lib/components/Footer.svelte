@@ -1,4 +1,4 @@
-<footer class="flex-none bg-surface-100-800-token shadow-xl p-4">
+<footer class="flex-none bg-surface-100-900 shadow-xl p-4">
     <div class="flex flex-col md:flex-row justify-around align-center mx-auto">
         <div class="space-y-1">
             <h6 class="h6">This Project</h6>

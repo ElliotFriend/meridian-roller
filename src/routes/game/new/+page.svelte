@@ -2,7 +2,6 @@
     import OddsAlert from '$lib/components/OddsAlert.svelte';
 
     import { goto } from '$app/navigation';
-    import { getToastStore } from '@skeletonlabs/skeleton';
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
@@ -52,7 +51,7 @@
 
             toastStore.trigger({
                 message: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
-                background: 'variant-filled-success'
+                background: 'preset-filled-success-500'
             });
 
             goto(`./${deployedGame}/manage`);
@@ -60,7 +59,7 @@
             console.error('err', err);
             toastStore.trigger({
                 message: 'Something went wrong rolling dice. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         } finally {
             isDeploying = false;
@@ -106,7 +105,7 @@
             >
         </select>
     </label>
-    <button class="btn variant-filled-primary" disabled={rollButtonDisabled} on:click={deployGame}>
+    <button class="btn preset-filled-primary-500" disabled={rollButtonDisabled} on:click={deployGame}>
         <span><Dices class={isDeploying ? 'animate-spin' : ''} /></span>
         <span>Create Game</span>
     </button>

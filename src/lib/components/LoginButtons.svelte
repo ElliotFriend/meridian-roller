@@ -2,7 +2,6 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, fundContract, getContractId } from '$lib/passkeyClient';
-    import { getToastStore } from '@skeletonlabs/skeleton';
     import { onMount } from 'svelte';
     let toastStore = getToastStore();
 
@@ -36,7 +35,7 @@
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong signing up. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         }
     }
@@ -56,7 +55,7 @@
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong logging in. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         }
     }
@@ -73,15 +72,15 @@
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong logging out. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         }
     }
 </script>
 
 {#if $contractAddress}
-    <button type="button" class="btn variant-filled-secondary" onclick={logout}>Logout</button>
+    <button type="button" class="btn preset-filled-secondary-500" onclick={logout}>Logout</button>
 {:else}
-    <button type="button" class="btn variant-filled-primary" onclick={signup}>Signup</button>
-    <button type="button" class="btn variant-filled-secondary" onclick={login}>Login</button>
+    <button type="button" class="btn preset-filled-primary-500" onclick={signup}>Signup</button>
+    <button type="button" class="btn preset-filled-secondary-500" onclick={login}>Login</button>
 {/if}

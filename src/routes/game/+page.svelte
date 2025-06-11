@@ -24,7 +24,7 @@ import type { PageProps } from "./$types";
 </ol>
 
 <div class="table-container">
-    <table class="table table-hover">
+    <table class="table ">
         <thead>
             <tr>
                 <th>Game Address</th>

@@ -12,5 +12,5 @@
         Looks like this contract is managed by another wallet. Click below to play the game,
         instead.
     </p>
-    <a href="./play" class="btn variant-filled-primary">Play</a>
+    <a href="./play" class="btn preset-filled-primary-500">Play</a>
 {/if}

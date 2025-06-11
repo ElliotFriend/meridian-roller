@@ -1,6 +1,5 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { getToastStore } from '@skeletonlabs/skeleton';
     import qrCode from 'qrcode';
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
@@ -38,13 +37,13 @@
             toastStore.trigger({
                 message:
                     "Hooray! Everyone is a winner, now! I'll start handing out the participation trophies.",
-                background: 'variant-filled-primary'
+                background: 'preset-filled-primary-500'
             });
         } catch (err) {
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong ending the game. Please try again later.',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         } finally {
             isWaiting = false;
@@ -63,13 +62,13 @@
 
             toastStore.trigger({
                 message: 'Welp... You stole from everyone... hooray?',
-                background: 'variant-filled-tertiary'
+                background: 'preset-filled-tertiary-500'
             });
         } catch (err) {
             console.log('err', err);
             toastStore.trigger({
                 message: 'Something went wrong being evil. Serves you right!',
-                background: 'variant-filled-error'
+                background: 'preset-filled-error-500'
             });
         } finally {
             isWaiting = false;
@@ -92,13 +91,13 @@
 
             {#if calledIt}
                 <button
-                    class="btn variant-filled-tertiary"
+                    class="btn preset-filled-tertiary-500"
                     disabled={isButtonDisabled}
                     on:click={beEvil}>Be evil!</button
                 >
             {:else}
                 <button
-                    class="btn variant-filled-primary"
+                    class="btn preset-filled-primary-500"
                     disabled={isButtonDisabled}
                     on:click={callIt}>Call it!</button
                 >

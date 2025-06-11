@@ -40,6 +40,6 @@
                 </div>
             {/if}
         </dl>
-        <button class="btn variant-filled-primary" onclick={fetchInstance}>re-fetch</button>
+        <button class="btn preset-filled-primary-500" onclick={fetchInstance}>re-fetch</button>
     </section>
 </div>

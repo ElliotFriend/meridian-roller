@@ -36,7 +36,7 @@
 </script>
 
 <div class="table-container space-y-4">
-    <table class="table table-hover table-compact table-auto max-w-full">
+    <table class="table  table-compact table-auto max-w-full">
         <thead>
             <tr>
                 <th>Rolled</th>

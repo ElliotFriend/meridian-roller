@@ -1,13 +1,13 @@
 <script lang="ts">
     import '../app.css';
-    import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+    import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
     initializeStores();
 
     import Header from '$lib/components/Header.svelte';
     import Footer from '$lib/components/Footer.svelte';
 </script>
 
-<Toast />
+<ToastProvider />
 
 <div class="h-screen grid grid-rows-[auto_1fr_auto]">
     <Header />

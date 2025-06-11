@@ -7,7 +7,7 @@
 </script>
 
 {#if numDice && numFaces}
-    <aside class="alert variant-filled-surface" transition:fade={{ duration: 200 }}>
+    <aside class="alert preset-filled-surface-500" transition:fade={{ duration: 200 }}>
         <div><Info size={36} /></div>
         <div class="alert-message">
             <h3 class="h3">Just a heads up</h3>
