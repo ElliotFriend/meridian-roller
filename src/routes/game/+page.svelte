@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { Address, humanizeEvents, scValToNative, StrKey } from "@stellar/stellar-sdk";
-import type { PageProps } from "./$types";
+    import { Address, humanizeEvents, scValToNative, StrKey } from '@stellar/stellar-sdk';
+    import type { PageProps } from './$types';
 
     let { data }: PageProps = $props();
     // console.log('data data data', data)
@@ -24,7 +24,7 @@ import type { PageProps } from "./$types";
 </ol>
 
 <div class="table-container">
-    <table class="table ">
+    <table class="table">
         <thead>
             <tr>
                 <th>Game Address</th>
@@ -34,7 +34,7 @@ import type { PageProps } from "./$types";
         </thead>
         <tbody>
             {#each data.events as event}
-            <!-- {@const address = event.topic[2].address().contractId() ?? event.topic[2].address().accountId()} -->
+                <!-- {@const address = event.topic[2].address().contractId() ?? event.topic[2].address().accountId()} -->
                 <tr>
                     <td>{event.contractId}</td>
                     <td>{event.admin}</td>

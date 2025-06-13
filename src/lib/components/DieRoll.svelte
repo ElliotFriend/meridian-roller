@@ -11,7 +11,7 @@
         3: Dice3,
         4: Dice4,
         5: Dice5,
-        6: Dice6
+        6: Dice6,
     };
 </script>
 

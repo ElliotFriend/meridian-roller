@@ -4,7 +4,7 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send } from '$lib/passkeyClient';
-    import diceGameSdk from '$lib/contracts/dice_game';
+    import { createClient } from '$lib/contracts/dice_game';
     import Leaderboard from '$lib/components/Leaderboard.svelte';
     import GameStats from '$lib/components/GameStats.svelte';
     import { toaster } from '$lib/toaster';
@@ -12,27 +12,25 @@
     import type { PageData } from './$types';
     export let data: PageData;
 
-    diceGameSdk.options.contractId = data.gameAddress;
+    let diceGame = createClient(data.gameAddress);
 
     let isWaiting: boolean = false;
     let calledIt: boolean = false;
 
     $: isButtonDisabled = !$contractAddress || isWaiting || data.gameWinner;
 
-
-
     let qrDataUrl = qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
-        errorCorrectionLevel: 'high'
+        errorCorrectionLevel: 'high',
     });
 
     async function callIt() {
         console.log('calling it a day');
         try {
             isWaiting = true;
-            const at = await diceGameSdk.call_it();
+            const at = await diceGame.call_it();
 
-            const tx = await account.sign(at.built!, { keyId: $keyId });
-            await send(tx.built!);
+            await account.sign(at, { keyId: $keyId });
+            await send(at.built!);
 
             calledIt = true;
             toaster.success({
@@ -54,10 +52,10 @@
         try {
             isWaiting = true;
 
-            const at = await diceGameSdk.be_evil();
+            const at = await diceGame.be_evil();
 
-            const tx = await account.sign(at.built!, { keyId: $keyId });
-            await send(tx.built!);
+            await account.sign(at, { keyId: $keyId });
+            await send(at.built!);
 
             toaster.success({
                 description: 'Welp... You stole from everyone... hooray?',

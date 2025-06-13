@@ -5,8 +5,8 @@
     import type { Readable } from 'svelte/store';
     import TruncatedAddress from './TruncatedAddress.svelte';
 
-    let value: Readable<Record<string, any> | null> = source(
-        `/api/game/${$page.params.address}/events`
+    let value: Readable<Record<string, any> | null | undefined> = source(
+        `/api/game/${$page.params.address}/events`,
     )
         .select('leaderboard')
         .json();
@@ -18,13 +18,13 @@
                           return {
                               rolled: 'WINNER',
                               address: value.address,
-                              ledger: value.ledger
+                              ledger: value.ledger,
                           };
                       default:
                           return {
                               rolled: value.rolled,
                               address: key,
-                              ledger: value.ledger
+                              ledger: value.ledger,
                           };
                   }
               })
@@ -36,7 +36,7 @@
 </script>
 
 <div class="table-container space-y-4">
-    <table class="table  table-compact table-auto max-w-full">
+    <table class="table table-compact table-auto max-w-full">
         <thead>
             <tr>
                 <th>Rolled</th>
@@ -48,7 +48,7 @@
             {#each $rows as row}
                 <tr>
                     <td>{row.rolled}</td>
-                    <td><code><TruncatedAddress address={row.address} /></code></td>
+                    <td><code><TruncatedAddress text={row.address} /></code></td>
                     <td>{row.ledger}</td>
                 </tr>
             {/each}

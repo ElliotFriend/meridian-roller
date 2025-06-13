@@ -31,12 +31,12 @@ export const POST: RequestHandler = async ({ params }) => {
                                 [
                                     nativeToScVal('ROLLER', { type: 'symbol' }).toXDR('base64'),
                                     '*',
-                                    '*'
-                                ]
-                            ]
-                        }
+                                    '*',
+                                ],
+                            ],
+                        },
                     ],
-                    limit: 10000
+                    limit: 10000,
                 });
 
                 events
@@ -55,7 +55,7 @@ export const POST: RequestHandler = async ({ params }) => {
                                 if (!(topics[2] in retObj) || retObj[topics[2]].rolled < data) {
                                     retObj[topics[2]] = {
                                         rolled: data,
-                                        ledger: event.ledger
+                                        ledger: event.ledger,
                                     };
                                 }
                                 break;
@@ -63,14 +63,14 @@ export const POST: RequestHandler = async ({ params }) => {
                                 retObj['winner'] = {
                                     address: topics[2],
                                     prize: data.toString(),
-                                    ledger: event.ledger
+                                    ledger: event.ledger,
                                 };
                                 foundWinner = true;
                                 break;
                             case 'called':
                                 retObj['called'] = {
                                     prize: data.toString(),
-                                    ledger: event.ledger
+                                    ledger: event.ledger,
                                 };
                                 gameCalled = true;
                                 break;
@@ -90,7 +90,7 @@ export const POST: RequestHandler = async ({ params }) => {
         {
             stop() {
                 console.log('connection stopped');
-            }
-        }
+            },
+        },
     );
 };

@@ -3,7 +3,7 @@
     import { page } from '$app/state';
     import type { LayoutProps } from './$types';
     let pathname = $derived(page.url.pathname.split('/').filter((p) => p));
-    let { children }: LayoutProps = $props()
+    let { children }: LayoutProps = $props();
 
     function capitalized(word: string): string {
         return word.charAt(0).toUpperCase() + word.slice(1);

@@ -9,12 +9,12 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
     const contractAddress = params.address;
     if (!contractAddress) {
         error(404, {
-            message: 'missing contract address'
+            message: 'missing contract address',
         });
     }
     if (!StrKey.isValidContract(contractAddress)) {
         error(400, {
-            message: 'invalid contract address'
+            message: 'invalid contract address',
         });
     }
 
@@ -30,7 +30,7 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         .toString('hex');
     if (wasmHash !== PUBLIC_GAME_WASM_HASH) {
         error(400, {
-            message: 'requested contract is not a valid game'
+            message: 'requested contract is not a valid game',
         });
     }
 
@@ -46,14 +46,14 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
 
     if (!Object.entries(instanceStorage).length) {
         error(400, {
-            message: 'uninitialized contract'
+            message: 'uninitialized contract',
         });
     }
 
     const tokenSymbol = (await sac.getSACClient(instanceStorage.TokenAddress).symbol()).result;
     const prizePot = (
         await sac.getSACClient(instanceStorage.TokenAddress).balance({
-            id: contractAddress
+            id: contractAddress,
         })
     ).result;
 
@@ -65,6 +65,6 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         gameAdmin: instanceStorage.Admin,
         numFaces: instanceStorage.NumFaces,
         prizePot,
-        gameWinner: instanceStorage.Winner || undefined
+        gameWinner: instanceStorage.Winner || undefined,
     };
 };

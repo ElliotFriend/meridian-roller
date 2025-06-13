@@ -5,8 +5,8 @@
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
     import { account, send, rpc, native } from '$lib/passkeyClient';
-    import diceGame from '$lib/contracts/dice_game';
-    import { xdr, scValToNative, nativeToScVal, Address } from '@stellar/stellar-sdk';
+    import { createClient } from '$lib/contracts/dice_game';
+    import { xdr, scValToNative, nativeToScVal, Address } from '@stellar/stellar-sdk/minimal';
     import DieRoll from '$lib/components/DieRoll.svelte';
     import type { Roller } from 'dice_game';
     import GameStats from '$lib/components/GameStats.svelte';
@@ -18,7 +18,7 @@
     import { toaster } from '$lib/toaster';
     import { Operation } from '@stellar/stellar-sdk/minimal';
 
-    diceGame.options.contractId = data.gameAddress;
+    let diceGame = createClient(data.gameAddress);
 
     let rollResult: number[] = [0, 0, 0];
     let isWaiting: boolean = false;
@@ -37,12 +37,12 @@
                     key: nativeToScVal(
                         [
                             nativeToScVal('Roller', { type: 'symbol' }),
-                            nativeToScVal($contractAddress, { type: 'address' })
+                            nativeToScVal($contractAddress, { type: 'address' }),
                         ],
-                        { type: 'vec' }
+                        { type: 'vec' },
                     ),
-                    durability: xdr.ContractDataDurability.persistent()
-                })
+                    durability: xdr.ContractDataDurability.persistent(),
+                }),
             );
             const ledgerEntry = await rpc.getLedgerEntries(ledgerKey);
             if (ledgerEntry.entries.length) {
@@ -54,7 +54,7 @@
             }
 
             let { result } = await native.balance({
-                id: $contractAddress
+                id: $contractAddress,
             });
             rollerBalance = result.toString();
         }
@@ -69,32 +69,25 @@
         console.log('rolling dice');
         try {
             isWaiting = true;
-            const at = await diceGame.roll({
-                roller: $contractAddress
+            let at = await diceGame.roll({
+                roller: $contractAddress,
             });
-            console.log('at', at)
+            console.log('at', at);
 
-            let hf = (at.built?.operations[0] as Operation.InvokeHostFunction).func
-            console.log('hf', hf)
+            await account.sign(at, { keyId: $keyId });
+            const res = await send(at.built!);
 
-            let auth = (at.built?.operations[0] as Operation.InvokeHostFunction).auth
-            console.log('auth', auth![0].credentials())
-            console.log('auth', auth![0].toXDR('base64'))
+            let result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
+            let sMeta = result.v3().sorobanMeta();
+            if (sMeta) {
+                rollResult = scValToNative(sMeta.returnValue());
+            }
+            console.log('rolled result', rollResult);
 
-            // const tx = await account.sign(at.built!, { keyId: $keyId });
-            // const res = await send(tx.built!);
-
-            // let result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
-            // let sMeta = result.v3().sorobanMeta();
-            // if (sMeta) {
-            //     rollResult = scValToNative(sMeta.returnValue());
-            // }
-            // console.log('rolled result', rollResult);
-
-            // toaster.success({
-            //     description: 'Successfully rolled the dice! Congrats',
-            // });
-            // fetchRoller();
+            toaster.success({
+                description: 'Successfully rolled the dice! Congrats',
+            });
+            fetchRoller();
         } catch (err) {
             console.log('err', err);
             toaster.error({

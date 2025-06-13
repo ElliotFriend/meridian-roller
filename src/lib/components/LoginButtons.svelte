@@ -9,7 +9,7 @@
     onMount(async () => {
         if ($keyId) {
             const { contractId } = await account.connectWallet({
-                keyId: $keyId
+                keyId: $keyId,
             });
 
             contractAddress.set(contractId);
@@ -22,7 +22,7 @@
             const {
                 keyIdBase64: kid,
                 contractId: cid,
-                signedTx
+                signedTx,
             } = await account.createWallet('Meridian Roller', 'High Stakes Roller');
 
             keyId.set(kid);
@@ -44,7 +44,7 @@
         console.log('logging in');
         try {
             const { keyIdBase64: kid, contractId: cid } = await account.connectWallet({
-                getContractId
+                getContractId,
             });
 
             keyId.set(kid);

@@ -27,7 +27,9 @@ function exe(command) {
 
 function fundAll() {
     exe(`stellar keys generate ${process.env.STELLAR_ACCOUNT} | true`);
-    exe(`stellar keys fund ${process.env.STELLAR_ACCOUNT} --network ${process.env.STELLAR_NETWORK} | true`)
+    exe(
+        `stellar keys fund ${process.env.STELLAR_ACCOUNT} --network ${process.env.STELLAR_NETWORK} | true`,
+    );
 }
 
 function removeFiles(pattern) {
@@ -56,7 +58,7 @@ function deploy(wasm) {
     }
 
     exe(
-        `stellar contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)} ${constructor_args}`
+        `stellar contract deploy --wasm ${wasm} --ignore-checks --alias ${filenameNoExtension(wasm)} ${constructor_args}`,
     );
 }
 
@@ -75,18 +77,18 @@ function contracts() {
     return contractFiles
         .map((path) => ({
             alias: filenameNoExtension(path),
-            ...JSON.parse(readFileSync(path))
+            ...JSON.parse(readFileSync(path)),
         }))
         .filter((data) => data.ids[process.env.STELLAR_NETWORK_PASSPHRASE])
         .map((data) => ({
             alias: data.alias,
-            id: data.ids[process.env.STELLAR_NETWORK_PASSPHRASE]
+            id: data.ids[process.env.STELLAR_NETWORK_PASSPHRASE],
         }));
 }
 
 function bind({ alias, id }) {
     exe(
-        `stellar contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`
+        `stellar contract bindings typescript --contract-id ${id} --output-dir ${dirname}/packages/${alias} --overwrite`,
     );
 
     exe(`cd ${dirname}/packages/${alias} && pnpm install && pnpm run build && cd ../..`);

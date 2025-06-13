@@ -4,25 +4,14 @@ import {
     Client as ContractClient,
     ClientOptions as ContractClientOptions,
     MethodOptions,
-    Result,
-    Spec as ContractSpec
+    Spec as ContractSpec,
 } from '@stellar/stellar-sdk/minimal/contract';
-import type {
-    u32,
-    i128,
-} from '@stellar/stellar-sdk/minimal/contract';
+import type { u32, i128 } from '@stellar/stellar-sdk/minimal/contract';
 
 if (typeof window !== 'undefined') {
     //@ts-ignore Buffer exists
     window.Buffer = window.Buffer || Buffer;
 }
-
-export const networks = {
-    testnet: {
-        networkPassphrase: 'Test SDF Network ; September 2015',
-        contractId: 'CBIWIU27G6LEEUD76ME6LVEMWRWTYWQA3BGYKHJDKUXVUWY3SUNWAQHP'
-    }
-} as const;
 
 export type DataKey =
     | { tag: 'Admin'; values: void }
@@ -30,8 +19,8 @@ export type DataKey =
     | { tag: 'Winner'; values: void }
     | { tag: 'Roller'; values: readonly [string] }
     | { tag: 'EveryoneWins'; values: void }
-    | { tag: 'NumFaces'; values: void }
-    | { tag: 'PrizePot'; values: void };
+    | { tag: 'NumDice'; values: void }
+    | { tag: 'NumFaces'; values: void };
 
 export interface Roller {
     first_roll: u32;
@@ -41,15 +30,18 @@ export interface Roller {
 }
 
 export const Errors = {
+    /**
+     * A winner has already been found.
+     */
     1: { message: 'WinnerFound' },
-
-    2: { message: 'NotInitialized' },
-
-    3: { message: 'AlreadyInitialized' },
-
-    4: { message: 'NotCalled' },
-
-    5: { message: 'AlreadyCalled' }
+    /**
+     * You can't be evil. The game has not been called.
+     */
+    2: { message: 'NotCalled' },
+    /**
+     * The game has already been called.
+     */
+    3: { message: 'AlreadyCalled' },
 };
 
 export interface Client {
@@ -58,16 +50,13 @@ export interface Client {
      * Roll the dice
      *
      * # Arguments
-     *
      * * `roller` - address rolling the dice during this turn.
      *
      * # Panics
-     *
      * * If the contract has not yet been initialized
      * * If a winner has already been found, and they've claimed the prize pot
      *
      * # Events
-     *
      * Emits one of two events, depending on the rolled value:
      *
      * * For a non-winning roll, emits an event with topics `["ROLLER",
@@ -96,21 +85,19 @@ export interface Client {
              * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
              */
             simulate?: boolean;
-        }
-    ) => Promise<AssembledTransaction<Result<Array<u32>>>>;
+        },
+    ) => Promise<AssembledTransaction<Array<u32>>>;
 
     /**
      * Construct and simulate a call_it transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
      * Call the game off
      *
      * # Panics
-     *
      * * If the contract has not yet been initialized
      * * If a winner has already been found, and they've claimed the prize pot
      * * If the game has already been "called" by the admin
      *
      * # Events
-     *
      * Emits an event with topics `["ROLLER", "called", admin: Address], data
      * = prize_pot: i128`
      */
@@ -129,7 +116,7 @@ export interface Client {
          * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
          */
         simulate?: boolean;
-    }) => Promise<AssembledTransaction<Result<void>>>;
+    }) => Promise<AssembledTransaction<null>>;
 
     /**
      * Construct and simulate a be_evil transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
@@ -150,7 +137,7 @@ export interface Client {
          * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
          */
         simulate?: boolean;
-    }) => Promise<AssembledTransaction<Result<i128>>>;
+    }) => Promise<AssembledTransaction<i128>>;
 }
 export class Client extends ContractClient {
     static async deploy<T = Client>(
@@ -158,9 +145,10 @@ export class Client extends ContractClient {
         {
             admin,
             token_address,
-            num_faces
-        }: { admin: string; token_address: string; num_faces: u32 },
-        /** Options for initalizing a Client as well as for calling a method, with extras specific to deploying. */
+            num_dice,
+            num_faces,
+        }: { admin: string; token_address: string; num_dice: u32; num_faces: u32 },
+        /** Options for initializing a Client as well as for calling a method, with extras specific to deploying. */
         options: MethodOptions &
             Omit<ContractClientOptions, 'contractId'> & {
                 /** The hash of the Wasm blob, which must already be installed on-chain. */
@@ -169,27 +157,27 @@ export class Client extends ContractClient {
                 salt?: Buffer | Uint8Array;
                 /** The format used to decode `wasmHash`, if it's provided as a string. */
                 format?: 'hex' | 'base64';
-            }
+            },
     ): Promise<AssembledTransaction<T>> {
-        return ContractClient.deploy({ admin, token_address, num_faces }, options);
+        return ContractClient.deploy({ admin, token_address, num_dice, num_faces }, options);
     }
     constructor(public readonly options: ContractClientOptions) {
         super(
             new ContractSpec([
-                'AAAAAgAAAAAAAAAAAAAAB0RhdGFLZXkAAAAABwAAAAAAAAAAAAAABUFkbWluAAAAAAAAAAAAAAAAAAAMVG9rZW5BZGRyZXNzAAAAAAAAAAAAAAAGV2lubmVyAAAAAAABAAAAAAAAAAZSb2xsZXIAAAAAAAEAAAATAAAAAAAAAAAAAAAMRXZlcnlvbmVXaW5zAAAAAAAAAAAAAAAITnVtRmFjZXMAAAAAAAAAAAAAAAhQcml6ZVBvdA==',
+                'AAAAAgAAAAAAAAAAAAAAB0RhdGFLZXkAAAAABwAAAAAAAAAAAAAABUFkbWluAAAAAAAAAAAAAAAAAAAMVG9rZW5BZGRyZXNzAAAAAAAAAAAAAAAGV2lubmVyAAAAAAABAAAAAAAAAAZSb2xsZXIAAAAAAAEAAAATAAAAAAAAAAAAAAAMRXZlcnlvbmVXaW5zAAAAAAAAAAAAAAAHTnVtRGljZQAAAAAAAAAAAAAAAAhOdW1GYWNlcw==',
                 'AAAAAQAAAAAAAAAAAAAABlJvbGxlcgAAAAAABAAAAAAAAAAKZmlyc3Rfcm9sbAAAAAAABAAAAAAAAAAJaGlnaF9yb2xsAAAAAAAABAAAAAAAAAANbGVkZ2VyX251bWJlcgAAAAAAAAQAAAAAAAAADHRpbWVzX3JvbGxlZAAAAAQ=',
-                'AAAABAAAAAAAAAAAAAAABUVycm9yAAAAAAAABQAAAAAAAAALV2lubmVyRm91bmQAAAAAAQAAAAAAAAAOTm90SW5pdGlhbGl6ZWQAAAAAAAIAAAAAAAAAEkFscmVhZHlJbml0aWFsaXplZAAAAAAAAwAAAAAAAAAJTm90Q2FsbGVkAAAAAAAABAAAAAAAAAANQWxyZWFkeUNhbGxlZAAAAAAAAAU=',
-                'AAAAAAAAAdRJbml0aWFsaXplIGEgbmV3IGdhbWUgY29udHJhY3QuCgojIEFyZ3VtZW50cwoKKiBgYWRtaW5gIC0gYWRkcmVzcyBjb3JyZXNwb25kaW5nIHRvIHRoZSBkZXBsb3llciBvZiB0aGlzIGdhbWUuCiogYHRva2VuX2FkZHJlc3NgIC0gYWRkcmVzcyBmb3IgdGhlIGFzc2V0IGNvbnRyYWN0IHRoYXQgd2lsbCBiZSB1c2VkIGZvcgpwYXltZW50cyB0byBhbmQgZnJvbSB0aGUgcHJpemUgcG90LgoqIGBudW1fZmFjZXNgIC0gbnVtYmVyIG9mIGZhY2VzIG9uIGVhY2ggZGllIHRoYXQgd2lsbCBiZSByb2xsZWQgZHVyaW5nCnRoZSBjb3Vyc2Ugb2YgdGhlIGdhbWUuCgojIFBhbmljcwoKKiBJZiB0aGUgY29udHJhY3QgaXMgYWxyZWFkeSBpbml0aWFsaXplZAoKIyBFdmVudHMKCkVtaXRzIGFuIGV2ZW50IHdpdGggdGhlIHRvcGljcyBgWyJST0xMRVIiLCAicmVhZHkiLCBhZG1pbjogQWRkcmVzc10sCmRhdGEgPSBudW1fZmFjZXM6IHUzMmAAAAANX19jb25zdHJ1Y3RvcgAAAAAAAAMAAAAAAAAABWFkbWluAAAAAAAAEwAAAAAAAAANdG9rZW5fYWRkcmVzcwAAAAAAABMAAAAAAAAACW51bV9mYWNlcwAAAAAAAAQAAAABAAAD6QAAA+0AAAAAAAAAAw==',
-                'AAAAAAAAAqZSb2xsIHRoZSBkaWNlCgojIEFyZ3VtZW50cwoKKiBgcm9sbGVyYCAtIGFkZHJlc3Mgcm9sbGluZyB0aGUgZGljZSBkdXJpbmcgdGhpcyB0dXJuLgoKIyBQYW5pY3MKCiogSWYgdGhlIGNvbnRyYWN0IGhhcyBub3QgeWV0IGJlZW4gaW5pdGlhbGl6ZWQKKiBJZiBhIHdpbm5lciBoYXMgYWxyZWFkeSBiZWVuIGZvdW5kLCBhbmQgdGhleSd2ZSBjbGFpbWVkIHRoZSBwcml6ZSBwb3QKCiMgRXZlbnRzCgpFbWl0cyBvbmUgb2YgdHdvIGV2ZW50cywgZGVwZW5kaW5nIG9uIHRoZSByb2xsZWQgdmFsdWU6CgoqIEZvciBhIG5vbi13aW5uaW5nIHJvbGwsIGVtaXRzIGFuIGV2ZW50IHdpdGggdG9waWNzIGBbIlJPTExFUiIsCiJyb2xsZWQiLCByb2xsZXI6IEFkZHJlc3NdLCBkYXRhID0gdG90YWw6IHUzMmAKKiBGb3IgYSB3aW5uaW5nIHJvbGwsIGVtaXRzIGFuIGV2ZW50IHdpdGggdG9waWNzIGBbIlJPTExFUiIsICJ3aW5uZXIiLApyb2xsZXI6IEFkZHJlc3NdLCBkYXRhID0gcHJpemVfcG90OiB1MzJgCgpJZiB0aGUgZ2FtZSBoYXMgYWxyZWFkeSBiZWVuICJjYWxsZWQiIGJ5IHRoZSBhZG1pbiwgYW5kIHRoZXJlZm9yZQpldmVyeW9uZSBpcyBoZW5jZWZvcnRoIGEgd2lubmVyLCBubyBldmVudCBpcyBlbWl0dGVkIGFuZCBhICJqYWNrcG90Igpyb2xsIGlzIHNpbXBseSByZXR1cm5lZCB0byB0aGUgdXNlci4AAAAAAARyb2xsAAAAAQAAAAAAAAAGcm9sbGVyAAAAAAATAAAAAQAAA+kAAAPqAAAABAAAAAM=',
-                'AAAAAAAAAS1DYWxsIHRoZSBnYW1lIG9mZgoKIyBQYW5pY3MKCiogSWYgdGhlIGNvbnRyYWN0IGhhcyBub3QgeWV0IGJlZW4gaW5pdGlhbGl6ZWQKKiBJZiBhIHdpbm5lciBoYXMgYWxyZWFkeSBiZWVuIGZvdW5kLCBhbmQgdGhleSd2ZSBjbGFpbWVkIHRoZSBwcml6ZSBwb3QKKiBJZiB0aGUgZ2FtZSBoYXMgYWxyZWFkeSBiZWVuICJjYWxsZWQiIGJ5IHRoZSBhZG1pbgoKIyBFdmVudHMKCkVtaXRzIGFuIGV2ZW50IHdpdGggdG9waWNzIGBbIlJPTExFUiIsICJjYWxsZWQiLCBhZG1pbjogQWRkcmVzc10sIGRhdGEKPSBwcml6ZV9wb3Q6IGkxMjhgAAAAAAAAB2NhbGxfaXQAAAAAAAAAAAEAAAPpAAAD7QAAAAAAAAAD',
-                'AAAAAAAAAB9Tc3NzaGhoLi4uIE5vdGhpbmcgdG8gc2VlIGhlcmUuAAAAAAdiZV9ldmlsAAAAAAAAAAABAAAD6QAAAAsAAAAD'
+                'AAAABAAAAAAAAAAAAAAABUVycm9yAAAAAAAAAwAAAAAAAAALV2lubmVyRm91bmQAAAAAAQAAADBZb3UgY2FuJ3QgYmUgZXZpbC4gVGhlIGdhbWUgaGFzIG5vdCBiZWVuIGNhbGxlZC4AAAAJTm90Q2FsbGVkAAAAAAAAAgAAACFUaGUgZ2FtZSBoYXMgYWxyZWFkeSBiZWVuIGNhbGxlZC4AAAAAAAANQWxyZWFkeUNhbGxlZAAAAAAAAAM=',
+                'AAAAAAAAAfdJbml0aWFsaXplIGEgbmV3IGdhbWUgY29udHJhY3QuCgojIEFyZ3VtZW50cwoqIGBhZG1pbmAgLSBhZGRyZXNzIGNvcnJlc3BvbmRpbmcgdG8gdGhlIGNyZWF0b3Igb2YgdGhpcyBnYW1lLgoqIGB0b2tlbl9hZGRyZXNzYCAtIGFkZHJlc3MgZm9yIHRoZSBhc3NldCBjb250cmFjdCB0aGF0IHdpbGwgYmUgdXNlZCBmb3IKcGF5bWVudHMgdG8gYW5kIGZyb20gdGhlIHByaXplIHBvdC4KKiBgbnVtX2RpY2VgIC0gbnVtYmVyIG9mIGRpY2UgdG8gcm9sbC4KKiBgbnVtX2ZhY2VzYCAtIG51bWJlciBvZiBmYWNlcyBvbiBlYWNoIGRpZSB0aGF0IHdpbGwgYmUgcm9sbGVkIGR1cmluZwp0aGUgY291cnNlIG9mIHRoZSBnYW1lLgoKIyBQYW5pY3MKKiBJZiB0aGUgY29udHJhY3QgaXMgYWxyZWFkeSBpbml0aWFsaXplZAoKIyBFdmVudHMKRW1pdHMgYW4gZXZlbnQgd2l0aCB0aGUgdG9waWNzIGBbIlJPTExFUiIsICJyZWFkeSIsIGFkbWluOiBBZGRyZXNzXSwKZGF0YSA9IG51bV9mYWNlczogdTMyYAAAAAANX19jb25zdHJ1Y3RvcgAAAAAAAAQAAAAAAAAABWFkbWluAAAAAAAAEwAAAAAAAAANdG9rZW5fYWRkcmVzcwAAAAAAABMAAAAAAAAACG51bV9kaWNlAAAABAAAAAAAAAAJbnVtX2ZhY2VzAAAAAAAABAAAAAA=',
+                'AAAAAAAAAqNSb2xsIHRoZSBkaWNlCgojIEFyZ3VtZW50cwoqIGByb2xsZXJgIC0gYWRkcmVzcyByb2xsaW5nIHRoZSBkaWNlIGR1cmluZyB0aGlzIHR1cm4uCgojIFBhbmljcwoqIElmIHRoZSBjb250cmFjdCBoYXMgbm90IHlldCBiZWVuIGluaXRpYWxpemVkCiogSWYgYSB3aW5uZXIgaGFzIGFscmVhZHkgYmVlbiBmb3VuZCwgYW5kIHRoZXkndmUgY2xhaW1lZCB0aGUgcHJpemUgcG90CgojIEV2ZW50cwpFbWl0cyBvbmUgb2YgdHdvIGV2ZW50cywgZGVwZW5kaW5nIG9uIHRoZSByb2xsZWQgdmFsdWU6CgoqIEZvciBhIG5vbi13aW5uaW5nIHJvbGwsIGVtaXRzIGFuIGV2ZW50IHdpdGggdG9waWNzIGBbIlJPTExFUiIsCiJyb2xsZWQiLCByb2xsZXI6IEFkZHJlc3NdLCBkYXRhID0gdG90YWw6IHUzMmAKKiBGb3IgYSB3aW5uaW5nIHJvbGwsIGVtaXRzIGFuIGV2ZW50IHdpdGggdG9waWNzIGBbIlJPTExFUiIsICJ3aW5uZXIiLApyb2xsZXI6IEFkZHJlc3NdLCBkYXRhID0gcHJpemVfcG90OiB1MzJgCgpJZiB0aGUgZ2FtZSBoYXMgYWxyZWFkeSBiZWVuICJjYWxsZWQiIGJ5IHRoZSBhZG1pbiwgYW5kIHRoZXJlZm9yZQpldmVyeW9uZSBpcyBoZW5jZWZvcnRoIGEgd2lubmVyLCBubyBldmVudCBpcyBlbWl0dGVkIGFuZCBhICJqYWNrcG90Igpyb2xsIGlzIHNpbXBseSByZXR1cm5lZCB0byB0aGUgdXNlci4AAAAABHJvbGwAAAABAAAAAAAAAAZyb2xsZXIAAAAAABMAAAABAAAD6gAAAAQ=',
+                'AAAAAAAAAStDYWxsIHRoZSBnYW1lIG9mZgoKIyBQYW5pY3MKKiBJZiB0aGUgY29udHJhY3QgaGFzIG5vdCB5ZXQgYmVlbiBpbml0aWFsaXplZAoqIElmIGEgd2lubmVyIGhhcyBhbHJlYWR5IGJlZW4gZm91bmQsIGFuZCB0aGV5J3ZlIGNsYWltZWQgdGhlIHByaXplIHBvdAoqIElmIHRoZSBnYW1lIGhhcyBhbHJlYWR5IGJlZW4gImNhbGxlZCIgYnkgdGhlIGFkbWluCgojIEV2ZW50cwpFbWl0cyBhbiBldmVudCB3aXRoIHRvcGljcyBgWyJST0xMRVIiLCAiY2FsbGVkIiwgYWRtaW46IEFkZHJlc3NdLCBkYXRhCj0gcHJpemVfcG90OiBpMTI4YAAAAAAHY2FsbF9pdAAAAAAAAAAAAA==',
+                'AAAAAAAAAB9Tc3NzaGhoLi4uIE5vdGhpbmcgdG8gc2VlIGhlcmUuAAAAAAdiZV9ldmlsAAAAAAAAAAABAAAACw==',
             ]),
-            options
+            options,
         );
     }
     public readonly fromJSON = {
-        roll: this.txFromJSON<Result<Array<u32>>>,
-        call_it: this.txFromJSON<Result<void>>,
-        be_evil: this.txFromJSON<Result<i128>>
+        roll: this.txFromJSON<Array<u32>>,
+        call_it: this.txFromJSON<null>,
+        be_evil: this.txFromJSON<i128>,
     };
 }
