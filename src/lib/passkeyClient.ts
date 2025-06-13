@@ -1,5 +1,5 @@
-import { Account, StrKey } from '@stellar/stellar-sdk';
-import { Server } from '@stellar/stellar-sdk/rpc';
+import { Account, StrKey } from '@stellar/stellar-sdk/minimal';
+import { Server } from '@stellar/stellar-sdk/minimal/rpc';
 import { PasskeyKit, SACClient } from 'passkey-kit';
 
 import {
@@ -8,7 +8,7 @@ import {
     PUBLIC_NATIVE_CONTRACT_ADDRESS,
     PUBLIC_WALLET_WASM_HASH
 } from '$env/static/public';
-import type { Tx } from '@stellar/stellar-sdk/contract';
+import type { Tx } from '@stellar/stellar-sdk/minimal/contract';
 
 export const mockPubkey = StrKey.encodeEd25519PublicKey(Buffer.alloc(32));
 export const mockSource = new Account(mockPubkey, '0');
@@ -59,4 +59,17 @@ export async function getSalt() {
         if (res.ok) return res.text();
         else throw await res.text();
     });
+}
+
+export async function sendDeploy(func: string, auth: string) {
+    return fetch('/api/game/deploy', {
+        method: 'POST',
+        body: JSON.stringify({
+            func: func,
+            auth: auth,
+        })
+    }).then(async (res) => {
+        if (res.ok) return res.text();
+        else throw await res.text();
+    })
 }

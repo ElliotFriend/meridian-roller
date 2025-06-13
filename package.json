@@ -13,6 +13,7 @@
         "setup": "node initialize.js"
     },
     "dependencies": {
+        "@fontsource/ubuntu-mono": "^5.2.6",
         "@stellar/stellar-sdk": "^13.3.0",
         "@tailwindcss/vite": "^4.1.9",
         "dice_game": "file:packages/dice_game",

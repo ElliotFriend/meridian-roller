@@ -4,15 +4,23 @@
     import { goto } from '$app/navigation';
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
-    import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH } from '$env/static/public';
-    import { account, send, getSalt } from '$lib/passkeyClient';
-    import { scValToNative, xdr } from '@stellar/stellar-sdk';
+    import { PUBLIC_NATIVE_CONTRACT_ADDRESS, PUBLIC_GAME_WASM_HASH, PUBLIC_STELLAR_NETWORK_PASSPHRASE, PUBLIC_STELLAR_RPC_URL } from '$env/static/public';
+    import { account, send, getSalt, rpc, sendDeploy, mockPubkey } from '$lib/passkeyClient';
+    // import { Address } from '@stellar/stellar-sdk'
+    import getSalty, { scValToNative, xdr, contract, Keypair, Networks, TransactionBuilder, Operation, Address, nativeToScVal, authorizeInvocation, authorizeEntry } from '@stellar/stellar-sdk/minimal';
+    // import { scValToNative, xdr, contract, Keypair, Networks, TransactionBuilder, Operation, nativeToScVal, authorizeInvocation, authorizeEntry } from 'dice_game';
     // import deployerSdk from '$lib/contracts/deployer';
-    import diceGameSdk from '$lib/contracts/dice_game';
+    import diceGameSdk, { deploy } from '$lib/contracts/dice_game';
+    import { Client as DiceDeployer } from 'dice_game';
     import { toaster } from '$lib/toaster';
 
     import LoaderCircle from 'lucide-svelte/icons/loader-circle';
     import Dices from 'lucide-svelte/icons/dices';
+    // import { basicNodeSigner } from '@stellar/stellar-sdk/contract';
+    import { assembleTransaction } from '@stellar/stellar-sdk/minimal/rpc';
+    import { createDeployAuthEntry, createDeployHostFunction, createDeployHostFunctionAndAuthEntry } from '$lib/utils/deploy';
+
+
 
     let numDice: number = 3;
     let numFaces: 2 | 3 | 4 | 6 | 8 | 10 | 12 | 20;
@@ -23,40 +31,58 @@
 
     async function deployGame() {
         console.log('deploying game');
+
         try {
             isDeploying = true;
 
-            const at = await deployerSdk.deploy({
-                deployer: $contractAddress,
-                wasm_hash: Buffer.from(PUBLIC_GAME_WASM_HASH, 'hex'),
-                salt: Buffer.from(await getSalt(), 'hex'),
-                constructor_args: [
-                    ...diceGameSdk.spec.funcArgsToScVals('__constructor', {
-                        admin: $contractAddress,
-                        token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
-                        num_faces: parseInt(numFaces.toString())
-                    })
-                ]
-            });
-            const tx = await account.sign(at.built!, { keyId: $keyId });
+            /**
+             * using the bindings deploy thing results in simulation complaining
+             * about non-root auth required and stuff.
+             */
+            // const at = await DiceDeployer.deploy({
+            //     admin: $contractAddress,
+            //     token_address: PUBLIC_NATIVE_CONTRACT_ADDRESS,
+            //     num_faces: parseInt(numFaces.toString()),
+            // }, {
+            //     rpcUrl: "https://soroban-testnet.stellar.org",
+            //     wasmHash: "c46cfa485acedd6736f345da6f8c1af1414ae67bcae2378cd5e4c25a150a8ab8",
+            //     networkPassphrase: "Test SDF Network ; September 2015",
+            //     publicKey: mockPubkey,
+            //     timeoutInSeconds: 30,
+            // })
+            // console.log('at', at)
 
-            const { resultMetaXdr } = await send(tx.built!);
-            const result = xdr.TransactionMeta.fromXDR(resultMetaXdr, 'base64');
-            const sMeta = result.v3().sorobanMeta();
-            let deployedGame;
-            if (sMeta) {
-                deployedGame = scValToNative(sMeta.returnValue());
-            }
+            /**
+             * this way of manually constructing the host function operation and auth
+             * entry seems to work (mostly? still get some weird `tx_too_soon` errors)
+             */
+            const adminAddress = new Address($contractAddress)
+            const salt = Buffer.from((await getSalt()), 'hex')
+            const buff = new ArrayBuffer(8);
+            const bigint64 = new BigInt64Array(buff);
+            const nonce = crypto.getRandomValues(bigint64)
+            console.log('nonce', nonce)
+
+            const { func, auth } = createDeployHostFunctionAndAuthEntry(adminAddress, salt, nonce)
+            console.log('func', func.toXDR('base64'))
+
+            let signedAuth = await account.signAuthEntry(auth, { keyId: $keyId })
+            console.log('signedAuth', signedAuth.toXDR('base64'))
+
+
+
+            const deployedGame = await sendDeploy(func.toXDR('base64'), signedAuth.toXDR('base64'))
+            console.log('deployedGame', deployedGame)
 
             toaster.success({
                 description: `Amazing! You've created a brand new game. The contract address is <code>${deployedGame}</code>.`,
             });
 
-            goto(`./${deployedGame}/manage`);
+            // goto(`./${deployedGame}/manage`);
         } catch (err) {
             console.error('err', err);
             toaster.error({
-                description: 'Something went wrong rolling dice. Please try again later.',
+                description: 'Something went wrong deploying game. Please try again later.',
             });
         } finally {
             isDeploying = false;

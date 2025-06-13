@@ -10,22 +10,24 @@
     }
 </script>
 
-<ol class="breadcrumb-nonresponsive flex">
+<ol class="flex gap-4">
     <li class="crumb"><a class="anchor" href="/">Home</a></li>
     <li class="crumb-separator" aria-hidden="true">›</li>
     {#each pathname as segment, i}
         {@const pathToHere = pathname.slice(0, i + 1).join('/')}
         {#if i == pathname.length - 1}
-            <li>{capitalized(segment)}</li>
+            <li>
+                {#if segment.startsWith('C')}
+                    <TruncatedAddress text={segment} />
+                {:else}
+                    {capitalized(segment)}
+                {/if}
+            </li>
         {:else}
             <li class="crumb flex-initial">
                 <a class="anchor" href={`/${pathToHere}`}>
                     {#if segment.startsWith('C')}
-                        <div class="overflow-hidden">
-                            <div class="overflow-hidden">
-                                <TruncatedAddress address={segment} />
-                            </div>
-                        </div>
+                        <TruncatedAddress text={segment} />
                     {:else}
                         {capitalized(segment)}
                     {/if}

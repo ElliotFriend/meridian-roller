@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/ubuntu-mono':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@stellar/stellar-sdk':
         specifier: ^13.3.0
         version: 13.3.0
@@ -317,6 +320,9 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@fontsource/ubuntu-mono@5.2.6':
+    resolution: {integrity: sha512-9oJsnQbCl0du6Sy5DITlCY+OwxYYPd2z5R55KF8qZXmJSoWPoMSY6bGi81eBvKU4Jdx8/ETRfN9NJvoMQ9ch3g==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2198,6 +2204,8 @@ snapshots:
       '@floating-ui/utils': 0.2.9
 
   '@floating-ui/utils@0.2.9': {}
+
+  '@fontsource/ubuntu-mono@5.2.6': {}
 
   '@humanfs/core@0.19.1': {}
 

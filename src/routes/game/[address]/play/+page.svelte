@@ -16,6 +16,7 @@
     import { invalidate } from '$app/navigation';
     import TruncatedAddress from '$lib/components/TruncatedAddress.svelte';
     import { toaster } from '$lib/toaster';
+    import { Operation } from '@stellar/stellar-sdk/minimal';
 
     diceGame.options.contractId = data.gameAddress;
 
@@ -71,21 +72,29 @@
             const at = await diceGame.roll({
                 roller: $contractAddress
             });
+            console.log('at', at)
 
-            const tx = await account.sign(at.built!, { keyId: $keyId });
-            const res = await send(tx.built!);
+            let hf = (at.built?.operations[0] as Operation.InvokeHostFunction).func
+            console.log('hf', hf)
 
-            let result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
-            let sMeta = result.v3().sorobanMeta();
-            if (sMeta) {
-                rollResult = scValToNative(sMeta.returnValue());
-            }
-            console.log('rolled result', rollResult);
+            let auth = (at.built?.operations[0] as Operation.InvokeHostFunction).auth
+            console.log('auth', auth![0].credentials())
+            console.log('auth', auth![0].toXDR('base64'))
 
-            toaster.success({
-                description: 'Successfully rolled the dice! Congrats',
-            });
-            fetchRoller();
+            // const tx = await account.sign(at.built!, { keyId: $keyId });
+            // const res = await send(tx.built!);
+
+            // let result = xdr.TransactionMeta.fromXDR(res.resultMetaXdr, 'base64');
+            // let sMeta = result.v3().sorobanMeta();
+            // if (sMeta) {
+            //     rollResult = scValToNative(sMeta.returnValue());
+            // }
+            // console.log('rolled result', rollResult);
+
+            // toaster.success({
+            //     description: 'Successfully rolled the dice! Congrats',
+            // });
+            // fetchRoller();
         } catch (err) {
             console.log('err', err);
             toaster.error({
@@ -106,7 +115,7 @@
 
 {#if $contractAddress}
     <p>
-        Your smart wallet address is: <TruncatedAddress address={$contractAddress} />
+        Your smart wallet address is: <TruncatedAddress text={$contractAddress} />
     </p>
 {/if}
 

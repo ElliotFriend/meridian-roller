@@ -1,8 +1,7 @@
 <script lang="ts">
-    export let address: string;
+    let { text, startChars = 4, endChars = 4 } = $props();
+
+    let shortenedText = `${text.slice(0, startChars)}...${text.slice(endChars * -1)}`
 </script>
 
-<span class="flex flex-1 min-w-0 p-0">
-    <p class="p-0 overflow-hidden text-ellipsis">{address.slice(0, -3)}</p>
-    <p class="p-0">{address.slice(-3)}</p>
-</span>
+<span>{shortenedText}</span>

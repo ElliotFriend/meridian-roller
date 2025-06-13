@@ -1,9 +1,6 @@
 import { Buffer } from 'buffer';
-import { AssembledTransaction, Client as ContractClient, ClientOptions as ContractClientOptions, MethodOptions, Result } from '@stellar/stellar-sdk/contract';
-import type { u32, i128 } from '@stellar/stellar-sdk/contract';
-export * from '@stellar/stellar-sdk';
-export * as contract from '@stellar/stellar-sdk/contract';
-export * as rpc from '@stellar/stellar-sdk/rpc';
+import { AssembledTransaction, Client as ContractClient, ClientOptions as ContractClientOptions, MethodOptions, Result } from '@stellar/stellar-sdk/minimal/contract';
+import type { u32, i128 } from '@stellar/stellar-sdk/minimal/contract';
 export declare const networks: {
     readonly testnet: {
         readonly networkPassphrase: "Test SDF Network ; September 2015";
@@ -166,8 +163,8 @@ export declare class Client extends ContractClient {
     }): Promise<AssembledTransaction<T>>;
     constructor(options: ContractClientOptions);
     readonly fromJSON: {
-        roll: (json: string) => AssembledTransaction<Result<number[], import("@stellar/stellar-sdk/contract").ErrorMessage>>;
-        call_it: (json: string) => AssembledTransaction<Result<void, import("@stellar/stellar-sdk/contract").ErrorMessage>>;
-        be_evil: (json: string) => AssembledTransaction<Result<bigint, import("@stellar/stellar-sdk/contract").ErrorMessage>>;
+        roll: (json: string) => AssembledTransaction<Result<number[], import("@stellar/stellar-sdk/minimal/contract").ErrorMessage>>;
+        call_it: (json: string) => AssembledTransaction<Result<void, import("@stellar/stellar-sdk/minimal/contract").ErrorMessage>>;
+        be_evil: (json: string) => AssembledTransaction<Result<bigint, import("@stellar/stellar-sdk/minimal/contract").ErrorMessage>>;
     };
 }

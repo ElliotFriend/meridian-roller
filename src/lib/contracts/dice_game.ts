@@ -5,3 +5,5 @@ export default new Client.Client({
     ...Client.networks.testnet,
     rpcUrl: PUBLIC_STELLAR_RPC_URL
 });
+
+export const deploy = Client.Client.deploy
