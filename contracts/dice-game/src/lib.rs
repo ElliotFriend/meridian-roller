@@ -1,7 +1,8 @@
 //! # Dice Roller Game
 //!
-//! A Soroban smart contract that simulates a dice-rolling game, where each player is attempting to
-//! roll a "jackpot": all three dice at the highest value.
+//! A Soroban smart contract that simulates a dice-rolling game, where each
+//! player is attempting to roll a "jackpot": all three dice at the highest
+//! value.
 //!
 //! On the first roll, a user will pay into the "prize pot" an amount of tokens
 //! equal to their roll. On subsequent rolls no payment is made.
@@ -10,78 +11,25 @@
 //! total sum of tokens in the "prize pot," by invoking the `claim_prize`
 //! function of the contract.
 //!
-//! Admin logic exists to allow the user to "call" the game off, and
-
+//! Admin logic exists to allow the admin user to "call" the game off, and (if
+//! they so desire) to be evil by claiming all the deposits for themselves!
 #![no_std]
 
+contractmeta!(key = "title", val = "Dice Roller Game");
+contractmeta!(
+    key = "desc",
+    val = "A dice-rolling game, where each player is attempting to roll a 'jackpot': all three dice at the highest value"
+);
+contractmeta!(key = "binver", val = "2.0.0");
+
+use events::{Called, EvilAdmin, Ready, Rolled, Winner};
 use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, panic_with_error, symbol_short, token,
-    xdr::ToXdr, Address, Bytes, Env, Vec,
+    contract, contractimpl, contractmeta, token, xdr::ToXdr, Address, Bytes, Env, Vec,
 };
-
-#[contracttype]
-#[derive(Clone)]
-pub enum DataKey {
-    Admin,
-    TokenAddress,
-    Winner,
-    Roller(Address),
-    EveryoneWins,
-    NumDice,
-    NumFaces,
-}
-
-#[contracttype]
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct Roller {
-    pub times_rolled: u32,
-    pub high_roll: u32,
-    pub ledger_number: u32,
-    pub first_roll: u32,
-}
-
-#[contracterror]
-#[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
-#[repr(u32)]
-pub enum Error {
-    //// A winner has already been found.
-    WinnerFound = 1,
-    /// You can't be evil. The game has not been called.
-    NotCalled = 2,
-    /// The game has already been called.
-    AlreadyCalled = 3,
-}
-
-/// Panic if a winning roll has already occurred.
-fn check_no_winner(env: &Env) {
-    if is_winner(env) {
-        panic_with_error!(env, Error::WinnerFound);
-    }
-}
-
-/// Return whether or not the instance storage contains a winner's address.
-fn is_winner(env: &Env) -> bool {
-    env.storage().instance().has(&DataKey::Winner)
-}
-
-/// Panic if the game has not been "called" by the admin.
-fn check_everyone_does_win(env: &Env) {
-    if !does_everyone_win(env) {
-        panic_with_error!(env, Error::NotCalled);
-    }
-}
-
-/// Panic if the game has been "called" by the admin.
-fn check_everyone_does_not_win(env: &Env) {
-    if does_everyone_win(env) {
-        panic_with_error!(env, Error::AlreadyCalled);
-    }
-}
-
-/// Returns whether or not the instance storage contains the everyone wins key.
-fn does_everyone_win(env: &Env) -> bool {
-    env.storage().instance().has(&DataKey::EveryoneWins)
-}
+use storage::{
+    check_everyone_does_not_win, check_everyone_does_win, check_no_winner, does_everyone_win,
+};
+use types::*;
 
 /// Returns a dice roll simulation
 fn roll_dice(env: &Env, num_dice: &u32, num_faces: &u32) -> Vec<u32> {
@@ -133,15 +81,12 @@ impl RollerContract {
             .set(&DataKey::TokenAddress, &token_address);
 
         // Publish an event about the game being ready
-        // The event has three topics:
-        //   - The "ROLLER" symbol
-        //   - The "ready" symbol
-        //   - The admin address
-        // The event data is the number of faces on each die.
-        env.events().publish(
-            (symbol_short!("ROLLER"), symbol_short!("ready"), admin),
+        Ready {
+            admin,
+            num_dice,
             num_faces,
-        );
+        }
+        .publish(&env);
     }
 
     /// Roll the dice
@@ -195,28 +140,29 @@ impl RollerContract {
             .unwrap_or_default();
 
         // Reseed the env's PRNG, so as to avoid a non-determinative
-        // invocation and deposit. Essentially, we're singing a transaction
+        // invocation and deposit. Essentially, we're signing a transaction
         // that will deposit tokens from the roller's balance, and the
         // amount is dependant on their roll. If the simulation returns one
         // result, and the _actual_ invocation another, then the signed auth
-        // will be invalid, since the resulting PRNG roll will (likely) be
-        // different.
+        // will be invalid, since the resulting PRNG roll will (likely) differ
+        // from the simulation's roll.
         let address_bytes = roller.clone().to_xdr(&env);
         let mut address_slice = [0u8; 40];
         address_bytes.copy_into_slice(&mut address_slice);
-        let rs_bytes = roller_store.clone().to_xdr(&env);
-        let mut rs_slice = [0u8; 128];
-        rs_bytes.copy_into_slice(&mut rs_slice);
-        rs_slice[..40].copy_from_slice(&address_slice);
+        let seed_bytes = roller_store.clone().to_xdr(&env);
+        let mut seed_slice = [0u8; 128];
+        seed_bytes.copy_into_slice(&mut seed_slice);
+        seed_slice[..40].copy_from_slice(&address_slice);
         env.prng().seed(
             env.crypto()
-                .sha256(&Bytes::from_array(&env, &rs_slice))
+                .sha256(&Bytes::from_array(&env, &seed_slice))
                 .to_xdr(&env)
                 .slice(8..),
         );
 
         rolls = roll_dice(&env, &num_dice, &num_faces);
         total = rolls.iter().sum();
+
         // Check if roller's first roll. If so, deposit from native SAC into the
         // game contract, according to their roll.
         if !env
@@ -240,15 +186,11 @@ impl RollerContract {
 
         roller_store.ledger_number = env.ledger().sequence();
         roller_store.times_rolled += 1;
-        roller_store.high_roll = if total > roller_store.high_roll {
-            total
-        } else {
-            roller_store.high_roll
+        if total > roller_store.high_roll {
+            roller_store.high_roll = total
         };
-        roller_store.first_roll = if roller_store.first_roll == 0 {
-            total
-        } else {
-            roller_store.first_roll
+        if roller_store.first_roll == 0 {
+            roller_store.first_roll = total
         };
 
         // Store the updated roller data in persistent storage.
@@ -271,26 +213,14 @@ impl RollerContract {
             env.storage().instance().set(&DataKey::Winner, &roller);
 
             // Publish an event about the game being won
-            // The event has three topics:
-            //   - The "ROLLER" symbol
-            //   - The "winner" symbol
-            //   - The winner's address
-            // The event data is the prize pot that has been won
-            env.events().publish(
-                (symbol_short!("ROLLER"), symbol_short!("winner"), roller),
+            Winner {
+                winner: roller,
                 prize_pot,
-            );
+            }
+            .publish(&env);
         } else {
-            // Publish an event about the game being won
-            // The event has three topics:
-            //   - The "ROLLER" symbol
-            //   - The "rolled" symbol
-            //   - The roller's address
-            // The event data is the total rolled value
-            env.events().publish(
-                (symbol_short!("ROLLER"), symbol_short!("rolled"), roller),
-                total,
-            );
+            // Publish an event about the rolled results
+            Rolled { roller, total }.publish(&env);
         }
 
         // Return the vector of rolled values
@@ -328,15 +258,7 @@ impl RollerContract {
         let prize_pot = token_client.balance(&env.current_contract_address());
 
         // Publish an event about the game being called
-        // The event has three topics:
-        //   - The "ROLLER" symbol
-        //   - The "called" symbol
-        //   - The admin address
-        // The event data is the prize pot at the time the game ended.
-        env.events().publish(
-            (symbol_short!("ROLLER"), symbol_short!("called"), admin),
-            prize_pot,
-        );
+        Called { admin, prize_pot }.publish(&env);
     }
 
     /// Sssshhh... Nothing to see here.
@@ -365,18 +287,13 @@ impl RollerContract {
         token_client.transfer(&env.current_contract_address(), &admin, &prize_pot);
 
         // Publish an event about the admin being evil
-        // The event has three topics:
-        //   - The "ROLLER" symbol
-        //   - The "eviladmin" symbol
-        //   - The admin address
-        // The event data is the prize pot the admin has stolen
-        env.events().publish(
-            (symbol_short!("ROLLER"), symbol_short!("eviladmin"), admin),
-            prize_pot,
-        );
+        EvilAdmin { admin, prize_pot }.publish(&env);
 
         prize_pot
     }
 }
 
+mod events;
+mod storage;
 mod test;
+mod types;

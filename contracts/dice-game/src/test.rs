@@ -19,7 +19,10 @@ fn test_including_winner() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     for i in 0..103 {
@@ -94,7 +97,10 @@ fn test_with_four_dice() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &4u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &4u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     for i in 0..226 {
@@ -169,7 +175,10 @@ fn test_past_winner() {
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     // the tests work out so that on iteration 103, we have a winner. everything
@@ -203,7 +212,10 @@ fn test_everyone_wins() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     // the tests work out so that on iteration 42, we have a winner. everything
@@ -244,7 +256,10 @@ fn test_cannot_call_game_twice() {
 
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     client.call_it();
@@ -264,7 +279,10 @@ fn test_cannot_be_evil_with_uncalled_game() {
     let token_contract = env.register_stellar_asset_contract_v2(token_admin);
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
     for _i in 0..10 {
         let roller = Address::generate(&env);
@@ -288,7 +306,10 @@ fn test_can_be_evil_with_called_game() {
     let token_client = token::TokenClient::new(&env, &token_contract.address());
     let sac_client = token::StellarAssetClient::new(&env, &token_contract.address());
 
-    let contract_address = env.register(RollerContract, (&admin, &token_contract.address(), &3u32, &6u32));
+    let contract_address = env.register(
+        RollerContract,
+        (&admin, &token_contract.address(), &3u32, &6u32),
+    );
     let client = RollerContractClient::new(&env, &contract_address);
 
     for _i in 0..10 {
