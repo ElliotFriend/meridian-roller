@@ -1,6 +1,6 @@
 import { rpc } from '$lib/passkeyClient';
 import type { RequestHandler } from './$types';
-import { scValToNative, nativeToScVal } from '@stellar/stellar-sdk';
+import { scValToNative, nativeToScVal } from '@stellar/stellar-sdk/minimal';
 import { produce } from 'sveltekit-sse';
 
 function delay(milliseconds: number) {

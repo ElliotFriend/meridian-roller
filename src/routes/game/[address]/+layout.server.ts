@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { Contract, scValToNative, StrKey } from '@stellar/stellar-sdk';
+import { Contract, scValToNative, StrKey } from '@stellar/stellar-sdk/minimal';
 import { server } from '$lib/server/passkeyServer';
 import { sac } from '$lib/passkeyClient';
 import type { LayoutServerLoad } from './$types';
@@ -63,6 +63,7 @@ export const load: LayoutServerLoad = async ({ params, depends }) => {
         tokenAddress: instanceStorage.TokenAddress,
         tokenSymbol: tokenSymbol,
         gameAdmin: instanceStorage.Admin,
+        numDice: instanceStorage.numDice,
         numFaces: instanceStorage.NumFaces,
         prizePot,
         gameWinner: instanceStorage.Winner || undefined,

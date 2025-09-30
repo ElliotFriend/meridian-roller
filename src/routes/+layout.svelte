@@ -9,7 +9,7 @@
     let { children } = $props();
 </script>
 
-<Toaster {toaster}></Toaster>
+<Toaster {toaster} />
 
 <div class="h-screen grid grid-rows-[auto_1fr_auto]">
     <Header />

@@ -9,19 +9,19 @@
     import GameStats from '$lib/components/GameStats.svelte';
     import { toaster } from '$lib/toaster';
 
-    import type { PageData } from './$types';
-    export let data: PageData;
+    import type { PageProps } from './$types';
+    let { data }: PageProps = $props();
 
     let diceGame = createClient(data.gameAddress);
 
-    let isWaiting: boolean = false;
-    let calledIt: boolean = false;
+    let isWaiting: boolean = $state(false);
+    let calledIt: boolean = $state(false);
 
-    $: isButtonDisabled = !$contractAddress || isWaiting || data.gameWinner;
+    let isButtonDisabled = $derived(!$contractAddress || isWaiting || data.gameWinner);
 
-    let qrDataUrl = qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
+    let qrDataUrl = $state(qrCode.toDataURL($page.url.href.replace('manage', 'play'), {
         errorCorrectionLevel: 'high',
-    });
+    }));
 
     async function callIt() {
         console.log('calling it a day');
@@ -88,13 +88,13 @@
                 <button
                     class="btn preset-filled-tertiary-500"
                     disabled={isButtonDisabled}
-                    on:click={beEvil}>Be evil!</button
+                    onclick={beEvil}>Be evil!</button
                 >
             {:else}
                 <button
                     class="btn preset-filled-primary-500"
                     disabled={isButtonDisabled}
-                    on:click={callIt}>Call it!</button
+                    onclick={callIt}>Call it!</button
                 >
             {/if}
         </section>

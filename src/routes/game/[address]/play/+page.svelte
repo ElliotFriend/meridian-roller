@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { PageData } from './$types';
-    export let data: PageData;
+    import type { PageProps } from './$types';
+    let { data }: PageProps = $props();
     console.log('src/routes/game/[address]/play/+page.svelte PageData', data);
     import { contractAddress } from '$lib/stores/contractAddress';
     import { keyId } from '$lib/stores/keyId';
@@ -12,21 +12,19 @@
     import GameStats from '$lib/components/GameStats.svelte';
     import RollerStats from '$lib/components/RollerStats.svelte';
     import { onMount } from 'svelte';
-    import Leaderboard from '$lib/components/Leaderboard.svelte';
     import { invalidate } from '$app/navigation';
     import TruncatedAddress from '$lib/components/TruncatedAddress.svelte';
     import { toaster } from '$lib/toaster';
-    import { Operation } from '@stellar/stellar-sdk/minimal';
 
     let diceGame = createClient(data.gameAddress);
 
-    let rollResult: number[] = [0, 0, 0];
-    let isWaiting: boolean = false;
-    let rollerStruct: Roller;
-    let rollerBalance: string;
-    let youWon: boolean = false;
-    let wonAmount: number = 0;
-    $: rollButtonDisabled = isWaiting || !$contractAddress || data.gameWinner;
+    let rollResult: number[] = $state(Array.from({ length: data.numDice }, () => 0));
+    let isWaiting: boolean = $state(false);
+    let rollerStruct: Roller | undefined = $state();
+    let rollerBalance: string = $state('');
+    let youWon: boolean = $state(false);
+    let wonAmount: number = $state(0);
+    let rollButtonDisabled = $derived(isWaiting || !$contractAddress || data.gameWinner);
 
     const fetchRoller = async () => {
         console.log('fetching roller');
@@ -49,7 +47,7 @@
                 rollerStruct = scValToNative(ledgerEntry.entries[0].val.contractData().val());
             }
 
-            if (rollerStruct.high_roll === data.numFaces * 3) {
+            if (rollerStruct?.high_roll === data.numFaces * 3) {
                 youWon = true;
             }
 
@@ -120,7 +118,7 @@
                 <p class="text-center">Congratulations! You've won {wonAmount} XLM. Enjoy!</p>
             {:else}
                 <h2 class="h2 text-center" data-ignore-toc>
-                    Total: {rollResult.reduce((acc, i) => acc + i) || '?'}
+                    Total: {rollResult.reduce((acc, i) => acc + i, 0) || '?'}
                 </h2>
             {/if}
             <div class="w-full flex flex-wrap gap-1 justify-center">
@@ -132,7 +130,7 @@
                 <button
                     type="button"
                     class="btn preset-filled-primary-500"
-                    on:click={rollDice}
+                    onclick={rollDice}
                     disabled={rollButtonDisabled || youWon}>Roll!</button
                 >
             </div>

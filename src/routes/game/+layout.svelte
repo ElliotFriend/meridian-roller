@@ -12,7 +12,7 @@
 
 <ol class="flex gap-4">
     <li class="crumb"><a class="anchor" href="/">Home</a></li>
-    <li class="crumb-separator" aria-hidden="true">›</li>
+    <li class="crumb-separator" aria-hidden="true">&rsaquo;</li>
     {#each pathname as segment, i}
         {@const pathToHere = pathname.slice(0, i + 1).join('/')}
         {#if i == pathname.length - 1}

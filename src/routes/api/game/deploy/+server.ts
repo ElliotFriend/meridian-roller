@@ -1,15 +1,13 @@
 import type { RequestHandler } from './$types';
 import { deploy } from '$lib/contracts/dice_game';
-import { contract, Keypair } from '@stellar/stellar-sdk';
+import { Keypair } from '@stellar/stellar-sdk/minimal';
 import {
-    PUBLIC_FUNDER_PUBLIC_KEY,
     PUBLIC_GAME_WASM_HASH,
-    PUBLIC_NATIVE_CONTRACT_ADDRESS,
     PUBLIC_STELLAR_NETWORK_PASSPHRASE,
     PUBLIC_STELLAR_RPC_URL,
 } from '$env/static/public';
 import { PRIVATE_FUNDER_SECRET_KEY } from '$env/static/private';
-import { basicNodeSigner } from '@stellar/stellar-sdk/contract';
+import { basicNodeSigner } from '@stellar/stellar-sdk/minimal/contract';
 
 export const POST: RequestHandler = async ({ request }) => {
     // get the details for the new game

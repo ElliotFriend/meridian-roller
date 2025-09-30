@@ -1,9 +1,9 @@
 import { server } from '$lib/server/passkeyServer';
-import { TransactionBuilder } from '@stellar/stellar-sdk';
+import { TransactionBuilder } from '@stellar/stellar-sdk/minimal';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { PUBLIC_STELLAR_NETWORK_PASSPHRASE } from '$env/static/public';
-import type { Tx } from '@stellar/stellar-sdk/contract';
+import type { Tx } from '@stellar/stellar-sdk/minimal/contract';
 
 export const POST: RequestHandler = async ({ request }) => {
     const { xdr } = await request.json();

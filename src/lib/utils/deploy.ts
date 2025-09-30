@@ -1,13 +1,6 @@
 import { PUBLIC_GAME_WASM_HASH, PUBLIC_NATIVE_CONTRACT_ADDRESS } from '$env/static/public';
-import {
-    Address,
-    xdr,
-    nativeToScVal,
-    Operation,
-    authorizeInvocation,
-} from '@stellar/stellar-sdk/minimal';
+import { Address, xdr, nativeToScVal, Operation } from '@stellar/stellar-sdk/minimal';
 import { getContractAddress } from '$lib/utils';
-import { account, rpc } from '$lib/passkeyClient';
 
 export function createDeployConstructorArgs(address: Address): xdr.ScVal[] {
     return [

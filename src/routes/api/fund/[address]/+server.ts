@@ -2,8 +2,8 @@ import { error, json } from '@sveltejs/kit';
 import { PRIVATE_FUNDER_SECRET_KEY } from '$env/static/private';
 import { native } from '$lib/passkeyClient';
 import type { RequestHandler } from './$types';
-import { Keypair } from '@stellar/stellar-sdk';
-import { basicNodeSigner } from '@stellar/stellar-sdk/contract';
+import { Keypair } from '@stellar/stellar-sdk/minimal';
+import { basicNodeSigner } from '@stellar/stellar-sdk/minimal/contract';
 import { PUBLIC_STELLAR_NETWORK_PASSPHRASE } from '$env/static/public';
 
 export const GET: RequestHandler = async ({ params, fetch }) => {
